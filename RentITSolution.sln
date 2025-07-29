@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.Core", "src\RentIT.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.Infrastructure", "RentIT.Infrastructure\RentIT.Infrastructure.csproj", "{73313A81-9A19-4650-88AB-FD1E4B2015AC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2084E64F-B942-4B90-9661-3A232123C9BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31A57C5B-678F-4C58-8C17-391D13E2429F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{0E45766C-A574-4A47-870C-732ED4CCF27D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{73313A81-9A19-4650-88AB-FD1E4B2015AC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B4ED6B7-1926-45F4-B6DD-392B68932D4A}
