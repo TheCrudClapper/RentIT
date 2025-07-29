@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.API", "src\RentIT.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.Core", "src\RentIT.Core\RentIT.Core.csproj", "{0E45766C-A574-4A47-870C-732ED4CCF27D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.Infrastructure", "RentIT.Infrastructure\RentIT.Infrastructure.csproj", "{73313A81-9A19-4650-88AB-FD1E4B2015AC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2084E64F-B942-4B90-9661-3A232123C9BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.Infrastructure", "src\RentIT.Infrastructure\RentIT.Infrastructure.csproj", "{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,10 @@ Global
 		{0E45766C-A574-4A47-870C-732ED4CCF27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E45766C-A574-4A47-870C-732ED4CCF27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E45766C-A574-4A47-870C-732ED4CCF27D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73313A81-9A19-4650-88AB-FD1E4B2015AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73313A81-9A19-4650-88AB-FD1E4B2015AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73313A81-9A19-4650-88AB-FD1E4B2015AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73313A81-9A19-4650-88AB-FD1E4B2015AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,7 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{31A57C5B-678F-4C58-8C17-391D13E2429F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{0E45766C-A574-4A47-870C-732ED4CCF27D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{73313A81-9A19-4650-88AB-FD1E4B2015AC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{F9ECF345-1F75-6E14-25B5-DE4275F5C7AD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B4ED6B7-1926-45F4-B6DD-392B68932D4A}
