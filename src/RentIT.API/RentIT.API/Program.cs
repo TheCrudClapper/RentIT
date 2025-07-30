@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using RentIT.Core.Domain.RepositoryContracts;
+using RentIT.Core.ServiceContracts;
+using RentIT.Core.Services;
 using RentIT.Infrastructure.DbContexts;
+using RentIT.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +24,12 @@ builder.Services.AddSwaggerGen( options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "RentItApi.xml"));
 });
+
+//Add Repositories 
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+//Add Services
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

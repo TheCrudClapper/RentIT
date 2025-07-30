@@ -19,10 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\RentIT.Core\RentIT.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\RentIT.Infrastructure\RentIT.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
