@@ -1,10 +1,9 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentIT.API.DependencyInjection;
-using RentIT.Core.Domain.RepositoryContracts;
-using RentIT.Core.ServiceContracts;
-using RentIT.Core.Services;
+using RentIT.Core.Domain.Entities;
 using RentIT.Infrastructure.DbContexts;
-using RentIT.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +25,13 @@ builder.Services.AddSwaggerGen( options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "RentItApi.xml"));
 });
+
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders()
+    .AddUserStore<UserStore<User, Role, ApplicationDbContext, Guid>>()
+    .AddRoleStore<RoleStore<Role, ApplicationDbContext, Guid>>();
+
 builder.Services.RegisterApplicationServices();
 
 

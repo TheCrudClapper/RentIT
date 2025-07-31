@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RentIT.Core.Domain.Entities;
 
 namespace RentIT.Infrastructure.DbContexts
 {
-    public class ApplicationDbContext :DbContext
+    public class ApplicationDbContext :IdentityDbContext<User, Role, Guid>
     {
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Equipment> EquipmentItems { get; set; }
         public virtual DbSet<Rental> Rentals { get; set; }
         
