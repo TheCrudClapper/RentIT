@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RentIT.API.DependencyInjection;
 using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Core.ServiceContracts;
 using RentIT.Core.Services;
@@ -20,15 +21,13 @@ builder.Services.AddOpenApi();
 
 //Enables swagger to read the endpoints of application
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen( options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "RentItApi.xml"));
 });
+builder.Services.RegisterApplicationServices();
 
-//Add Repositories 
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-//Add Services
-builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
