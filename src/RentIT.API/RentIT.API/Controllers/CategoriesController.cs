@@ -21,7 +21,7 @@ namespace RentIT.API.Controllers
             var result = await _categoryService.AddCategory(request);
 
             if (result.IsFailure)
-                return Problem(detail: result.Error.Description, statusCode: 400);
+                return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
 
             return result.Value;
         }
@@ -36,6 +36,26 @@ namespace RentIT.API.Controllers
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
 
             return result.Value;
+        }
+
+        //GET :api/Categories
+        [HttpGet]
+        public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+        {
+            var categories = await _categoryService.GetAllCategories();
+            return categories;
+        }
+
+        //PUT :api/Categories
+        [HttpPut("{categoryId}")]
+        public async Task<ActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request)
+        {
+            var result = await _categoryService.UpdateCategory(categoryId, request);
+
+            if (result.IsFailure)
+                return Problem(detail: result.Error.Description, statusCode:result.Error.ErrorCode);
+
+            return NoContent();
         }
 
         //DELETE: api/Categories/categoryId

@@ -22,5 +22,13 @@ namespace RentIT.Core.Mappings
                 Name = request.Name
             };
         }
+        public static Category ToCategory(this CategoryUpdateRequest request)
+        {
+            return new Category
+            {
+                Name = request.Name,
+                Description = request.Description,
+            };
+        }
     }
 }

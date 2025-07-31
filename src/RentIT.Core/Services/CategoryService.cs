@@ -18,19 +18,43 @@ namespace RentIT.Core.Services
         {
             Category category = request.ToCategory();
 
+            if(await _categoryRepository.IsEntityValid(category))
+                return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotUnique);
+
             Category newCategory = await _categoryRepository.AddCategoryAsync(category);
 
             return Result.Success(newCategory.ToCategoryResponse());
         }
 
-        public async Task<Result> DeleteCategory(Guid id)
+        public async Task<Result> DeleteCategory(Guid categoryId)
         {
-            bool isSuccess = await _categoryRepository.DeleteCategoryAsync(id);
+            bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId);
 
             if (!isSuccess)
                 return Result.Failure(CategoryErrors.CategoryNotFound);
 
             return Result.Success();
+        }
+
+        public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request)
+        {
+            Category categoryToEdit = request.ToCategory();
+
+            if(await _categoryRepository.IsEntityValid(categoryToEdit))
+                return Result.Failure(CategoryErrors.CategoryNotUnique);
+
+            bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit);
+
+            if (!isSuccess)
+                return Result.Failure(CategoryErrors.CategoryNotFound);
+
+            return Result.Success();
+        }
+
+        public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+        {
+            IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync();
+            return categories.Select(item => item.ToCategoryResponse());
         }
 
         public async Task<Result<CategoryResponse>> GetCategory(Guid id)
