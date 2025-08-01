@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DTO\EquipmentDto\" />
-    <Folder Include="DTO\NewFolder\" />
-    <Folder Include="DTO\UserDto\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RentIT.Core.DTO.CategoryDto;
 using RentIT.Core.ServiceContracts;
 
@@ -28,6 +29,7 @@ namespace RentIT.API.Controllers
 
         //GET :api/Categories/categoryId
         [HttpGet("{categoryId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CategoryResponse>> GetCategory(Guid categoryId)
         {
             var result = await _categoryService.GetCategory(categoryId);

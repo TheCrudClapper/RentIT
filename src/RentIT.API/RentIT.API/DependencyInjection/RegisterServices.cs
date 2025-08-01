@@ -15,6 +15,7 @@ namespace RentIT.API.DependencyInjection
 
             //Add Services
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserService, UserService>();
 
             //Add Utility Services/Classes
         }

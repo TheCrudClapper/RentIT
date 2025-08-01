@@ -21,16 +21,20 @@ builder.Services.AddOpenApi();
 //Enables swagger to read the endpoints of application
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen( options =>
+builder.Services.AddSwaggerGen(options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "RentItApi.xml"));
 });
 
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders()
-    .AddUserStore<UserStore<User, Role, ApplicationDbContext, Guid>>()
-    .AddRoleStore<RoleStore<Role, ApplicationDbContext, Guid>>();
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders()
+.AddUserStore<UserStore<User, Role, ApplicationDbContext, Guid>>()
+.AddRoleStore<RoleStore<Role, ApplicationDbContext, Guid>>();
 
 builder.Services.RegisterApplicationServices();
 
@@ -49,6 +53,7 @@ app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
