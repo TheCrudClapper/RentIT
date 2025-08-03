@@ -5,6 +5,9 @@ using RentIT.Core.ServiceContracts;
 
 namespace RentIT.API.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -17,6 +20,7 @@ namespace RentIT.API.Controllers
 
         //POST: api/Categories
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request)
         {
             var result = await _categoryService.AddCategory(request);
@@ -42,10 +46,10 @@ namespace RentIT.API.Controllers
 
         //GET :api/Categories
         [HttpGet]
-        public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+        public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategories();
-            return categories;
+            return categories.ToList();
         }
 
         //PUT :api/Categories

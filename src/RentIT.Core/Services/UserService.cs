@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RentIT.Core.Domain.Entities;
+using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Core.DTO.UserDto;
 using RentIT.Core.Enums;
 using RentIT.Core.Mappings;
 using RentIT.Core.ResultTypes;
 using RentIT.Core.ServiceContracts;
+
 namespace RentIT.Core.Services
 {
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public UserService(UserManager<User> userManager, RoleManager<Role> roleManager)
+        private readonly IUserRepository _userRepository;
+        public UserService(UserManager<User> userManager, RoleManager<Role> roleManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _userRepository = userRepository;
         }
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
         {
@@ -67,5 +71,11 @@ namespace RentIT.Core.Services
 
         private bool IsAllowedRole(UserRoleOption role) =>
                 role == UserRoleOption.User || role == UserRoleOption.Admin;
+
+        public async Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync()
+        {
+            IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync();
+            return users.Select(item => item.ToUserResponse());
+        }
     }
 }

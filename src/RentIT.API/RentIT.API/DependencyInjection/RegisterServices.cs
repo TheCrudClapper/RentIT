@@ -11,11 +11,12 @@ namespace RentIT.API.DependencyInjection
         {
             //Add Repositories 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //Add Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
+            
 
             //Add Utility Services/Classes
         }

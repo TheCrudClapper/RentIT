@@ -14,6 +14,19 @@ namespace RentIT.Core.Mappings
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
+                IsActive = true,
+                DateCreated = DateTime.UtcNow,
+            };
+        }
+        public static UserResponse ToUserResponse(this User user)
+        {
+            return new UserResponse
+            {
+                //Email is always added in register 
+                Email = user.Email!,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = user.Id,
             };
         }
     }

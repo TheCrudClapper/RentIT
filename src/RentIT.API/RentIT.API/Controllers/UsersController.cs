@@ -6,10 +6,10 @@ namespace RentIT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -48,7 +48,12 @@ namespace RentIT.API.Controllers
             return NoContent();
         }
 
-        //POST :api/User/ChangePassword
-
+        //GET :/api/Users
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers()
+        {
+            var users = await _userService.GetAllActiveUsersAsync();
+            return users.ToList();
+        }
     }
 }

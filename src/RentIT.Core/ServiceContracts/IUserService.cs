@@ -8,5 +8,6 @@ namespace RentIT.Core.ServiceContracts
     {
         Task<IdentityResult> RegisterAsync(RegisterRequest request);
         Task<Result> LoginAsync(LoginRequest request);
+        Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync();
     }
 }
