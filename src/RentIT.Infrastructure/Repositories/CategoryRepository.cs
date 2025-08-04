@@ -2,7 +2,6 @@
 using RentIT.Core.Domain.Entities;
 using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Infrastructure.DbContexts;
-using System.Threading.Tasks;
 
 namespace RentIT.Infrastructure.Repositories
 {
@@ -17,11 +16,8 @@ namespace RentIT.Infrastructure.Repositories
         public async Task<Category> AddCategoryAsync(Category category)
         {
             category.Id = Guid.NewGuid();
-            category.IsActive = true;
-            category.DateCreated = DateTime.UtcNow;
             _dbContext.Categories.Add(category);
             await _dbContext.SaveChangesAsync();
-
             return category;
         }
 

@@ -54,7 +54,7 @@ namespace RentIT.API.Controllers
 
         //PUT :api/Categories
         [HttpPut("{categoryId}")]
-        public async Task<ActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request)
+        public async Task<IActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request)
         {
             var result = await _categoryService.UpdateCategory(categoryId, request);
 
@@ -66,7 +66,7 @@ namespace RentIT.API.Controllers
 
         //DELETE: api/Categories/categoryId
         [HttpDelete("{categoryId}")]
-        public async Task<ActionResult> DeleteCategory(Guid categoryId)
+        public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             var result = await _categoryService.DeleteCategory(categoryId);
 
