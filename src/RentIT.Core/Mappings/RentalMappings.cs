@@ -11,9 +11,9 @@ namespace RentIT.Core.Mappings
             {
                 StartDate = rental.StartDate,
                 Id = rental.Id,
-                CreatorEmail = rental.CreatedBy.Email!,
+                CreatorEmail = rental.RentedBy.Email!,
                 EndDate = rental.EndDate,
-                RentalPrice = rental.RentalPrice,
+                RentalPrice = rental.TotalRentalPrice,
                 EquipmentName = rental.Equipment.Name,
                 ReturnedDate = rental.ReturnedDate
             };
@@ -25,9 +25,9 @@ namespace RentIT.Core.Mappings
             {
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                UserId = request.UserId,
+                RentedByUserId = request.UserId,
                 EquipmentId = request.EquipmentId,
-                RentalPrice = request.RentalPrice,
+                TotalRentalPrice = request.RentalPrice,
                 ReturnedDate = null,
                 IsActive = true,
                 DateCreated = DateTime.UtcNow,
@@ -40,7 +40,7 @@ namespace RentIT.Core.Mappings
             {
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                UserId = request.UserId,
+                RentedByUserId = request.UserId,
                 EquipmentId = request.EquipmentId,
                 DateEdited = DateTime.UtcNow,
                 ReturnedDate = request.ReturnedDate,

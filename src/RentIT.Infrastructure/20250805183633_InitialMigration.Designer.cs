@@ -12,8 +12,8 @@ using RentIT.Infrastructure.DbContexts;
 namespace RentIT.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250803174747_IsActiveFieldUserMigration")]
-    partial class IsActiveFieldUserMigration
+    [Migration("20250805183633_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,9 @@ namespace RentIT.Infrastructure.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -190,6 +193,9 @@ namespace RentIT.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<decimal>("RentalPricePerDay")
+                        .HasColumnType("decimal(5, 2)");
+
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -199,14 +205,11 @@ namespace RentIT.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("EquipmentItems");
                 });
@@ -235,8 +238,8 @@ namespace RentIT.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("RentalPrice")
-                        .HasColumnType("decimal(5, 2)");
+                    b.Property<Guid>("RentedByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ReturnedDate")
                         .HasColumnType("datetime2");
@@ -244,14 +247,14 @@ namespace RentIT.Infrastructure.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("TotalRentalPrice")
+                        .HasColumnType("decimal(5, 2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EquipmentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RentedByUserId");
 
                     b.ToTable("Rentals");
                 });
@@ -431,15 +434,15 @@ namespace RentIT.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentIT.Core.Domain.Entities.User", "User")
+                    b.HasOne("RentIT.Core.Domain.Entities.User", "CreatedBy")
                         .WithMany("CreatedEquipmentItems")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("User");
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("RentIT.Core.Domain.Entities.Rental", b =>
@@ -450,15 +453,15 @@ namespace RentIT.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentIT.Core.Domain.Entities.User", "CreatedBy")
+                    b.HasOne("RentIT.Core.Domain.Entities.User", "RentedBy")
                         .WithMany("Rentals")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("RentedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Equipment");
+
+                    b.Navigation("RentedBy");
                 });
 
             modelBuilder.Entity("RentIT.Core.Domain.Entities.Category", b =>

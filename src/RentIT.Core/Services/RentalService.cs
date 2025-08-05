@@ -1,4 +1,5 @@
-﻿using RentIT.Core.Domain.Entities;
+﻿using RentIT.Core.CustomValidators;
+using RentIT.Core.Domain.Entities;
 using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Core.DTO.RentalDto;
 using RentIT.Core.Mappings;
@@ -10,9 +11,11 @@ namespace RentIT.Core.Services
     public class RentalService : IRentalService
     {
         private readonly IRentalRepository _rentalRepository;
-        public RentalService(IRentalRepository rentalRepository)
+        private readonly RentalValidator _rentalValidator;
+        public RentalService(IRentalRepository rentalRepository, RentalValidator rentalValidator)
         {
             _rentalRepository = rentalRepository;
+            _rentalValidator = rentalValidator;
         }
 
         public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request)
@@ -61,5 +64,9 @@ namespace RentIT.Core.Services
             return Result.Success();
         }
 
+        //private async Task<Result> ValidateRentalRequests()
+        //{
+
+        //}
     }
 }

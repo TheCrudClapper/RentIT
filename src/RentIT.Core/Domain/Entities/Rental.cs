@@ -11,17 +11,17 @@ namespace RentIT.Core.Domain.Entities
     public class Rental : BaseEntity
     {
         public Guid EquipmentId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid RentedByUserId { get; set; }
         public DateTime? ReturnedDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         [Column(TypeName = "decimal(5, 2)")]
-        public decimal RentalPrice { get; set; }
+        public decimal TotalRentalPrice { get; set; }
         [ForeignKey("EquipmentId")]
         public Equipment Equipment { get; set; } = null!;
 
-        [ForeignKey("UserId")]
-        public User CreatedBy { get; set; } = null!;
+        [ForeignKey("RentedByUserId")]
+        public User RentedBy { get; set; } = null!;
 
     }
 }

@@ -27,18 +27,19 @@ namespace RentIT.Core.Domain.Entities
     {
         [MaxLength(50)]
         public string Name { get; set; } = null!;
-        public Guid UserId { get; set; }
+        public Guid CreatedByUserId { get; set; }
         public Guid CategoryId { get; set; }
         [MaxLength(50)]
         public string SerialNumber { get; set; } = null!;
+        [Column(TypeName = "decimal(5, 2)")]
+        public decimal RentalPricePerDay { get; set; }
         public RentStatusEnum Status { get; set; }
-
         [MaxLength(255)]
         public string? Notes { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } = null!;
-        [ForeignKey("UserId")]
-        public User User { get; set; } = null!;
+        [ForeignKey("CreatedByUserId")]
+        public User CreatedBy { get; set; } = null!;
         public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
     }
 }

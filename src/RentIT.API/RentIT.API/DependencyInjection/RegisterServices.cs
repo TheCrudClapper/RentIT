@@ -1,4 +1,5 @@
-﻿using RentIT.Core.Domain.RepositoryContracts;
+﻿using RentIT.Core.CustomValidators;
+using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Core.ServiceContracts;
 using RentIT.Core.Services;
 using RentIT.Infrastructure.Repositories;
@@ -13,13 +14,17 @@ namespace RentIT.API.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddScoped<IEquipmentRepository , EquipmentRepository>();
 
             //Add Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRentalService, RentalService>();
+            services.AddScoped<IEquipmentService, EquipmentService>();
 
             //Add Utility Services/Classes
+            services.AddScoped<RentalValidator, RentalValidator>();
         }
     }
 }
+

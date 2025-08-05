@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RentIT.Core.CustomValidators;
+using System.ComponentModel.DataAnnotations;
 namespace RentIT.Core.DTO.RentalDto
 {
     public class RentalAddRequest
@@ -7,9 +8,9 @@ namespace RentIT.Core.DTO.RentalDto
         public Guid EquipmentId { get; set; }
         [Required]
         public Guid UserId { get; set; }
-        [Required]
+        [Required, FutureDateValidator]
         public DateTime StartDate { get; set; }
-        [Required]
+        [Required, FutureDateValidator]
         public DateTime EndDate { get; set; }
         [Required]
         public decimal RentalPrice { get; set; }

@@ -14,7 +14,7 @@ namespace RentIT.API.Controllers
             _userService = userService;
         }
 
-        //POST :api/User/Register
+        //POST :api/CreatedBy/Register
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterRequest request)
@@ -33,7 +33,7 @@ namespace RentIT.API.Controllers
             return NoContent();
         }
 
-        //POST :api/User/Login
+        //POST :api/CreatedBy/Login
         [Route("Login")]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)

@@ -25,7 +25,7 @@ namespace RentIT.Core.Services
             User user = request.ToUserEntity();
 
             if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return IdentityResult.Failed(new IdentityError { Code = "", Description = "User with this email already exists" });
+                return IdentityResult.Failed(new IdentityError { Code = "", Description = "CreatedBy with this email already exists" });
 
             if (!IsAllowedRole(request.UserRoleOption))
                 return IdentityResult.Failed(new IdentityError{ Code = "", Description = "This role cannot be assigned during registration"});
