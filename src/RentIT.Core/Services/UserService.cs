@@ -53,7 +53,7 @@ namespace RentIT.Core.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
-                return Result.Failure(UserErrors.UserDoesNotExist);
+                return Result.Failure(UserErrors.UserNotFound);
 
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
                 return Result.Failure(UserErrors.WrongPassword);
@@ -76,6 +76,11 @@ namespace RentIT.Core.Services
         {
             IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync();
             return users.Select(item => item.ToUserResponse());
+        }
+
+        public async Task<bool> DoesUserExists(Guid userId)
+        {
+            return await _userRepository.DoesUserExistsAsync(userId);
         }
     }
 }

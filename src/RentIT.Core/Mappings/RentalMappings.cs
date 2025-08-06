@@ -13,7 +13,7 @@ namespace RentIT.Core.Mappings
                 Id = rental.Id,
                 CreatorEmail = rental.RentedBy.Email!,
                 EndDate = rental.EndDate,
-                RentalPrice = rental.TotalRentalPrice,
+                TotalRentalPrice = rental.TotalRentalPrice,
                 EquipmentName = rental.Equipment.Name,
                 ReturnedDate = rental.ReturnedDate
             };
@@ -27,7 +27,7 @@ namespace RentIT.Core.Mappings
                 EndDate = request.EndDate,
                 RentedByUserId = request.UserId,
                 EquipmentId = request.EquipmentId,
-                TotalRentalPrice = request.RentalPrice,
+                TotalRentalPrice = 0,
                 ReturnedDate = null,
                 IsActive = true,
                 DateCreated = DateTime.UtcNow,

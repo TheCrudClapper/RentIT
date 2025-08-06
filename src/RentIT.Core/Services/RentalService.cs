@@ -1,5 +1,4 @@
-﻿using RentIT.Core.CustomValidators;
-using RentIT.Core.Domain.Entities;
+﻿using RentIT.Core.Domain.Entities;
 using RentIT.Core.Domain.RepositoryContracts;
 using RentIT.Core.DTO.RentalDto;
 using RentIT.Core.Mappings;
@@ -11,19 +10,32 @@ namespace RentIT.Core.Services
     public class RentalService : IRentalService
     {
         private readonly IRentalRepository _rentalRepository;
-        private readonly RentalValidator _rentalValidator;
-        public RentalService(IRentalRepository rentalRepository, RentalValidator rentalValidator)
+        private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUserRepository _userRepository;
+        public RentalService(IRentalRepository rentalRepository, IEquipmentRepository equipmentRepository, IUserRepository userRepository)
         {
             _rentalRepository = rentalRepository;
-            _rentalValidator = rentalValidator;
+            _equipmentRepository = equipmentRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request)
         {
             Rental rental = request.ToRentalEntity();
+            
+            var validationResult = await ValidateRentalEntity(rental);
+
+            if (validationResult.IsFailure)
+                return Result.Failure<RentalResponse>(validationResult.Error);
+
+            var dailyPrice = await _equipmentRepository.GetDailyPriceAsync(rental.EquipmentId);
+            if (dailyPrice == null)
+                return Result.Failure<RentalResponse>(EquipmentErrors.EquipmentNotFound);
+
+            rental.TotalRentalPrice = CalculateTotalRentalPrice(rental.StartDate, rental.EndDate, dailyPrice.Value);
 
             Rental newRental = await _rentalRepository.AddRentalAsync(rental);
-
+            
             return newRental.ToRentalResponse();
         }
 
@@ -64,9 +76,35 @@ namespace RentIT.Core.Services
             return Result.Success();
         }
 
-        //private async Task<Result> ValidateRentalRequests()
-        //{
+        private decimal CalculateTotalRentalPrice(DateTime startDate, DateTime endDate, decimal dailyPrice)
+        {
+            var days = (endDate.Date - startDate.Date).Days;
+            return dailyPrice * days;
+        }
 
-        //}
+        private async Task<Result> ValidateRentalEntity(Rental entity)
+        {
+            //Check given equipmentId
+            if (!await _equipmentRepository.DoesEquipmentExistsAsync(entity.EquipmentId))
+                return Result.Failure(EquipmentErrors.EquipmentNotFound);
+
+            //Check given userId
+            if(!await _userRepository.DoesUserExistsAsync(entity.RentedByUserId))
+                return Result.Failure(UserErrors.UserNotFound);
+
+            //Check avaliablitiy of item
+            var equipmentStatus = await _equipmentRepository.GetEquipmentStatusAsync(entity.EquipmentId);
+
+            if(equipmentStatus == null 
+                || equipmentStatus == RentStatusEnum.Maintenance 
+                || equipmentStatus == RentStatusEnum.Rented)
+                return Result.Failure(EquipmentErrors.EquipmentNotAvaliable);
+
+            //Check ownership of item
+            if (await _equipmentRepository.DoesEquipmentBelongsToUser(entity.EquipmentId, entity.RentedByUserId))
+                return Result.Failure(RentalErrors.RentalForSelfEquipment);
+
+            return Result.Success();
+        }
     }
 }

@@ -243,7 +243,7 @@ namespace RentIT.Infrastructure.Migrations
                         column: x => x.EquipmentId,
                         principalTable: "EquipmentItems",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

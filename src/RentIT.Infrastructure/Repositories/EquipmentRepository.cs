@@ -27,6 +27,12 @@ namespace RentIT.Infrastructure.Repositories
             return true;
         }
 
+        public Task<bool> DoesEquipmentExistsAsync(Guid equipmentId)
+        {
+            return _context.EquipmentItems
+                .AnyAsync(item => item.Id == equipmentId && item.IsActive);
+        }
+
         public async Task<Equipment?> GetActiveEquipmentByIdAsync(Guid equipmentId)
         {
             return await _context.EquipmentItems
@@ -43,7 +49,26 @@ namespace RentIT.Infrastructure.Repositories
                 .Include(item => item.Category)
                 .Include(item => item.Rentals)
                 .ToListAsync();
-                
+        }
+        public async Task<decimal?> GetDailyPriceAsync(Guid equipmentId)
+        {
+            return await _context.EquipmentItems
+                .Where(item => item.Id == equipmentId && item.IsActive)
+                .Select(item => item.RentalPricePerDay)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DoesEquipmentBelongsToUser(Guid equipmentId, Guid userId)
+        {
+            return await _context.EquipmentItems
+                .AnyAsync(item => item.IsActive && item.Id == equipmentId && item.CreatedByUserId == userId);
+        }
+
+        public async Task<RentStatusEnum?> GetEquipmentStatusAsync(Guid equipmentId)
+        {
+            return await _context.EquipmentItems.Where(item => item.IsActive && item.Id == equipmentId)
+                .Select(item => item.Status)
+                .FirstOrDefaultAsync();
         }
     }
 }

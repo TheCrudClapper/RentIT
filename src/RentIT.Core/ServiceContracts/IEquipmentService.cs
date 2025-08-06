@@ -7,7 +7,6 @@ namespace RentIT.Core.ServiceContracts
     {
         Task<Result<EquipmentResponse>> GetActiveEquipment(Guid equipmentId);
         Task<IEnumerable<EquipmentResponse>> GetAllActiveEquipmentItems();
-
         Task<Result> DeleteEquipment(Guid equipmentId);
     }
 }

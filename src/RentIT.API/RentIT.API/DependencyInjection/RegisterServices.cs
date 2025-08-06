@@ -23,7 +23,6 @@ namespace RentIT.API.DependencyInjection
             services.AddScoped<IEquipmentService, EquipmentService>();
 
             //Add Utility Services/Classes
-            services.AddScoped<RentalValidator, RentalValidator>();
         }
     }
 }

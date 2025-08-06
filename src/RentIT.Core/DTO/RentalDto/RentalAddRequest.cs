@@ -8,11 +8,9 @@ namespace RentIT.Core.DTO.RentalDto
         public Guid EquipmentId { get; set; }
         [Required]
         public Guid UserId { get; set; }
-        [Required, FutureDateValidator]
+        [Required, FutureDateAttribute]
         public DateTime StartDate { get; set; }
-        [Required, FutureDateValidator]
+        [Required, FutureDateAttribute]
         public DateTime EndDate { get; set; }
-        [Required]
-        public decimal RentalPrice { get; set; }
     }
 }

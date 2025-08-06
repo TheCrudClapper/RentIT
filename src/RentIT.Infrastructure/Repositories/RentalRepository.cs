@@ -17,11 +17,13 @@ namespace RentIT.Infrastructure.Repositories
         {
             rental.Id = Guid.NewGuid();
             _context.Rentals.Add(rental);
-            await _context.SaveChangesAsync();
 
             //loading up navigation properties to return to user full response object
             await _context.Entry(rental).Reference(item => item.RentedBy).LoadAsync();
             await _context.Entry(rental).Reference(item => item.Equipment).LoadAsync();
+
+            rental.Equipment.Status = RentStatusEnum.Rented;
+            await _context.SaveChangesAsync();
             return rental;
         }
 
@@ -67,6 +69,7 @@ namespace RentIT.Infrastructure.Repositories
             if(rentalToDelete == null)
                 return false;
 
+            rentalToDelete.Equipment.Status = RentStatusEnum.Avaliable;
             rentalToDelete.IsActive = false;
             rentalToDelete.DateDeleted = DateTime.UtcNow;
 

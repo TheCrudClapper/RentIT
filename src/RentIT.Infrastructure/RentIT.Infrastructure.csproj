@@ -25,4 +25,8 @@
     <ProjectReference Include="..\RentIT.Core\RentIT.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

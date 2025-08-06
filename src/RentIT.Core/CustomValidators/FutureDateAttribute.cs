@@ -2,7 +2,7 @@
 
 namespace RentIT.Core.CustomValidators
 {
-    public class FutureDateValidator : ValidationAttribute
+    public class FutureDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext context)
         {

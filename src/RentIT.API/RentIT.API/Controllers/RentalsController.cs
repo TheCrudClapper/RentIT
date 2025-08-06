@@ -55,7 +55,7 @@ namespace RentIT.API.Controllers
         {
             var result = await _rentalService.AddRental(request);
             if (result.IsFailure)
-                return BadRequest();
+                return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
 
             return result.Value;    
         }
