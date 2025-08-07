@@ -70,5 +70,32 @@ namespace RentIT.Infrastructure.Repositories
                 .Select(item => item.Status)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Equipment> AddEquipmentAsync(Equipment equipment)
+        {
+            equipment.Id = Guid.NewGuid();
+            _context.EquipmentItems.Add(equipment);
+            await _context.SaveChangesAsync();
+
+            return equipment;
+        }
+
+        public async Task<bool> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment)
+        {
+            var equipmentToUpdate = await GetActiveEquipmentByIdAsync(equipmentId);
+
+            if (equipmentToUpdate == null)
+                return false;
+
+            equipmentToUpdate.Name = equipment.Name;
+            equipmentToUpdate.Status = equipment.Status;
+            equipmentToUpdate.Notes = equipment.Notes;
+            equipmentToUpdate.RentalPricePerDay = equipment.RentalPricePerDay;
+            equipmentToUpdate.SerialNumber = equipment.SerialNumber;
+            equipmentToUpdate.CategoryId = equipment.CategoryId;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

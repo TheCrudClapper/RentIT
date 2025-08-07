@@ -52,7 +52,7 @@ namespace RentIT.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers()
         {
-            var users = await _userService.GetAllActiveUsersAsync();
+            var users = await _userService.GetAllUsersAsync();
             return users.ToList();
         }
     }

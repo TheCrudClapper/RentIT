@@ -4,27 +4,21 @@ namespace RentIT.Core.CustomValidators
 {
     public class FutureDateAttribute : ValidationAttribute
     {
-        protected override ValidationResult? IsValid(object? value, ValidationContext context)
+        public FutureDateAttribute()
         {
-            if(value != null)
-            {
-                DateTime date;
-                bool parseResult = DateTime.TryParse(value.ToString(), out date);
+            ErrorMessage = "The date must be in the future.";
+        }
 
-                if (!parseResult)
-                    return new ValidationResult("Error while parsing date");
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+        {
 
-                if(date < DateTime.UtcNow)
-                {
-                    return new ValidationResult("Given date cannot be in past");
-                }
-                else
-                {
-                    return ValidationResult.Success;
-                }
-            }
+            if (value is not DateTime date)
+                return new ValidationResult("Invalid date format.");
 
-            return null;
+            if (date.Date <= DateTime.UtcNow.Date)
+                return new ValidationResult(ErrorMessage);
+
+            return ValidationResult.Success;
         }
     }
 }

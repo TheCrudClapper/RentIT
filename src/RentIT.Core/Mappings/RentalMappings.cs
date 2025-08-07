@@ -40,7 +40,6 @@ namespace RentIT.Core.Mappings
             {
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                RentedByUserId = request.UserId,
                 EquipmentId = request.EquipmentId,
                 DateEdited = DateTime.UtcNow,
                 ReturnedDate = request.ReturnedDate,

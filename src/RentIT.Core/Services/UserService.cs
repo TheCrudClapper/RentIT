@@ -72,7 +72,7 @@ namespace RentIT.Core.Services
         private bool IsAllowedRole(UserRoleOption role) =>
                 role == UserRoleOption.User || role == UserRoleOption.Admin;
 
-        public async Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync()
+        public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
         {
             IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync();
             return users.Select(item => item.ToUserResponse());

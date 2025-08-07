@@ -6,6 +6,7 @@ namespace RentIT.Core.DTO.RentalDto
     {
         [Required]
         public Guid EquipmentId { get; set; }
+        //User ID For testing purposes only
         [Required]
         public Guid UserId { get; set; }
         [Required, FutureDateAttribute]

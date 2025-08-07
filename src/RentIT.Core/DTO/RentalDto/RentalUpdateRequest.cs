@@ -7,11 +7,8 @@ namespace RentIT.Core.DTO.RentalDto
         [Required]
         public Guid EquipmentId { get; set; }
         [Required]
-        public Guid UserId { get; set; }
-        [Required]
         public DateTime StartDate { get; set; }
         public DateTime? ReturnedDate { get; set; }
-
         [Required]
         public DateTime EndDate { get; set; }
         [Required]

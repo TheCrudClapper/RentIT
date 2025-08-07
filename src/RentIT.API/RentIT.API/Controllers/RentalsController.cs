@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RentIT.Core.Domain.Entities;
 using RentIT.Core.DTO.RentalDto;
 using RentIT.Core.ServiceContracts;
-using RentIT.Infrastructure.DbContexts;
 
 namespace RentIT.API.Controllers
 {
@@ -21,15 +18,15 @@ namespace RentIT.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals()
         {
-            var rentals = await _rentalService.GetAllActiveRentals();
+            var rentals = await _rentalService.GetAllRentals();
             return rentals.ToList();
         }
 
         // GET: api/Rentals/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RentalResponse>> GetRental(Guid id)
+        [HttpGet("{rentalId}")]
+        public async Task<ActionResult<RentalResponse>> GetRental(Guid rentalId)
         {
-            var result = await _rentalService.GetActiveRental(id);
+            var result = await _rentalService.GetRental(rentalId);
 
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
@@ -38,10 +35,10 @@ namespace RentIT.API.Controllers
         }
 
         // PUT: api/Rentals/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request)
+        [HttpPut("{rentalId}")]
+        public async Task<IActionResult> PutRental(Guid rentalId, RentalUpdateRequest request)
         {
-            var result = await _rentalService.UpdateRental(id, request);
+            var result = await _rentalService.UpdateRental(rentalId, request);
 
             if(result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
@@ -61,10 +58,10 @@ namespace RentIT.API.Controllers
         }
 
         // DELETE: api/Rentals/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRental(Guid id)
+        [HttpDelete("{rentalId}")]
+        public async Task<IActionResult> DeleteRental(Guid rentalId)
         {
-            var result = await _rentalService.DeleteRental(id);
+            var result = await _rentalService.DeleteRental(rentalId);
 
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);

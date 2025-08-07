@@ -31,7 +31,7 @@ namespace RentIT.Core.Domain.Entities
         public Guid CategoryId { get; set; }
         [MaxLength(50)]
         public string SerialNumber { get; set; } = null!;
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(10, 2)")]
         public decimal RentalPricePerDay { get; set; }
         public RentStatusEnum Status { get; set; }
         [MaxLength(255)]
