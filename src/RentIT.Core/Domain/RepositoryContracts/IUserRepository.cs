@@ -4,5 +4,7 @@ namespace RentIT.Core.Domain.RepositoryContracts
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAllActiveUsersAsync();
+
+        Task<bool> DoesUserExistsAsync(Guid userId);
     }
 }

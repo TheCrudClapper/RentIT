@@ -7,7 +7,7 @@
         public DateTime? ReturnedDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal RentalPrice { get; set; }
+        public decimal TotalRentalPrice { get; set; }
         public string CreatorEmail { get; set; } = null!;
     }
 }

@@ -25,7 +25,7 @@ namespace RentIT.Core.Services
             User user = request.ToUserEntity();
 
             if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return IdentityResult.Failed(new IdentityError { Code = "", Description = "User with this email already exists" });
+                return IdentityResult.Failed(new IdentityError { Code = "", Description = "CreatedBy with this email already exists" });
 
             if (!IsAllowedRole(request.UserRoleOption))
                 return IdentityResult.Failed(new IdentityError{ Code = "", Description = "This role cannot be assigned during registration"});
@@ -53,7 +53,7 @@ namespace RentIT.Core.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
-                return Result.Failure(UserErrors.UserDoesNotExist);
+                return Result.Failure(UserErrors.UserNotFound);
 
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
                 return Result.Failure(UserErrors.WrongPassword);
@@ -72,10 +72,15 @@ namespace RentIT.Core.Services
         private bool IsAllowedRole(UserRoleOption role) =>
                 role == UserRoleOption.User || role == UserRoleOption.Admin;
 
-        public async Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync()
+        public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
         {
             IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync();
             return users.Select(item => item.ToUserResponse());
+        }
+
+        public async Task<bool> DoesUserExists(Guid userId)
+        {
+            return await _userRepository.DoesUserExistsAsync(userId);
         }
     }
 }

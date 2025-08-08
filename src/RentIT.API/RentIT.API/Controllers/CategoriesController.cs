@@ -20,7 +20,6 @@ namespace RentIT.API.Controllers
 
         //POST: api/Categories
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request)
         {
             var result = await _categoryService.AddCategory(request);
