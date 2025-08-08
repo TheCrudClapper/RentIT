@@ -15,6 +15,8 @@ namespace RentIT.Core.CustomValidators
             if (value is not DateTime date)
                 return new ValidationResult("Invalid date format.");
 
+            date = date.Date;
+
             if (date.Date <= DateTime.UtcNow.Date)
                 return new ValidationResult(ErrorMessage);
 

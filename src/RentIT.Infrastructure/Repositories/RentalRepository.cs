@@ -52,11 +52,8 @@ namespace RentIT.Infrastructure.Repositories
                 return false;
 
             rentalToUpdate.StartDate = rental.StartDate;
-            rentalToUpdate.TotalRentalPrice = rental.TotalRentalPrice;
             rentalToUpdate.ReturnedDate = rental.ReturnedDate;
             rentalToUpdate.EndDate = rental.EndDate;
-            rentalToUpdate.RentedByUserId = rental.RentedByUserId;
-            rentalToUpdate.EquipmentId = rental.EquipmentId;
 
             await _context.SaveChangesAsync();
             return true;

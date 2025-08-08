@@ -23,7 +23,7 @@ namespace RentIT.Core.Services
         {
             Rental rental = request.ToRentalEntity();
             
-            var validationResult = await ValidateRentalEntity(rental);
+            var validationResult = await ValidateAddRentalEntity(rental);
 
             if (validationResult.IsFailure)
                 return Result.Failure<RentalResponse>(validationResult.Error);
@@ -68,6 +68,11 @@ namespace RentIT.Core.Services
         {
             Rental rental = request.ToRentalEntity();
 
+            var validationResult = await ValidateUpdateRentalEntity(rental);
+
+            if (validationResult.IsFailure)
+                return Result.Failure(validationResult.Error);
+
             bool isSuccess = await _rentalRepository.UpdateRentalAsync(rentalId, rental);
 
             if (!isSuccess)
@@ -82,7 +87,7 @@ namespace RentIT.Core.Services
             return dailyPrice * days;
         }
 
-        private async Task<Result> ValidateRentalEntity(Rental entity)
+        private async Task<Result> ValidateAddRentalEntity(Rental entity)
         {
             //Check given equipmentId
             if (!await _equipmentRepository.DoesEquipmentExistsAsync(entity.EquipmentId))
@@ -106,5 +111,18 @@ namespace RentIT.Core.Services
 
             return Result.Success();
         }
+
+        private async Task<Result> ValidateUpdateRentalEntity(Rental entity)
+        {
+            //Check given equipmentId
+            if (!await _equipmentRepository.DoesEquipmentExistsAsync(entity.EquipmentId))
+                return Result.Failure(EquipmentErrors.EquipmentNotFound);
+            
+            //validate ownership, for now skip it, we dont have authentication or authorization
+
+
+            return Result.Success();
+        }
+
     }
 }

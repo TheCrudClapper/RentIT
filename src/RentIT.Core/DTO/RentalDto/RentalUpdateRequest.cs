@@ -11,7 +11,5 @@ namespace RentIT.Core.DTO.RentalDto
         public DateTime? ReturnedDate { get; set; }
         [Required]
         public DateTime EndDate { get; set; }
-        [Required]
-        public decimal RentalPrice { get; set; }
     }
 }
