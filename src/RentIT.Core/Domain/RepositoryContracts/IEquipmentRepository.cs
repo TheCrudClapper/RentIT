@@ -3,6 +3,7 @@ namespace RentIT.Core.Domain.RepositoryContracts
 {
     public interface IEquipmentRepository
     {
+        Task<bool> IsEquipmentUnique(Equipment equipment, Guid? excludeId = null);
         Task<Equipment> AddEquipmentAsync(Equipment equipment);
         Task<bool> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment);
         Task<Equipment?> GetActiveEquipmentByIdAsync(Guid equipmentId);

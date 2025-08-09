@@ -10,9 +10,13 @@ namespace RentIT.Core.Services
     public class EquipmentService : IEquipmentService
     {
         private readonly IEquipmentRepository _equipmentRepository;
-        public EquipmentService(IEquipmentRepository equipmentRepository)
+        private readonly IUserRepository _userRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        public EquipmentService(IEquipmentRepository equipmentRepository, IUserRepository userRepository, ICategoryRepository categoryRepository)
         {
             _equipmentRepository = equipmentRepository;
+            _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
@@ -45,7 +49,11 @@ namespace RentIT.Core.Services
         public async Task<Result> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request)
         {
             Equipment equipment = request.ToEquipment();
-            
+
+            var validationResult = await ValidateUpdateEquipmentEntity(equipment, equipmentId);
+            if (validationResult.IsFailure)
+                return Result.Failure<EquipmentResponse>(validationResult.Error);
+
             bool updationResult = await _equipmentRepository.UpdateEquipmentAsync(equipmentId, equipment);
 
             if (!updationResult)
@@ -58,9 +66,42 @@ namespace RentIT.Core.Services
         {
             Equipment equipment = request.ToEquipment();
             
+            var validationResult = await ValidateNewEquipmentEntity(equipment);
+            if (validationResult.IsFailure)
+                return Result.Failure<EquipmentResponse>(validationResult.Error);
+
             var newEquipment = await _equipmentRepository.AddEquipmentAsync(equipment);
 
             return newEquipment.ToEquipmentResponse();
+        }
+
+        private async Task<Result> ValidateNewEquipmentEntity(Equipment equipment)
+        {
+            if (!await _userRepository.DoesUserExistsAsync(equipment.CreatedByUserId))
+                return Result.Failure(UserErrors.UserNotFound);
+
+            if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
+                return Result.Failure(CategoryErrors.CategoryNotFound);
+
+            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment);
+
+            if (!isValid)
+                return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
+
+            return Result.Success();
+        }
+
+        private async Task<Result> ValidateUpdateEquipmentEntity(Equipment equipment, Guid equipmentId)
+        {
+            if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
+                return Result.Failure(CategoryErrors.CategoryNotFound);
+
+            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment, equipmentId);
+
+            if (!isValid)
+                return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
+
+            return Result.Success();
         }
     }
 }

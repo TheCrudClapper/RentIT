@@ -15,9 +15,9 @@ namespace RentIT.Infrastructure.Repositories
 
         public async Task<bool> DeleteEquipmentAsync(Guid equipmentId)
         {
-            var equipment = await  GetActiveEquipmentByIdAsync(equipmentId);
+            var equipment = await GetActiveEquipmentByIdAsync(equipmentId);
 
-            if(equipment == null)
+            if (equipment == null)
                 return false;
 
             equipment.DateDeleted = DateTime.UtcNow;
@@ -39,7 +39,7 @@ namespace RentIT.Infrastructure.Repositories
                 .Include(item => item.CreatedBy)
                 .Include(item => item.Category)
                 .Include(item => item.Rentals)
-                .FirstOrDefaultAsync(item => item.IsActive);
+                .FirstOrDefaultAsync(item => item.IsActive && item.Id == equipmentId);
         }
 
         public async Task<IEnumerable<Equipment>> GetAllActiveEquipmentItemsAsync()
@@ -76,7 +76,8 @@ namespace RentIT.Infrastructure.Repositories
             equipment.Id = Guid.NewGuid();
             _context.EquipmentItems.Add(equipment);
             await _context.SaveChangesAsync();
-
+            await _context.Entry(equipment).Reference(item => item.Category).LoadAsync();
+            await _context.Entry(equipment).Reference(item => item.CreatedBy).LoadAsync();
             return equipment;
         }
 
@@ -96,6 +97,14 @@ namespace RentIT.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> IsEquipmentUnique(Equipment equipment, Guid? excludeId = null)
+        {
+            return !await _context.EquipmentItems
+                .AnyAsync(item => item.IsActive
+                    && (item.Name == equipment.Name || item.SerialNumber == equipment.SerialNumber)
+                    && (excludeId == null || item.Id != excludeId));
         }
     }
 }

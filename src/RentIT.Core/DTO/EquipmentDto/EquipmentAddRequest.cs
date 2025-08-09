@@ -1,4 +1,5 @@
-﻿using RentIT.Core.Domain.Entities;
+﻿using RentIT.Core.CustomValidators;
+using RentIT.Core.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Core.DTO.EquipmentDto
@@ -14,7 +15,7 @@ namespace RentIT.Core.DTO.EquipmentDto
         public Guid CategoryId { get; set; }
         [Required, StringLength(50)]
         public string SerialNumber { get; set; } = null!;
-        [Required]
+        [Required, MinPrice]
         public decimal RentalPricePerDay { get; set; }
         [Required]
         public RentStatusEnum Status { get; set; }
