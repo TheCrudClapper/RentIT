@@ -9,6 +9,7 @@ namespace RentIT.Core.Domain.RepositoryContracts
         Task<Category?> GetCategoryByIdAsync(Guid categoryId);
         Task<bool> DeleteCategoryAsync(Guid categoryId);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
-        Task<bool> IsEntityValid(Category dbObject);
+        Task<bool> IsCategoryUnique(Category dbObject, Guid? excludeId = null);
+        Task<bool> DoesCategoryExist(Guid categoryId);
     }
 }

@@ -18,8 +18,8 @@ namespace RentIT.Core.Services
         {
             Category category = request.ToCategory();
 
-            if(await _categoryRepository.IsEntityValid(category))
-                return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotUnique);
+            if(!await _categoryRepository.IsCategoryUnique(category))
+                return Result.Failure<CategoryResponse>(CategoryErrors.CategoryAlreadyExists);
 
             Category newCategory = await _categoryRepository.AddCategoryAsync(category);
 
@@ -40,8 +40,8 @@ namespace RentIT.Core.Services
         {
             Category categoryToEdit = request.ToCategory();
 
-            if(await _categoryRepository.IsEntityValid(categoryToEdit))
-                return Result.Failure(CategoryErrors.CategoryNotUnique);
+            if(!await _categoryRepository.IsCategoryUnique(categoryToEdit, categoryId))
+                return Result.Failure(CategoryErrors.CategoryAlreadyExists);
 
             bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit);
 

@@ -89,25 +89,26 @@ namespace RentIT.Core.Services
 
         private async Task<Result> ValidateAddRentalEntity(Rental entity)
         {
-            //Check given equipmentId
-            if (!await _equipmentRepository.DoesEquipmentExistsAsync(entity.EquipmentId))
+            var equipment = await _equipmentRepository.GetActiveEquipmentByIdAsync(entity.EquipmentId);
+
+            //Check nullability of equipment from request
+            if (equipment == null)
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
-            //Check given userId
-            if(!await _userRepository.DoesUserExistsAsync(entity.RentedByUserId))
+            //Check if user exists
+            if (!await _userRepository.DoesUserExistsAsync(entity.RentedByUserId))
                 return Result.Failure(UserErrors.UserNotFound);
 
-            //Check avaliablitiy of item
-            var equipmentStatus = await _equipmentRepository.GetEquipmentStatusAsync(entity.EquipmentId);
-
-            if(equipmentStatus == null 
-                || equipmentStatus == RentStatusEnum.Maintenance 
-                || equipmentStatus == RentStatusEnum.Rented)
-                return Result.Failure(EquipmentErrors.EquipmentNotAvaliable);
-
             //Check ownership of item
-            if (await _equipmentRepository.DoesEquipmentBelongsToUser(entity.EquipmentId, entity.RentedByUserId))
+            if (equipment.CreatedByUserId != entity.RentedByUserId)
                 return Result.Failure(RentalErrors.RentalForSelfEquipment);
+
+            //Status check on equipment
+            if (equipment.Status == RentStatusEnum.Maintenance)
+                return Result.Failure(EquipmentErrors.EquipmentInMaintnance);
+
+            if(equipment.Status == RentStatusEnum.Rented)
+                return Result.Failure(EquipmentErrors.EquipmentRented(entity.StartDate, entity.EndDate));
 
             return Result.Success();
         }
