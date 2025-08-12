@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Domain\Entities\" />
+      <Folder Include="Domain\RepositoryContracts\" />
+      <Folder Include="DTO\" />
+      <Folder Include="Mappings\" />
+      <Folder Include="ResultTypes\" />
+      <Folder Include="ServiceContracts\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+    </ItemGroup>
+
+</Project>

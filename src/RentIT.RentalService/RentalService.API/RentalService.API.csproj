@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9744241f-9aa8-41b7-befd-7d39ef3fa5c8</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RentalService.Core\RentalService.Core.csproj" />
+    <ProjectReference Include="..\RentalService.Infrastructure\RentalService.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

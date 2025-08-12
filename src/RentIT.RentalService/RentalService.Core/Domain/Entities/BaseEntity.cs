@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentIT.Core.Domain.Entities
+namespace RentalService.Core.Domain.Entities
 {
     /// <summary>
     /// Represents the base entity type for database models, providing common properties for tracking entity state and

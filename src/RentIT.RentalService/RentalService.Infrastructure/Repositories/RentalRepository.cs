@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RentIT.Core.Domain.Entities;
-using RentIT.Core.Domain.RepositoryContracts;
-using RentIT.Infrastructure.DbContexts;
+﻿using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.RepositoryContracts;
 
-namespace RentIT.Infrastructure.Repositories
+namespace RentalService.Infrastructure.Repositories
 {
     public class RentalRepository : IRentalRepository
     {

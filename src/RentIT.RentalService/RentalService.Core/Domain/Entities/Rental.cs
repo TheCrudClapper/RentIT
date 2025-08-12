@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RentIT.Core.Domain.Entities
+namespace RentalService.Core.Domain.Entities
 {
     /// <summary>
     /// Represents a rental entity that contains information about the equipment associated with the rental.
@@ -17,11 +17,5 @@ namespace RentIT.Core.Domain.Entities
         public DateTime EndDate { get; set; }
         [Column(TypeName = "decimal(5, 2)")]
         public decimal RentalPrice { get; set; }
-        [ForeignKey("EquipmentId")]
-        public Equipment Equipment { get; set; } = null!;
-
-        [ForeignKey("UserId")]
-        public User CreatedBy { get; set; } = null!;
-
     }
 }

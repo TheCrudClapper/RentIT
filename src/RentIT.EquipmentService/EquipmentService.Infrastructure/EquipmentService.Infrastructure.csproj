@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="DatabaseContexts\**" />
+      <EmbeddedResource Remove="DatabaseContexts\**" />
+      <None Remove="DatabaseContexts\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Repositories\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+      <PackageReference Include="Npgsql" Version="9.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EquipmentService.Core\EquipmentService.Core.csproj" />
+    </ItemGroup>
+
+</Project>

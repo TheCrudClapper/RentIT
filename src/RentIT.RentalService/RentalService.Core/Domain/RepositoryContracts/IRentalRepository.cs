@@ -1,6 +1,6 @@
-﻿using RentIT.Core.Domain.Entities;
+﻿using RentalService.Core.Domain.Entities;
 
-namespace RentIT.Core.Domain.RepositoryContracts
+namespace RentalService.Core.Domain.RepositoryContracts
 {
     public interface IRentalRepository
     {
