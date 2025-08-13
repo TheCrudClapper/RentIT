@@ -11,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Add API Controllers
 builder.Services.AddControllers();
-
 //Add DB context
 builder.Services.AddDbContext<UsersDbContext>(options =>
 {
@@ -40,6 +39,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+//Add Fluent Validations
+
 
 var app = builder.Build();
 

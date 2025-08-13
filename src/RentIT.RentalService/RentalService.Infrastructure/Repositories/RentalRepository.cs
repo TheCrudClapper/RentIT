@@ -1,12 +1,14 @@
-﻿using RentalService.Core.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RentalService.Core.Domain.Entities;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Infrastructure.DbContexts;
 
 namespace RentalService.Infrastructure.Repositories
 {
     public class RentalRepository : IRentalRepository
     {
-        private readonly ApplicationDbContext _context;
-        public RentalRepository(ApplicationDbContext context)
+        private readonly RentalDbContext _context;
+        public RentalRepository(RentalDbContext context)
         {
             _context = context;
         }
@@ -18,16 +20,12 @@ namespace RentalService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             //loading up navigation properties to return to user full response object
-            await _context.Entry(rental).Reference(item => item.CreatedBy).LoadAsync();
-            await _context.Entry(rental).Reference(item => item.Equipment).LoadAsync();
             return rental;
         }
 
         public async Task<Rental?> GetActiveRentalByIdAsync(Guid rentalId)
         {
             return await _context.Rentals
-                .Include(item => item.CreatedBy)
-                .Include(item => item.Equipment)
                 .FirstOrDefaultAsync(item => item.IsActive && item.Id == rentalId);
         }
 
@@ -35,8 +33,6 @@ namespace RentalService.Infrastructure.Repositories
         {
             return await _context.Rentals
                 .Where(item => item.IsActive)
-                .Include(item => item.Equipment)
-                .Include(item => item.CreatedBy)
                 .ToListAsync();
         }
 

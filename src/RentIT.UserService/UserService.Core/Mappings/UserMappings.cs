@@ -10,6 +10,7 @@ public static class UserMappings
         return new User
         {
             //Email is used as user's username
+            Id = new Guid(),
             UserName = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
@@ -20,14 +21,9 @@ public static class UserMappings
     }
     public static UserResponse ToUserResponse(this User user)
     {
-        return new UserResponse
-        {
-            //Email is always added in register 
-            Email = user.Email!,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Id = user.Id,
-        };
+        //Email is always added
+        return new UserResponse(
+            user.Id, user.FirstName, user.LastName, user.Email!);
     }
 }
 

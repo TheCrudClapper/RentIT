@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UserService.Core.DTO;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.ResultTypes;
 
-namespace RentIT.Core.ServiceContracts;
+namespace UserService.Core.ServiceContracts;
 
 public interface IUserService
 {
-    Task<IdentityResult> RegisterAsync(RegisterRequest request);
-    Task<Result> LoginAsync(LoginRequest request);
+    Task<Result<UserAuthResponse>> RegisterAsync(RegisterRequest request);
+    Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request);
     Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync();
 }
 

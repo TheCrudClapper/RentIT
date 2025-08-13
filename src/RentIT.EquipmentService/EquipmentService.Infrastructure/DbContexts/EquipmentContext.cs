@@ -11,5 +11,12 @@ namespace EquipmentService.Infrastructure.DbContexts
         public EquipmentContext(DbContextOptions options) : base(options){}
 
         public EquipmentContext(){}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Equipment>().Property(prop => prop.Status)
+                .HasConversion<string>();
+        }
     }
 }

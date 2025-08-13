@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RentIT.Core.ServiceContracts;
 using UserService.Core.DTO.UserDto;
+using UserService.Core.ServiceContracts;
 namespace UserService.API.Controllers
 {
     [Route("api/[controller]")]
@@ -20,14 +20,9 @@ namespace UserService.API.Controllers
         {
             var result = await _userService.RegisterAsync(request);
 
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                   ModelState.AddModelError(error.Code, error.Description);
-                }
-                return ValidationProblem();
-            }
+            if (result.IsFailure)
+                return Problem(detail: result.Error.Description,
+                    statusCode: result.Error.ErrorCode);
 
             return NoContent();
         }

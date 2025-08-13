@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using UserService.Core.Domain.RepositoryContracts;
+using UserService.Infrastructure.Repositories;
 namespace UserService.Infrastructure
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace UserService.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services)
         {
+            services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }
     }

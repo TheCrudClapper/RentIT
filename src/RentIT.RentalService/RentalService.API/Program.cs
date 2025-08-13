@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using RentalService.API.Middleware;
 using RentalService.Core;
 using RentalService.Infrastructure;
+using RentalService.Infrastructure.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Add API Controllers
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<RentalDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDB"),
+        x => x.MigrationsAssembly("RentalService.Infrastructure"));
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
