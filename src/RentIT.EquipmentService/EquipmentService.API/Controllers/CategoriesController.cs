@@ -3,7 +3,7 @@ using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RentIT.API.Controllers;
+namespace EquipmentService.API.Controllers;
 
 /// <summary>
 /// 

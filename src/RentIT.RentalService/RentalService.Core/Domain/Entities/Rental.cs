@@ -15,7 +15,7 @@ namespace RentalService.Core.Domain.Entities
         public DateTime? ReturnedDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(10, 2)")]
         public decimal RentalPrice { get; set; }
     }
 }

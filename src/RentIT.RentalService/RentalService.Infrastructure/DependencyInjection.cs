@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Infrastructure.Repositories;
 namespace RentalService.Infrastructure
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace RentalService.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services)
         {
+            services.AddScoped<IRentalRepository, RentalRepository>();
             return services;
         }
     }

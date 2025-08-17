@@ -5,7 +5,7 @@ using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts;
 
-namespace RentIT.Core.Services
+namespace EquipmentService.Core.Services
 {
     public class EquipmentService : IEquipmentService
     {

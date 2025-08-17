@@ -3,7 +3,7 @@ using EquipmentService.Core.Domain.Entities;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 
-namespace RentIT.Infrastructure.Repositories
+namespace EquipmentService.Infrastructure.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {

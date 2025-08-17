@@ -5,7 +5,7 @@ using RentalService.Core.Mappings;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 
-namespace RentIT.Core.Services
+namespace RentalService.Core.Services
 {
     //DISCLAIMER !
     //Commented out ,for now, unused code or deprecated one. Will figure how to communicate with other apis soon

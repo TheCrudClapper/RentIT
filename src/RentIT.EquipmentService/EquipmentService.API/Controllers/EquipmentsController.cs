@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
-namespace RentIT.API.Controllers;
+namespace EquipmentService.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

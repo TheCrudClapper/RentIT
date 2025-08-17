@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-namespace RentalService.Core
+using RentalService.Core.ServiceContracts;
+using RentalService.Core.Services;
+namespace RentalService.Core;
+
+/// <summary>
+/// Class to register services related to infrastructure layer
+/// </summary>
+public static class DependencyInjection
 {
-    /// <summary>
-    /// Class to register services related to infrastructure layer
-    /// </summary>
-    public static  class DependencyInjection
+    public static IServiceCollection AddCoreLayer(this IServiceCollection services)
     {
-        public static IServiceCollection AddCoreLayer(this IServiceCollection services)
-        {
-            return services;
-        }
+        services.AddScoped<IRentalService, Services.RentalService>();
+        return services;
     }
 }
