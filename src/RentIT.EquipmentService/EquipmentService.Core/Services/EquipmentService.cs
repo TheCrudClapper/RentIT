@@ -10,12 +10,15 @@ namespace EquipmentService.Core.Services
     public class EquipmentService : IEquipmentService
     {
         private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
         public EquipmentService(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository)
         {
             _equipmentRepository = equipmentRepository;
+            _userRepository = userRepository;
             _categoryRepository = categoryRepository;
         }
+
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
         {
@@ -74,6 +77,9 @@ namespace EquipmentService.Core.Services
 
         private async Task<Result> ValidateNewEquipmentEntity(Equipment equipment)
         {
+            if (!await _userRepository.DoesUserExistsAsync(equipment.CreatedByUserId))
+                return Result.Failure(UserErrors.UserNotFound);
+
             if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
 

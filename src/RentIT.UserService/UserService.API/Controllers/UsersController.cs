@@ -13,7 +13,7 @@ namespace UserService.API.Controllers
             _userService = userService;
         }
 
-        //POST :api/User/Register
+        //POST :api/CreatedBy/Register
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterRequest request)
@@ -27,7 +27,7 @@ namespace UserService.API.Controllers
             return NoContent();
         }
 
-        //POST :api/User/Login
+        //POST :api/CreatedBy/Login
         [Route("Login")]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)
@@ -46,7 +46,7 @@ namespace UserService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers()
         {
-            var users = await _userService.GetAllActiveUsersAsync();
+            var users = await _userService.GetAllUsersAsync();
             return users.ToList();
         }
     }
