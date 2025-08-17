@@ -27,10 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\EquipmentService.Core\EquipmentService.Core.csproj" />
       <ProjectReference Include="..\EquipmentService.Infrastructure\EquipmentService.Infrastructure.csproj" />
     </ItemGroup>

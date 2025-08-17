@@ -11,14 +11,7 @@ namespace RentalService.Core.Mappings
             {
                 StartDate = rental.StartDate,
                 Id = rental.Id,
-<<<<<<< HEAD:src/RentIT.RentalService/RentalService.Core/Mappings/RentalMappings.cs
                 EndDate = rental.EndDate,
-=======
-                CreatorEmail = rental.RentedBy.Email!,
-                EndDate = rental.EndDate,
-                TotalRentalPrice = rental.TotalRentalPrice,
-                EquipmentName = rental.Equipment.Name,
->>>>>>> 6cdc2c7a6c07dad638ba1cbe5a252fd415b7cd49:src/RentIT.Core/Mappings/RentalMappings.cs
                 ReturnedDate = rental.ReturnedDate
             };
         }
@@ -29,13 +22,7 @@ namespace RentalService.Core.Mappings
             {
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-<<<<<<< HEAD:src/RentIT.RentalService/RentalService.Core/Mappings/RentalMappings.cs
                 EquipmentId = request.EquipmentId,
-=======
-                RentedByUserId = request.UserId,
-                EquipmentId = request.EquipmentId,
-                TotalRentalPrice = 0,
->>>>>>> 6cdc2c7a6c07dad638ba1cbe5a252fd415b7cd49:src/RentIT.Core/Mappings/RentalMappings.cs
                 ReturnedDate = null,
                 IsActive = true,
                 DateCreated = DateTime.UtcNow,

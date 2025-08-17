@@ -23,8 +23,8 @@ namespace RentalService.API.Controllers
         }
 
         // GET: api/Rentals/5
-        [HttpGet("{rentalId}")]
-        public async Task<ActionResult<RentalResponse>> GetRental(Guid rentalId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RentalResponse>> GetRental(Guid id)
         {
             var result = await _rentalService.GetRental(id);
 
@@ -35,10 +35,10 @@ namespace RentalService.API.Controllers
         }
 
         // PUT: api/Rentals/5
-        [HttpPut("{rentalId}")]
-        public async Task<IActionResult> PutRental(Guid rentalId, RentalUpdateRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request)
         {
-            var result = await _rentalService.UpdateRental(rentalId, request);
+            var result = await _rentalService.UpdateRental(id, request);
 
             if(result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
@@ -52,16 +52,16 @@ namespace RentalService.API.Controllers
         {
             var result = await _rentalService.AddRental(request);
             if (result.IsFailure)
-                return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+                return BadRequest();
 
             return result.Value;    
         }
 
         // DELETE: api/Rentals/5
-        [HttpDelete("{rentalId}")]
-        public async Task<IActionResult> DeleteRental(Guid rentalId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRental(Guid id)
         {
-            var result = await _rentalService.DeleteRental(rentalId);
+            var result = await _rentalService.DeleteRental(id);
 
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
