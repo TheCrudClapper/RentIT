@@ -12,7 +12,7 @@ public class UserErrors
         400, "User with this email already exists");
 
     public static readonly Error FailedToCreateUser = new Error(
-        400, "User with this email already exists");
+        400, "Failed to create user");
 
 }
 

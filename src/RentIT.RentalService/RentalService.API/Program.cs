@@ -25,7 +25,7 @@ builder.Services.AddInfrastructureLayer();
 builder.Services.AddCoreLayer();
 
 //Add OpenAPI support and Swagger
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();

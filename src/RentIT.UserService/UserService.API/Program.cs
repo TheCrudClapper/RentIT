@@ -37,7 +37,6 @@ builder.Services.AddCoreLayer();
 //Add OpenAPI support and Swagger
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
 //Add Fluent Validations
