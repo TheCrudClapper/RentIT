@@ -21,9 +21,8 @@ namespace UserService.Infrastructure.Repositories
 
         public async Task<IEnumerable<User>> GetAllActiveUsersAsync()
         {
-            //return await _context.Users.Where(item => item.IsActive)
-            //    .ToListAsync();
-            return Enumerable.Empty<User>();
+            return await _context.Users.Where(item => item.IsActive)
+                .ToListAsync();
         }
     }
 }

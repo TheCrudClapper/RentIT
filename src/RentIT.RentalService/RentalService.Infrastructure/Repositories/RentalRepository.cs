@@ -18,8 +18,6 @@ namespace RentalService.Infrastructure.Repositories
             rental.Id = Guid.NewGuid();
             _context.Rentals.Add(rental);
             await _context.SaveChangesAsync();
-
-            //loading up navigation properties to return to user full response object
             return rental;
         }
 
@@ -36,6 +34,8 @@ namespace RentalService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        //Main purpose method, later will include user who wanted to edit this 
+        //and checking 
         public async Task<bool> UpdateRentalAsync(Guid rentalId, Rental rental)
         {
             var rentalToUpdate = await GetActiveRentalByIdAsync(rentalId);
@@ -66,6 +66,25 @@ namespace RentalService.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<Rental>> GetAllActiveUserRentalsAsync(Guid userId)
+        {
+            return await _context.Rentals
+                .Where(item => item.IsActive && item.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<Rental?> GetRentalByIdAsync(Guid rentalId)
+        {
+            return await _context.Rentals
+                .FirstOrDefaultAsync(item => item.Id == rentalId);
+        }
+
+        public async Task<Rental?> GetActiveUserRentalByIdAsync(Guid rentalId, Guid userId)
+        {
+            return await _context.Rentals
+                .FirstOrDefaultAsync(item => item.Id == rentalId && item.IsActive  && item.UserId == userId);
         }
     }
 }

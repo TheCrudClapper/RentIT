@@ -101,5 +101,18 @@ namespace EquipmentService.Infrastructure.Repositories
                     && (item.Name == equipment.Name || item.SerialNumber == equipment.SerialNumber)
                     && (excludeId == null || item.Id != excludeId));
         }
+
+        public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid equipmentId, Guid userId)
+        {
+            return await _context.EquipmentItems
+                .Where(item => item.IsActive && item.Id == equipmentId && item.CreatedByUserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<Equipment?> GetUserActiveEquipmentByIdAsync(Guid equipmentId, Guid userId)
+        {
+            return await _context.EquipmentItems
+                   .FirstOrDefaultAsync(item => item.IsActive && item.Id == equipmentId && item.CreatedByUserId == userId);
+        }
     }
 }
