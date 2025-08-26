@@ -49,24 +49,24 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-//Add global exception handling middleware
+// Global exception handling
 app.UseGlobalExceptionHandlingMiddleware();
 
-//Https supports
+// Security middlewares
 app.UseHsts();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-//Use Swagger
+// Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//Use Routing
+// Routing
 app.UseRouting();
 
-//Mapping API controllers 
-app.MapControllers();
-
-//Authentication && Authorization
+// Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
+
 app.Run();

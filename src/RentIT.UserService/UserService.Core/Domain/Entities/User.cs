@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using UserService.Core.Domain.Interfaces;
 
 namespace UserService.Core.Domain.Entities
 {
-    public class User : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>, ISoftDelete
     {
         [MaxLength(50)]
         public string FirstName { get; set; } = null!;
