@@ -30,18 +30,18 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+//Add global exception handling middleware
+app.UseGlobalExceptionHandlingMiddleware();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-//Add global exception handling middleware
-app.UseGlobalExceptionHandlingMiddleware();
-
 //Https supports
 app.UseHsts();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 //Use Swagger
 app.UseSwagger();

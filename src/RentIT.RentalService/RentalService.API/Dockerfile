@@ -2,7 +2,7 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -13,8 +13,12 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RentalService.API/RentalService.API.csproj", "RentalService.API/"]
+COPY ["RentalService.Core/RentalService.Core.csproj", "RentalService.Core/"]
+COPY ["RentalService.Infrastructure/RentalService.Infrastructure.csproj", "RentalService.Infrastructure/"]
+
 RUN dotnet restore "./RentalService.API/RentalService.API.csproj"
 COPY . .
+
 WORKDIR "/src/RentalService.API"
 RUN dotnet build "./RentalService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EquipmentService.Core.Domain.RepositoryContracts;
+using EquipmentService.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 namespace EquipmentService.Infrastructure
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace EquipmentService.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services)
         {
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             return services;
         }
     }

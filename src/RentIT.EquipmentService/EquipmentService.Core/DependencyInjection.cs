@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
 namespace EquipmentService.Core
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace EquipmentService.Core
     {
         public static IServiceCollection AddCoreLayer(this IServiceCollection services)
         {
+            services.AddScoped<ICategoryService, CategoryService>();
             return services;
         }
     }
