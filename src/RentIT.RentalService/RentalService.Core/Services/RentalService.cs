@@ -49,7 +49,7 @@ namespace RentalService.Core.Services
 
         public async Task<Result<RentalResponse>> GetRental(Guid rentalId)
         {
-            Rental? rental = await _rentalRepository.GetActiveRentalByIdAsync(rentalId);
+            Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId);
             if (rental == null)
                 return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
 
@@ -58,7 +58,7 @@ namespace RentalService.Core.Services
 
         public async Task<IEnumerable<RentalResponse>> GetAllRentals()
         {
-            IEnumerable<Rental> rentals = await _rentalRepository.GetAllActiveRentalsAsync();
+            IEnumerable<Rental> rentals = await _rentalRepository.GetAllRentalsAsync();
             return rentals.Select(item => item.ToRentalResponse());
         }
 

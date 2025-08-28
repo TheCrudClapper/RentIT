@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EquipmentService.Core.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EquipmentService.Core.Domain.Entities;
@@ -23,7 +24,7 @@ public enum RentStatusEnum
 /// <remarks>The <see cref="Equipment"/> class provides properties to store details about the equipment, 
 /// including its name, category, serial number, rental status, and optional notes.  It is associated with a
 /// specific category through the <see cref="CategoryId"/> property.</remarks>
-public class Equipment : BaseEntity
+public class Equipment : IBaseEntity, ISoftDelete
 {
     [MaxLength(50)]
     public string Name { get; set; } = null!;
@@ -38,5 +39,10 @@ public class Equipment : BaseEntity
     public string? Notes { get; set; }
     [ForeignKey("CategoryId")]
     public Category Category { get; set; } = null!;
+    public bool IsActive { get; set; }
+    public DateTime? DateDeleted { get; set; }
+    public Guid Id { get; set; }
+    public DateTime DateCreated { get; set; }
+    public DateTime? DateEdited { get; set; }
 }
 

@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Infrastructure.DbContexts.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentService.Infrastructure.DbContexts
@@ -17,6 +18,14 @@ namespace EquipmentService.Infrastructure.DbContexts
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Equipment>().Property(prop => prop.Status)
                 .HasConversion<string>();
+            modelBuilder.Entity<Equipment>()
+                .HasQueryFilter(item => item.IsActive);
+            modelBuilder.Entity<Category>()
+                .HasQueryFilter(item => item.IsActive);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
     }
 }

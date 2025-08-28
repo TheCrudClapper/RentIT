@@ -23,7 +23,7 @@ namespace EquipmentService.Infrastructure.Repositories
 
         public async Task<bool> DeleteCategoryAsync(Guid categoryId)
         {
-            Category? category = await GetActiveCategoryByIdAsync(categoryId);
+            Category? category = await GetCategoryByIdAsync(categoryId);
 
             if (category == null)
                 return false;
@@ -38,19 +38,18 @@ namespace EquipmentService.Infrastructure.Repositories
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _context.Categories
-                .Where(item => item.IsActive)
                 .ToListAsync();
         }
 
-        public async Task<Category?> GetActiveCategoryByIdAsync(Guid categoryId)
+        public async Task<Category?> GetCategoryByIdAsync(Guid categoryId)
         {
             return await _context.Categories
-                .FirstOrDefaultAsync(item => item.Id == categoryId && item.IsActive);
+                .FirstOrDefaultAsync(item => item.Id == categoryId);
         }
 
         public async Task<bool> UpdateCategoryAsync(Guid categoryId, Category category)
         {
-            Category? categoryToEdit = await GetActiveCategoryByIdAsync(categoryId);
+            Category? categoryToEdit = await GetCategoryByIdAsync(categoryId);
 
             if (categoryToEdit == null)
                 return false;
@@ -73,13 +72,7 @@ namespace EquipmentService.Infrastructure.Repositories
         public async Task<bool> DoesCategoryExist(Guid categoryId)
         {
             return await _context.Categories
-                .AnyAsync(item => item.Id == categoryId && item.IsActive);
-        }
-
-        public async Task<Category?> GetCategoryByIdAsync(Guid categoryId)
-        {
-            return await _context.Categories
-                .FirstOrDefaultAsync(item => item.Id == categoryId);
+                .AnyAsync(item => item.Id == categoryId);
         }
     }
 }

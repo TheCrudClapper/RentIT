@@ -21,16 +21,15 @@ namespace RentalService.Infrastructure.Repositories
             return rental;
         }
 
-        public async Task<Rental?> GetActiveRentalByIdAsync(Guid rentalId)
+        public async Task<Rental?> GetRentalByIdAsync(Guid rentalId)
         {
             return await _context.Rentals
-                .FirstOrDefaultAsync(item => item.IsActive && item.Id == rentalId);
+                .FirstOrDefaultAsync(item => item.Id == rentalId);
         }
 
-        public async Task<IEnumerable<Rental>> GetAllActiveRentalsAsync()
+        public async Task<IEnumerable<Rental>> GetAllRentalsAsync()
         {
             return await _context.Rentals
-                .Where(item => item.IsActive)
                 .ToListAsync();
         }
 
@@ -38,7 +37,7 @@ namespace RentalService.Infrastructure.Repositories
         //and checking 
         public async Task<bool> UpdateRentalAsync(Guid rentalId, Rental rental)
         {
-            var rentalToUpdate = await GetActiveRentalByIdAsync(rentalId);
+            var rentalToUpdate = await GetRentalByIdAsync(rentalId);
 
             if(rentalToUpdate == null)
                 return false;
@@ -56,7 +55,7 @@ namespace RentalService.Infrastructure.Repositories
 
         public async Task<bool> DeleteRentalAsync(Guid rentalId)
         {
-            var rentalToDelete = await GetActiveRentalByIdAsync(rentalId);
+            var rentalToDelete = await GetRentalByIdAsync(rentalId);
 
             if(rentalToDelete == null)
                 return false;
@@ -68,23 +67,17 @@ namespace RentalService.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Rental>> GetAllActiveUserRentalsAsync(Guid userId)
+        public async Task<IEnumerable<Rental>> GetAllUserRentalsAsync(Guid userId)
         {
             return await _context.Rentals
-                .Where(item => item.IsActive && item.UserId == userId)
+                .Where(item => item.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Rental?> GetRentalByIdAsync(Guid rentalId)
+        public async Task<Rental?> GetUserRentalByIdAsync(Guid rentalId, Guid userId)
         {
             return await _context.Rentals
-                .FirstOrDefaultAsync(item => item.Id == rentalId);
-        }
-
-        public async Task<Rental?> GetActiveUserRentalByIdAsync(Guid rentalId, Guid userId)
-        {
-            return await _context.Rentals
-                .FirstOrDefaultAsync(item => item.Id == rentalId && item.IsActive  && item.UserId == userId);
+                .FirstOrDefaultAsync(item => item.Id == rentalId && item.UserId == userId);
         }
     }
 }

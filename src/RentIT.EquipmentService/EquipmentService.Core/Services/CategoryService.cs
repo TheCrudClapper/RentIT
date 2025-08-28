@@ -59,7 +59,7 @@ namespace EquipmentService.Core.Services
 
         public async Task<Result<CategoryResponse>> GetCategory(Guid id)
         {
-            Category? category = await _categoryRepository.GetActiveCategoryByIdAsync(id);
+            Category? category = await _categoryRepository.GetCategoryByIdAsync(id);
 
             if (category == null)
                 return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
