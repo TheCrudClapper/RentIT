@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using UserService.API.Extensions;
 using UserService.API.Middleware;
 using UserService.Core;
 using UserService.Core.Domain.Entities;
@@ -11,12 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Add API Controllers
 builder.Services.AddControllers();
-//Add DB context
-builder.Services.AddDbContext<UsersDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDB"),
-        x => x.MigrationsAssembly("UserService.Infrastructure"));
-});
+
+//Add user-defined services
+builder.Services.AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddCoreLayer();
 
 //Add Identity with it's own stores
 builder.Services.AddIdentity<User, Role>(options =>
@@ -29,11 +27,6 @@ builder.Services.AddIdentity<User, Role>(options =>
 .AddUserStore<UserStore<User, Role, UsersDbContext, Guid>>()
 .AddRoleStore<RoleStore<Role, UsersDbContext, Guid>>();
 
-
-//Add user-defined services
-builder.Services.AddInfrastructureLayer();
-builder.Services.AddCoreLayer();
-
 //Add OpenAPI support and Swagger
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -44,13 +37,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Global exception handling
+app.UseGlobalExceptionHandlingMiddleware();
+await app.MigrateDatabaseAsync(builder.Services);
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-// Global exception handling
-app.UseGlobalExceptionHandlingMiddleware();
 
 // Security middlewares
 app.UseHsts();
