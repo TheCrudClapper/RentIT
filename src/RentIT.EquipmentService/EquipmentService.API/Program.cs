@@ -1,8 +1,7 @@
+using EquipmentService.API.Extensions;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
 using EquipmentService.Infrastructure;
-using EquipmentService.Infrastructure.DbContexts;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,17 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 //Add API Controllers
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<EquipmentContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDB"),
-        x => x.MigrationsAssembly("EquipmentService.Infrastructure"));
-});
-
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 //Add user-defined services
-builder.Services.AddInfrastructureLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
 //Add OpenAPI support and Swagger
@@ -39,9 +32,11 @@ if (app.Environment.IsDevelopment())
 //Add global exception handling middleware
 app.UseGlobalExceptionHandlingMiddleware();
 
+await app.MigrateDatabaseAsync(builder.Services);
+
 //Https supports
 app.UseHsts();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 //Use Swagger
 app.UseSwagger();

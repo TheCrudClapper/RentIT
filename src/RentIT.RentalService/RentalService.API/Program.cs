@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RentalService.API.Extensions;
 using RentalService.API.Middleware;
 using RentalService.Core;
 using RentalService.Infrastructure;
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<RentalDbContext>(options =>
 builder.Services.AddOpenApi();
 
 //Add user-defined services
-builder.Services.AddInfrastructureLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
 //Add OpenAPI support and Swagger
@@ -32,6 +33,9 @@ var app = builder.Build();
 
 //Add global exception handling middleware
 app.UseGlobalExceptionHandlingMiddleware();
+
+
+await app.MigrateDatabaseAsync(builder.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

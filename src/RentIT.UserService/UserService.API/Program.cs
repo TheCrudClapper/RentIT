@@ -39,6 +39,8 @@ var app = builder.Build();
 
 // Global exception handling
 app.UseGlobalExceptionHandlingMiddleware();
+
+//Automatic migrations for docker
 await app.MigrateDatabaseAsync(builder.Services);
 
 if (app.Environment.IsDevelopment())

@@ -16,10 +16,10 @@ namespace UserService.Infrastructure
             services.AddDbContext<UsersDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("PostgresDB")!
-                    .Replace("$POSTGRES_DB", Environment.GetEnvironmentVariable("POSTGRES_DB"))
-                    .Replace("$POSTGRES_USER", Environment.GetEnvironmentVariable("POSTGRES_USER"))
-                    .Replace("$POSTGRES_PASSWORD", Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"))
-                    .Replace("$HOST",Environment.GetEnvironmentVariable("HOST")),
+                    .Replace("$POSTGRES_DB", Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "RentITUsers")
+                    .Replace("$POSTGRES_USER", Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres")
+                    .Replace("$POSTGRES_PASSWORD", Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "admin")
+                    .Replace("$HOST",Environment.GetEnvironmentVariable("HOST") ?? "localhost"),
                     x => x.MigrationsAssembly("UserService.Infrastructure"));
             });
             services.AddScoped<IUserRepository, UserRepository>();

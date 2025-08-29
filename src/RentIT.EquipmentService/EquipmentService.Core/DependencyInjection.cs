@@ -11,6 +11,7 @@ namespace EquipmentService.Core
         public static IServiceCollection AddCoreLayer(this IServiceCollection services)
         {
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IEquipmentService, EquipmentService.Core.Services.EquipmentService>();
             return services;
         }
     }
