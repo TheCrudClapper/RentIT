@@ -20,9 +20,17 @@ namespace UserService.API.Controllers
         {
             var result = await _userService.RegisterAsync(request);
 
-            if (result.IsFailure)
-                return Problem(detail: result.Error.Description,
-                    statusCode: result.Error.ErrorCode);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors
+               .GroupBy(e => e.Code)
+               .ToDictionary(
+                   g => g.Key,
+                   g => g.Select(e => e.Description).ToArray()
+               );
+
+                return ValidationProblem(new ValidationProblemDetails(errors));
+            }
 
             return NoContent();
         }

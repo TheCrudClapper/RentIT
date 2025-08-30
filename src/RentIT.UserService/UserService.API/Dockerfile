@@ -39,7 +39,9 @@ RUN dotnet publish "./UserService.API.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_DB=users
-ENV POSTGRES_PASSWORD=admin
+ENV DB_USER=postgres
+ENV DB_NAME=users
+ENV DB_PORT=5432
+ENV DB_HOST=localhost
+ENV DB_PASSWORD=admin
 ENTRYPOINT ["dotnet", "UserService.API.dll"]

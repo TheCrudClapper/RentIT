@@ -20,15 +20,15 @@ public class UserService : IUserService
         _roleManager = roleManager;
         _userRepository = userRepository;
     }
-    public async Task<Result<UserAuthResponse>> RegisterAsync(RegisterRequest request)
+    public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
     {
         User user = request.ToUserEntity();
 
         if (await _userManager.FindByEmailAsync(request.Email) != null)
-            return Result.Failure<UserAuthResponse>(UserErrors.AccountAlreadyExists);
+            return IdentityResult.Failed(new IdentityError { Code="AccountExists", Description = UserErrors.AccountAlreadyExists.Description });
 
         if (!IsAllowedRole(request.UserRoleOption))
-            return Result.Failure<UserAuthResponse>(RoleErrors.InvalidRole);
+            return IdentityResult.Failed(new IdentityError { Code = "InvalidRole", Description = RoleErrors.InvalidRole.Description });
 
         string userRole = request.UserRoleOption.ToString();
 
@@ -36,22 +36,20 @@ public class UserService : IUserService
         {
             var roleCreationResult = await CreateRole(request.UserRoleOption);
             if (!roleCreationResult.Succeeded)
-                return Result.Failure<UserAuthResponse>(RoleErrors.RoleCreationFailed);
+                return roleCreationResult;
         }
 
         var userCreationResult = await _userManager.CreateAsync(user, request.Password);
 
         if (!userCreationResult.Succeeded)
-            return Result.Failure<UserAuthResponse>(UserErrors.FailedToCreateUser);
+            return userCreationResult;
 
         var roleAssignResult = await _userManager.AddToRoleAsync(user, userRole);
 
         if(!roleAssignResult.Succeeded)
-            return Result.Failure<UserAuthResponse>(RoleErrors.RoleAssignationFailed);
+           return roleAssignResult;
 
-        //generate JWT TOKEN
-        //put creds into response
-        return new UserAuthResponse(user.Id, user.Email!, "token");
+        return IdentityResult.Success;
     }
     public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request)
     {

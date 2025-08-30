@@ -16,10 +16,11 @@ namespace EquipmentService.Infrastructure
             services.AddDbContext<EquipmentContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("PostgresDB")!
-                    .Replace("$POSTGRES_DB", Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "RentITEquipmentItems")
-                    .Replace("$POSTGRES_USER", Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres")
-                    .Replace("$POSTGRES_PASSWORD", Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "admin")
-                    .Replace("$HOST", Environment.GetEnvironmentVariable("HOST") ?? "localhost"),
+                    .Replace("$DB_NAME", Environment.GetEnvironmentVariable("DB_NAME") ?? "RentITEquipmentItems")
+                    .Replace("$DB_PORT", Environment.GetEnvironmentVariable("DB_PORT") ?? "5432")
+                    .Replace("$DB_USER", Environment.GetEnvironmentVariable("DB_USER") ?? "postgres")
+                    .Replace("$DB_PASSWORD", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "admin")
+                    .Replace("$DB_HOST", Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"),
                     x => x.MigrationsAssembly("EquipmentService.Infrastructure"));
             });
             services.AddScoped<ICategoryRepository, CategoryRepository>();

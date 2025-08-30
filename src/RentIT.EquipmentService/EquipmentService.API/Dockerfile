@@ -29,4 +29,9 @@ RUN dotnet publish "./EquipmentService.API.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV DB_USER=postgres
+ENV DB_NAME=equipment
+ENV DB_PORT=5432
+ENV DB_HOST=localhost
+ENV DB_PASSWORD=admin
 ENTRYPOINT ["dotnet", "EquipmentService.API.dll"]

@@ -31,4 +31,9 @@ RUN dotnet publish "./RentalService.API.csproj" -c $BUILD_CONFIGURATION -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV DB_USER=postgres
+ENV DB_NAME=rentals
+ENV DB_PORT=5432
+ENV DB_HOST=localhost
+ENV DB_PASSWORD=admin
 ENTRYPOINT ["dotnet", "RentalService.API.dll"]
