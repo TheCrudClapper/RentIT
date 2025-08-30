@@ -1,0 +1,89 @@
+services:
+  # Host ports for databases descend starting from 5999
+  # Host ports for microservices start from 5000 (ms1: http-5000,https-5001, ms2:http-5003 etc.)
+
+  # User Microservice Database
+  user-microservice-db-postgress:
+    image: postgres:latest
+    environment:
+        - USERNAME=postgres
+        - POSTGRES_DB=users
+        - POSTGRES_PASSWORD=admin
+    ports:
+        - 5999:5432
+    networks:
+        users-microservice-network:
+
+  # Users Microservice 
+  users-microservice:
+    image: thecrudclapper/rentit-users-microservice:v1.12
+    environment:
+        - HOST=user-microservice-db-postgress
+        - USERNAME=postgres
+        - POSTGRES_DB=users
+        - POSTGRES_PASSWORD=admin
+    ports:
+        - "5000:8080"
+        - "5001:8081"
+    networks:
+        users-microservice-network:
+
+  # Equipment Microservice Database
+  equipment-microservices-db-postgress:
+    image: postgres:latest
+    environment:
+        - USERNAME=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=equipment
+    ports:
+        - "5998:5432"
+    networks:
+        equipment-microservice-network:
+
+  # Equipment Microservice
+  equipment-microservice:
+    image: thecrudclapper/rentit-equipment-microservice:v1.0
+    environment:
+        - HOST=equipment-microservices-db-postgress
+        - USERNAME=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=equipment
+    ports:
+        - "5002:8080"
+        - "5003:8081"
+    networks:
+        equipment-microservice-network:
+
+  # Rental Microservice Database
+  rental-service-db-postgress:
+    image: postgres:latest
+    environment:
+        - USERNAME=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=rentals
+    ports:
+        - "5997:5432"
+    networks:
+        rental-microservice-network:
+    
+  # Rental Microservice
+  rental-microservice:
+    image: thecrudclapper/rentit-rental-microservice:v1.0
+    environment:
+        - HOST=rental-service-db-postgress
+        - POSTGRES_DB=rentals
+        - POSTGRES_PASSWORD=admin
+        - USERNAME=postgres
+    ports:
+        - "5004:8080"
+        - "5005:8081"
+    networks:
+        rental-microservice-network:
+
+networks:
+    users-microservice-network:
+        driver: "bridge"
+    equipment-microservice-network:
+        driver: "bridge"
+    rental-microservice-network:
+        driver: "bridge"    
