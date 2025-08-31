@@ -6,8 +6,7 @@ namespace UserService.Core.ServiceContracts;
 
 public interface IUserService
 {
-    Task<IdentityResult> RegisterAsync(RegisterRequest request);
-    Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request);
-    Task<IEnumerable<UserResponse>> GetAllActiveUsersAsync();
+    Task<Result<UserDTO>> GetUserByUserId(Guid userId);
+    Task<IEnumerable<UserResponse>> GetAllUsersAsync();
 }
 

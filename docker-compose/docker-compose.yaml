@@ -43,7 +43,7 @@ services:
 
   # Equipment Microservice
   equipment-microservice:
-    image: thecrudclapper/rentit-equipment-microservice:v1.0
+    image: thecrudclapper/rentit-equipment-microservice:v1.1
     environment:
         - DB_HOST=equipment-microservices-db-postgress
         - DB_USER=postgres
@@ -70,7 +70,7 @@ services:
     
   # Rental Microservice
   rental-microservice:
-    image: thecrudclapper/rentit-rental-microservice:v1.0
+    image: thecrudclapper/rentit-rental-microservice:v1.1
     environment:
         - DB_HOST=rental-service-db-postgress
         - DB_USER=postgres

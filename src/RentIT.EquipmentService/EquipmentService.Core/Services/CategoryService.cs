@@ -14,6 +14,7 @@ namespace EquipmentService.Core.Services
         {
             _categoryRepository = categoryRepository;
         }
+
         public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request)
         {
             Category category = request.ToCategory();

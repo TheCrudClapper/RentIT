@@ -11,5 +11,7 @@
         public static readonly Error RoleAssignationFailed = new Error(
             400, "Something went wrong while assigning your role");
 
+        public static readonly Error UserNotInRole = new Error(
+            400, "User doesn't have assigned role");
     }
 }

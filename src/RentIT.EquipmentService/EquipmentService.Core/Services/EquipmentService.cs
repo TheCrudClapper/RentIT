@@ -39,7 +39,7 @@ namespace EquipmentService.Core.Services
 
         public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems()
         {
-            var equipmentItems = await _equipmentRepository.GetAllActiveEquipmentItemsAsync();
+            var equipmentItems = await _equipmentRepository.GetAllEquipmentAsync();
             return equipmentItems.Select(item => item.ToEquipmentResponse());
         }
 

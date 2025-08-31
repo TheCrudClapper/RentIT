@@ -1,8 +1,11 @@
 ﻿using UserService.Core.Domain.Entities;
-using UserService.Core.DTO;
 using UserService.Core.DTO.UserDto;
+using UserService.Core.Enums;
 
 namespace UserService.Core.Mappings;
+/// <summary>
+/// This class is used as source of mappings between dto =><= entity
+/// </summary>
 public static class UserMappings
 {
     public static User ToUserEntity(this RegisterRequest request)
@@ -24,6 +27,15 @@ public static class UserMappings
         //Email is always added
         return new UserResponse(
             user.Id, user.FirstName, user.LastName, user.Email!);
+    }
+
+    public static UserDTO ToUserDTO(this User user, IList<string> roles)
+    {
+        string role = roles.Contains(UserRoleOption.Admin.ToString())
+            ? UserRoleOption.Admin.ToString()
+            : UserRoleOption.User.ToString();
+
+        return new UserDTO(user.Id, user.Email!,role);
     }
 }
 
