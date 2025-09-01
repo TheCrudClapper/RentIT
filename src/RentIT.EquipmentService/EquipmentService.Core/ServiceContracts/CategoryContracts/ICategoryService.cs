@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.ResultTypes;
 
-namespace EquipmentService.Core.ServiceContracts
+namespace EquipmentService.Core.ServiceContracts.CategoryContracts
 {
     public interface ICategoryService
     {

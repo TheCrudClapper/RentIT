@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.DTO.CategoryDto;
-using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +25,7 @@ public class CategoriesController : ControllerBase
         var result = await _categoryService.AddCategory(request);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return result.Value;
     }
@@ -38,7 +38,7 @@ public class CategoriesController : ControllerBase
         var result = await _categoryService.GetCategory(categoryId);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return result.Value;
     }
@@ -58,7 +58,7 @@ public class CategoriesController : ControllerBase
         var result = await _categoryService.UpdateCategory(categoryId, request);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
     }
@@ -70,7 +70,7 @@ public class CategoriesController : ControllerBase
         var result = await _categoryService.DeleteCategory(categoryId);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
     }

@@ -3,18 +3,19 @@ using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
-using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.ServiceContracts.Equipment;
+using EquipmentService.Core.Validators;
 
-namespace EquipmentService.Core.Services
+namespace EquipmentService.Core.Services.EquipmentServices
 {
     public class EquipmentService : IEquipmentService
     {
         private readonly IEquipmentRepository _equipmentRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        public EquipmentService(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository)
+        private readonly EquipmentValidator _equipmentValidator;
+        public EquipmentService(IEquipmentRepository equipmentRepository, EquipmentValidator equipmentValidator)
         {
             _equipmentRepository = equipmentRepository;
-            _categoryRepository = categoryRepository;
+            _equipmentValidator = equipmentValidator;
         }
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
@@ -29,7 +30,7 @@ namespace EquipmentService.Core.Services
 
         public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId)
         {
-            var equipment = await _equipmentRepository.GetActiveEquipmentByIdAsync(equipmentId);
+            var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId);
 
             if (equipment == null)
                 return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
@@ -47,7 +48,7 @@ namespace EquipmentService.Core.Services
         {
             Equipment equipment = request.ToEquipment();
 
-            var validationResult = await ValidateUpdateEquipmentEntity(equipment, equipmentId);
+            var validationResult = await _equipmentValidator.ValidateUpdateEquipmentEntity(equipment, equipmentId);
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
@@ -63,39 +64,13 @@ namespace EquipmentService.Core.Services
         {
             Equipment equipment = request.ToEquipment();
             
-            var validationResult = await ValidateNewEquipmentEntity(equipment);
+            var validationResult = await _equipmentValidator.ValidateNewEquipmentEntity(equipment);
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
             var newEquipment = await _equipmentRepository.AddEquipmentAsync(equipment);
 
             return newEquipment.ToEquipmentResponse();
-        }
-
-        private async Task<Result> ValidateNewEquipmentEntity(Equipment equipment)
-        {
-            if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
-                return Result.Failure(CategoryErrors.CategoryNotFound);
-
-            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment);
-
-            if (!isValid)
-                return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
-
-            return Result.Success();
-        }
-
-        private async Task<Result> ValidateUpdateEquipmentEntity(Equipment equipment, Guid equipmentId)
-        {
-            if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
-                return Result.Failure(CategoryErrors.CategoryNotFound);
-
-            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment, equipmentId);
-
-            if (!isValid)
-                return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
-
-            return Result.Success();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
-using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Mvc;
 namespace EquipmentService.API.Controllers;
 
@@ -28,7 +28,7 @@ public class EquipmentsController : ControllerBase
         var result = await _equipmentService.GetEquipment(equipmentId);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return result.Value;
     }
@@ -40,7 +40,7 @@ public class EquipmentsController : ControllerBase
         var result = await _equipmentService.UpdateEquipment(equipmentId, equipment);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
     }
@@ -52,7 +52,7 @@ public class EquipmentsController : ControllerBase
         var result = await _equipmentService.AddEquipment(request);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return result.Value;
     }
@@ -64,7 +64,7 @@ public class EquipmentsController : ControllerBase
         var result = await _equipmentService.DeleteEquipment(equipmentId);
 
         if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.ErrorCode);
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
     }

@@ -15,7 +15,7 @@ namespace EquipmentService.Infrastructure.Repositories
 
         public async Task<bool> DeleteEquipmentAsync(Guid equipmentId)
         {
-            var equipment = await GetActiveEquipmentByIdAsync(equipmentId);
+            var equipment = await GetEquipmentByIdAsync(equipmentId);
 
             if (equipment == null)
                 return false;
@@ -30,14 +30,14 @@ namespace EquipmentService.Infrastructure.Repositories
         public async Task<bool> DoesEquipmentExistsAsync(Guid equipmentId)
         {
             return await _context.EquipmentItems
-                .AnyAsync(item => item.Id == equipmentId && item.IsActive);
+                .AnyAsync(item => item.Id == equipmentId);
         }
 
-        public async Task<Equipment?> GetActiveEquipmentByIdAsync(Guid equipmentId)
+        public async Task<Equipment?> GetEquipmentByIdAsync(Guid equipmentId)
         {
             return await _context.EquipmentItems
                 .Include(item => item.Category)
-                .FirstOrDefaultAsync(item => item.IsActive && item.Id == equipmentId);
+                .FirstOrDefaultAsync(item => item.Id == equipmentId);
         }
 
         public async Task<IEnumerable<Equipment>> GetAllEquipmentAsync()
@@ -70,9 +70,19 @@ namespace EquipmentService.Infrastructure.Repositories
             return equipment;
         }
 
+        public async Task<Equipment> AddUserEquipment(Equipment equipment, Guid userId)
+        {
+            equipment.Id = Guid.NewGuid();
+            equipment.CreatedByUserId = userId;
+            _context.EquipmentItems.Add(equipment);
+            await _context.SaveChangesAsync();
+            await _context.Entry(equipment).Reference(item => item.Category).LoadAsync();
+            return equipment;
+        }
+
         public async Task<bool> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment)
         {
-            var equipmentToUpdate = await GetActiveEquipmentByIdAsync(equipmentId);
+            var equipmentToUpdate = await GetEquipmentByIdAsync(equipmentId);
 
             if (equipmentToUpdate == null)
                 return false;
@@ -88,7 +98,17 @@ namespace EquipmentService.Infrastructure.Repositories
             return true;
         }
 
+        public async Task UpdateUserEquipmentAsync(Equipment equipment)
+        {
+            equipment.Name = equipment.Name;
+            equipment.Status = equipment.Status;
+            equipment.Notes = equipment.Notes;
+            equipment.RentalPricePerDay = equipment.RentalPricePerDay;
+            equipment.SerialNumber = equipment.SerialNumber;
+            equipment.CategoryId = equipment.CategoryId;
 
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<bool> IsEquipmentUnique(Equipment equipment, Guid? excludeId = null)
         {
@@ -97,10 +117,10 @@ namespace EquipmentService.Infrastructure.Repositories
                 && (excludeId == null || item.Id != excludeId)));
         }
 
-        public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid equipmentId, Guid userId)
+        public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId)
         {
             return await _context.EquipmentItems
-                .Where(item => item.Id == equipmentId && item.CreatedByUserId == userId)
+                .Where(item => item.CreatedByUserId == userId)
                 .ToListAsync();
         }
 

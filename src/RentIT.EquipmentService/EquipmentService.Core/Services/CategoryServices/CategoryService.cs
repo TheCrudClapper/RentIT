@@ -3,9 +3,9 @@ using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
-using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.ServiceContracts.CategoryContracts;
 
-namespace EquipmentService.Core.Services
+namespace EquipmentService.Core.Services.CategoryServices
 {
     public class CategoryService : ICategoryService
     {
