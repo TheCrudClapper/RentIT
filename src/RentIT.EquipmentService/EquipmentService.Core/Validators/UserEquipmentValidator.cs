@@ -7,11 +7,11 @@ namespace EquipmentService.Core.Validators
 {
     public class UserEquipmentValidator : IUserEquipmentValidator
     {
-        private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUserEquipmentRepository _userEquipmentRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public UserEquipmentValidator(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository)
+        public UserEquipmentValidator(IUserEquipmentRepository userEquipmentRepository, ICategoryRepository categoryRepository)
         {
-            _equipmentRepository = equipmentRepository;
+            _userEquipmentRepository = userEquipmentRepository;
             _categoryRepository = categoryRepository;
         }
 
@@ -20,7 +20,7 @@ namespace EquipmentService.Core.Validators
             if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
 
-            bool isValid = await _equipmentRepository.IsEquipmentUnique(entity);
+            bool isValid = await _userEquipmentRepository.IsEquipmentUnique(entity);
 
             if (!isValid)
                 return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
@@ -33,7 +33,7 @@ namespace EquipmentService.Core.Validators
             if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
 
-            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment, equipmentId);
+            bool isValid = await _userEquipmentRepository.IsEquipmentUnique(equipment, equipmentId);
 
             if (!isValid)
                 return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);

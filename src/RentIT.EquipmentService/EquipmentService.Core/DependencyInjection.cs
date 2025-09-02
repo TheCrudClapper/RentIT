@@ -15,9 +15,12 @@ namespace EquipmentService.Core
     {
         public static IServiceCollection AddCoreLayer(this IServiceCollection services)
         {
+            //Add Services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserEquipmentService, UserEquipmentService>();
             services.AddScoped<IEquipmentService, Services.EquipmentServices.EquipmentService>();
+
+            //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
             return services;

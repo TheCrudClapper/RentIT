@@ -13,6 +13,7 @@ namespace EquipmentService.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            //Add Db Context
             services.AddDbContext<EquipmentContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("PostgresDB")!
@@ -23,8 +24,11 @@ namespace EquipmentService.Infrastructure
                     .Replace("$DB_HOST", Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"),
                     x => x.MigrationsAssembly("EquipmentService.Infrastructure"));
             });
+
+            //Add Repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IUserEquipmentRepository, UserEquipmentRepository>();
             return services;
         }
     }

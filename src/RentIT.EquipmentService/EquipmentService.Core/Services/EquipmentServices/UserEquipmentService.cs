@@ -10,30 +10,31 @@ namespace EquipmentService.Core.Services.EquipmentServices
 {
     public class UserEquipmentService : IUserEquipmentService
     {
-        private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUserEquipmentRepository _userEquipmentRepository;
         private readonly IUserEquipmentValidator _userEquipmentValidator;
-        public UserEquipmentService(IEquipmentRepository equipmentRepository, IUserEquipmentValidator userEquipmentValidator)
+        public UserEquipmentService(IUserEquipmentRepository userEquipmentRepository, IUserEquipmentValidator userEquipmentValidator)
         {
-            _equipmentRepository = equipmentRepository;
+            _userEquipmentRepository = userEquipmentRepository;
             _userEquipmentValidator = userEquipmentValidator;
         }
 
-        //ok
         public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
         {
             Equipment equipment = request.ToEquipment();
 
             var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment);
 
-            var newEquipment = await _equipmentRepository.AddUserEquipment(equipment, userId);
+            if (validationResult.IsFailure)
+                return Result.Failure<EquipmentResponse>(validationResult.Error);
+
+            var newEquipment = await _userEquipmentRepository.AddUserEquipment(equipment, userId);
 
             return newEquipment.ToEquipmentResponse();
         }
 
-        //ok
         public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request)
         {
-            var equipment = await _equipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
+            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
 
             if (equipment == null) 
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
@@ -45,15 +46,14 @@ namespace EquipmentService.Core.Services.EquipmentServices
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);
 
-            await _equipmentRepository.UpdateUserEquipmentAsync(equipmentToUpdate);
+            await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentToUpdate);
 
             return Result.Success();            
         }
 
-        //ok
         public async Task<Result<EquipmentResponse>> GetUserEquipment(Guid userId, Guid equipmentId)
         {
-            var equipment = await _equipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId);
+            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId);
 
             if (equipment == null)
                 return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
@@ -61,17 +61,15 @@ namespace EquipmentService.Core.Services.EquipmentServices
             return equipment.ToEquipmentResponse();
         }
 
-        //ok
         public async Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId)
         {
-            var userEquipments = await _equipmentRepository.GetAllUserEquipmentAsync(userId);
+            var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId);
             return userEquipments.Select(item => item.ToEquipmentResponse());
         }
 
-        //ok
         public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId)
         {
-            bool isDeleted = await _equipmentRepository.DeleteUserEquipmentAsync(userId, equipmentId);
+            bool isDeleted = await _userEquipmentRepository.DeleteUserEquipmentAsync(userId, equipmentId);
 
             if(!isDeleted)
                 return Result.Failure(EquipmentErrors.FailedToDeleteEquipment);
