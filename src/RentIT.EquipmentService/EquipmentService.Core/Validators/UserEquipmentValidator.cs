@@ -1,10 +1,11 @@
 ﻿using EquipmentService.Core.Domain.Entities;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.ResultTypes;
+using EquipmentService.Core.Validators.ValidatorContracts;
 
 namespace EquipmentService.Core.Validators
 {
-    public class UserEquipmentValidator
+    public class UserEquipmentValidator : IUserEquipmentValidator
     {
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly ICategoryRepository _categoryRepository;
@@ -14,12 +15,12 @@ namespace EquipmentService.Core.Validators
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result> ValidateAddEntity(Equipment equipment)
+        public async Task<Result> ValidateNewEntity(Equipment entity)
         {
-            if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId))
+            if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
 
-            bool isValid = await _equipmentRepository.IsEquipmentUnique(equipment);
+            bool isValid = await _equipmentRepository.IsEquipmentUnique(entity);
 
             if (!isValid)
                 return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);

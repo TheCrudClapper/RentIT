@@ -3,6 +3,7 @@ using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
 using EquipmentService.Core.Validators;
+using EquipmentService.Core.Validators.ValidatorContracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EquipmentService.Core
@@ -17,8 +18,8 @@ namespace EquipmentService.Core
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserEquipmentService, UserEquipmentService>();
             services.AddScoped<IEquipmentService, Services.EquipmentServices.EquipmentService>();
-            services.AddScoped<EquipmentValidator, EquipmentValidator>();
-            services.AddScoped<UserEquipmentValidator, UserEquipmentValidator>();
+            services.AddScoped<IEquipmentValidator, EquipmentValidator>();
+            services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
             return services;
         }
     }

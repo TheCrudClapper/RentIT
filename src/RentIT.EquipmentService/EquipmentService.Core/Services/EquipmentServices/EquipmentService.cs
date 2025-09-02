@@ -4,15 +4,15 @@ using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
-using EquipmentService.Core.Validators;
+using EquipmentService.Core.Validators.ValidatorContracts;
 
 namespace EquipmentService.Core.Services.EquipmentServices
 {
     public class EquipmentService : IEquipmentService
     {
         private readonly IEquipmentRepository _equipmentRepository;
-        private readonly EquipmentValidator _equipmentValidator;
-        public EquipmentService(IEquipmentRepository equipmentRepository, EquipmentValidator equipmentValidator)
+        private readonly IEquipmentValidator _equipmentValidator;
+        public EquipmentService(IEquipmentRepository equipmentRepository, IEquipmentValidator equipmentValidator)
         {
             _equipmentRepository = equipmentRepository;
             _equipmentValidator = equipmentValidator;
@@ -48,7 +48,7 @@ namespace EquipmentService.Core.Services.EquipmentServices
         {
             Equipment equipment = request.ToEquipment();
 
-            var validationResult = await _equipmentValidator.ValidateUpdateEquipmentEntity(equipment, equipmentId);
+            var validationResult = await _equipmentValidator.ValidateUpdateEntity(equipment, equipmentId);
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
@@ -64,7 +64,7 @@ namespace EquipmentService.Core.Services.EquipmentServices
         {
             Equipment equipment = request.ToEquipment();
             
-            var validationResult = await _equipmentValidator.ValidateNewEquipmentEntity(equipment);
+            var validationResult = await _equipmentValidator.ValidateNewEntity(equipment);
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 

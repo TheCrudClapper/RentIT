@@ -4,26 +4,26 @@ using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
-using EquipmentService.Core.Validators;
+using EquipmentService.Core.Validators.ValidatorContracts;
 
 namespace EquipmentService.Core.Services.EquipmentServices
 {
     public class UserEquipmentService : IUserEquipmentService
     {
         private readonly IEquipmentRepository _equipmentRepository;
-        private readonly UserEquipmentValidator _userEquipmentValidator;
-        public UserEquipmentService(IEquipmentRepository equipmentRepository, UserEquipmentValidator userEquipmentValidator)
+        private readonly IUserEquipmentValidator _userEquipmentValidator;
+        public UserEquipmentService(IEquipmentRepository equipmentRepository, IUserEquipmentValidator userEquipmentValidator)
         {
             _equipmentRepository = equipmentRepository;
             _userEquipmentValidator = userEquipmentValidator;
         }
 
         //ok
-        public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, EquipmentAddRequest request)
+        public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
         {
             Equipment equipment = request.ToEquipment();
 
-            var validationResult = await _userEquipmentValidator.ValidateAddEntity(equipment);
+            var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment);
 
             var newEquipment = await _equipmentRepository.AddUserEquipment(equipment, userId);
 
@@ -78,7 +78,5 @@ namespace EquipmentService.Core.Services.EquipmentServices
 
             return Result.Success();
         }
-
-       
     }
 }

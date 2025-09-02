@@ -21,6 +21,21 @@ public static class EquipmentMappings
         };
     }
 
+    public static Equipment ToEquipment(this UserEquipmentAddRequest request)
+    {
+        return new Equipment
+        {
+            CategoryId = request.CategoryId,
+            Name = request.Name,
+            Notes = request.Notes,
+            RentalPricePerDay = request.RentalPricePerDay,
+            SerialNumber = request.SerialNumber,
+            Status = request.Status,
+            DateCreated = DateTime.UtcNow,
+            IsActive = true,
+        };
+    }
+
     public static Equipment ToEquipment(this EquipmentUpdateRequest request)
     {
         return new Equipment
