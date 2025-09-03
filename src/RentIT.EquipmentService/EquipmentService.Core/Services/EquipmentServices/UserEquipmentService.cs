@@ -44,19 +44,18 @@ namespace EquipmentService.Core.Services.EquipmentServices
 
         public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request)
         {
-            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
-
-            if (equipment == null)
-                return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
-
             var equipmentToUpdate = request.ToEquipment();
+            equipmentToUpdate.CreatedByUserId = userId;
 
             var validationResult = await _userEquipmentValidator.ValidateUpdateEntity(equipmentToUpdate, equipmentId);
 
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);
 
-            await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentToUpdate);
+            var isSuccess = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate);
+
+            if(!isSuccess)
+                return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
             return Result.Success();            
         }

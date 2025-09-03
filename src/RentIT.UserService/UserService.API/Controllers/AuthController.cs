@@ -38,7 +38,7 @@ namespace UserService.API.Controllers
         //POST :api/User/Login
         [Route("Login")]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request)
         {
             var result = await _authService.LoginAsync(request);
 
@@ -47,7 +47,7 @@ namespace UserService.API.Controllers
                     statusCode: result.Error.ErrorCode);
 
             //return JWT Token
-            return NoContent();
+            return result.Value;
         }
 
 
