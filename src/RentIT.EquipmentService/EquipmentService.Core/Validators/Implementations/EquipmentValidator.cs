@@ -1,24 +1,32 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.Validators.ValidatorContracts;
 
-namespace EquipmentService.Core.Validators
+namespace EquipmentService.Core.Validators.Implementations
 {
     public class EquipmentValidator : IEquipmentValidator
     {
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public EquipmentValidator(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository)
+        private readonly IUsersMicroserviceClient _usersClient;
+        public EquipmentValidator(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository, IUsersMicroserviceClient usersClient)
         {
             _equipmentRepository = equipmentRepository;
             _categoryRepository = categoryRepository;
+            _usersClient = usersClient;
         }
 
         public async Task<Result> ValidateNewEntity(Equipment entity)
         {
             if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
+
+            var response = await _usersClient.GetUserByUserId(entity.CreatedByUserId);
+
+            if (response.IsFailure)
+                return Result.Failure(response.Error);
 
             bool isValid = await _equipmentRepository.IsEquipmentUnique(entity);
 
@@ -32,6 +40,11 @@ namespace EquipmentService.Core.Validators
         {
             if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId))
                 return Result.Failure(CategoryErrors.CategoryNotFound);
+
+            var response = await _usersClient.GetUserByUserId(entity.CreatedByUserId);
+
+            if (response.IsFailure)
+                return Result.Failure(response.Error);
 
             bool isValid = await _equipmentRepository.IsEquipmentUnique(entity, entityId);
 

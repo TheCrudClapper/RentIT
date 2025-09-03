@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
@@ -12,14 +13,23 @@ namespace EquipmentService.Core.Services.EquipmentServices
     {
         private readonly IUserEquipmentRepository _userEquipmentRepository;
         private readonly IUserEquipmentValidator _userEquipmentValidator;
-        public UserEquipmentService(IUserEquipmentRepository userEquipmentRepository, IUserEquipmentValidator userEquipmentValidator)
+        private readonly IUsersMicroserviceClient _usersClient;
+        public UserEquipmentService(IUserEquipmentRepository userEquipmentRepository,
+            IUserEquipmentValidator userEquipmentValidator,
+            IUsersMicroserviceClient usersClient)
         {
             _userEquipmentRepository = userEquipmentRepository;
             _userEquipmentValidator = userEquipmentValidator;
+            _usersClient = usersClient;
         }
 
         public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
         {
+            var response = await _usersClient.GetUserByUserId(userId);
+
+            if (response.IsFailure)
+                return Result.Failure<EquipmentResponse>(response.Error);
+
             Equipment equipment = request.ToEquipment();
 
             var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment);
@@ -36,8 +46,8 @@ namespace EquipmentService.Core.Services.EquipmentServices
         {
             var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
 
-            if (equipment == null) 
-                return Result.Failure(EquipmentErrors.EquipmentNotFound);
+            if (equipment == null)
+                return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
 
             var equipmentToUpdate = request.ToEquipment();
 

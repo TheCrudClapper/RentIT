@@ -1,7 +1,9 @@
 using EquipmentService.API.Extensions;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Infrastructure;
+using EquipmentService.Infrastructure.HttpClients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +19,15 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
+
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>( client =>
+{
+    client.BaseAddress = new Uri("http://localhost:9090");
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

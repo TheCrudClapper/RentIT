@@ -2,7 +2,7 @@
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
-using EquipmentService.Core.Validators;
+using EquipmentService.Core.Validators.Implementations;
 using EquipmentService.Core.Validators.ValidatorContracts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +23,7 @@ namespace EquipmentService.Core
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
+
             return services;
         }
     }

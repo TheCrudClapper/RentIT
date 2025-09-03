@@ -45,6 +45,7 @@ public static class EquipmentMappings
             Notes = request.Notes,
             DateEdited = DateTime.UtcNow,
             Status = request.Status,
+            CreatedByUserId = request.UserId,
             RentalPricePerDay = request.RentalPricePerDay,
             SerialNumber = request.SerialNumber,
         };

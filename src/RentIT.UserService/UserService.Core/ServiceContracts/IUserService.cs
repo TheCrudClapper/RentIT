@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using UserService.Core.DTO.UserDto;
+﻿using UserService.Core.DTO.UserDto;
 using UserService.Core.ResultTypes;
 
 namespace UserService.Core.ServiceContracts;

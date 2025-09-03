@@ -3,7 +3,7 @@ using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.Validators.ValidatorContracts;
 
-namespace EquipmentService.Core.Validators
+namespace EquipmentService.Core.Validators.Implementations
 {
     public class UserEquipmentValidator : IUserEquipmentValidator
     {

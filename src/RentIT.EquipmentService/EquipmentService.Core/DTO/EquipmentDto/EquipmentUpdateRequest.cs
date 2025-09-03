@@ -15,6 +15,9 @@ public class EquipmentUpdateRequest
     public string SerialNumber { get; set; } = null!;
 
     [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
     public decimal RentalPricePerDay { get; set; }
 
     [Required]
