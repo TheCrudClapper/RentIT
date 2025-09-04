@@ -1,0 +1,35 @@
+services:
+  userservice.api:
+    image: users-microservice:latest
+    build:
+        context: .
+        dockerfile: src/RentIT.UserService/UserService.API/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres 
+        - DB_NAME=users
+        - DB_PORT=5432
+        - DB_HOST=user-microservice-db-postgress
+        - DB_PASSWORD=admin
+    ports:
+        - "5000:8080"
+        - "5001:8081"
+ 
+    networks:
+      - users-microservice-network  
+    
+  user-microservice-db-postgress:
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=users
+        - POSTGRES_PASSWORD=admin
+    ports:
+        - 5999:5432
+    networks:
+        - users-microservice-network
+
+networks:
+  users-microservice-network:
+
+      

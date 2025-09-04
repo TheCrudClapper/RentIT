@@ -5,7 +5,12 @@
       "launchUrl": "swagger",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_USER": "postgres",
+        "DB_NAME": "RentITUsers",
+        "DB_PORT": "5432",
+        "DB_HOST": "localhost",
+        "DB_PASSWORD": "admin"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5116"
@@ -14,7 +19,12 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_USER": "postgres",
+        "DB_NAME": "RentITUsers",
+        "DB_PORT": "5432",
+        "DB_HOST": "localhost",
+        "DB_PASSWORD": "admin"
       },
       "launchUrl": "swagger",
       "dotnetRunMessages": true,
@@ -26,7 +36,13 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_USER": "postgres",
+        "DB_NAME": "RentITUsers",
+        "DB_PORT": "5432",
+        "DB_HOST": "localhost",
+        "DB_PASSWORD": "admin"
       },
       "publishAllPorts": true,
       "useSSL": true

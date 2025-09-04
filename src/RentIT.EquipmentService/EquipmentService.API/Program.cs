@@ -26,7 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>( client =>
 {
-    client.BaseAddress = new Uri("http://localhost:9090");
+    client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 });
 var app = builder.Build();
 

@@ -8,8 +8,8 @@ USER $APP_UID
 WORKDIR /app
 
 # app listens on this ports
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 9090
+EXPOSE 9091
 
 
 # This stage is used to build the service project

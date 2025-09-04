@@ -29,6 +29,8 @@ RUN dotnet publish "./EquipmentService.API.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV USERS_MICROSERVICE_NAME=users
+ENV USERS_MICROSERVICE_PORT=9090
 ENV DB_USER=postgres
 ENV DB_NAME=equipment
 ENV DB_PORT=5432

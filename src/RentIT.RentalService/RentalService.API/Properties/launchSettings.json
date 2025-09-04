@@ -5,7 +5,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_NAME": "RentITRentals",
+        "DB_PORT": "5432",
+        "DB_USER": "postgres",
+        "DB_PASSWORD": "admin",
+        "DB_HOST": "localhost"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5282"
@@ -15,7 +20,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_NAME": "RentITRentals",
+        "DB_PORT": "5432",
+        "DB_USER": "postgres",
+        "DB_PASSWORD": "admin",
+        "DB_HOST": "localhost"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7084;http://localhost:5282"
@@ -25,7 +35,13 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_NAME": "RentITRentals",
+        "DB_PORT": "5432",
+        "DB_USER": "postgres",
+        "DB_PASSWORD": "admin",
+        "DB_HOST": "localhost"
       },
       "publishAllPorts": true,
       "useSSL": true
