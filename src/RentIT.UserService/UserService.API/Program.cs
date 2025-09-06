@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.OpenApi.Writers;
 using UserService.API.Extensions;
 using UserService.API.Middleware;
 using UserService.Core;
 using UserService.Core.Domain.Entities;
 using UserService.Infrastructure;
 using UserService.Infrastructure.DbContexts;
+using UserService.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,13 @@ await app.MigrateDatabaseAsync(builder.Services);
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var context = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+
+    await AppDbSeeder.Seed(context, userManager, roleManager);
 }
 
 // Security middlewares
