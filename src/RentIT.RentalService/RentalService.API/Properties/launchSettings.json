@@ -10,7 +10,11 @@
         "DB_PORT": "5432",
         "DB_USER": "postgres",
         "DB_PASSWORD": "admin",
-        "DB_HOST": "localhost"
+        "DB_HOST": "localhost",
+        "USERS_MICROSERVICE_NAME": "localhost",
+        "USERS_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_NAME": "localhost"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5282"
@@ -25,7 +29,11 @@
         "DB_PORT": "5432",
         "DB_USER": "postgres",
         "DB_PASSWORD": "admin",
-        "DB_HOST": "localhost"
+        "DB_HOST": "localhost",
+        "USERS_MICROSERVICE_NAME": "localhost",
+        "USERS_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_NAME": "localhost"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7084;http://localhost:5282"
@@ -41,7 +49,11 @@
         "DB_PORT": "5432",
         "DB_USER": "postgres",
         "DB_PASSWORD": "admin",
-        "DB_HOST": "localhost"
+        "DB_HOST": "localhost",
+        "USERS_MICROSERVICE_NAME": "localhost",
+        "USERS_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_PORT": "8080",
+        "EQUIPMENT_MICROSERVICE_NAME": "localhost"
       },
       "publishAllPorts": true,
       "useSSL": true

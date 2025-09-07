@@ -1,7 +1,11 @@
 using RentalService.API.Extensions;
 using RentalService.API.Middleware;
 using RentalService.Core;
+using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Infrastructure;
+using RentalService.Infrastructure.DbContexts;
+using RentalService.Infrastructure.HttpClients;
+using RentalService.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,16 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
+builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
+{
+    options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:" +
+        $"{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
+});
+builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroserviceClient>(options =>
+{
+    options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
+        $"{builder.Configuration["EQUIPMENT_MICROSERVICE_PORT"]}");
+});
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +47,10 @@ await app.MigrateDatabaseAsync(builder.Services);
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<RentalDbContext>();
+    await AppDbSeeder.Seed(context);
 }
 
 //Https supports

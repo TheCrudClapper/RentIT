@@ -7,5 +7,8 @@
 
         public static readonly Error RentalForSelfEquipment = new Error(
             400, "You can't rent equipment you own yourself !");
+
+        public static readonly Error RentalPeriodNotAvaliable = new Error(
+            400, "Equipment is already rented during the requested period.");
     }
 }

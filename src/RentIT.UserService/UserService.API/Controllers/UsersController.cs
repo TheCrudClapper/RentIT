@@ -16,12 +16,9 @@ namespace UserService.API.Controllers
 
         //GET :/api/Users/5
         [HttpGet("{userId}")]
-        public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid? userId)
+        public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid userId)
         {
-            if(userId == null)
-                return BadRequest("User Id can't be null");
-
-            var result = await _userService.GetUserByUserId(userId.Value);
+            var result = await _userService.GetUserByUserId(userId);
 
             if (result.IsFailure)
                 return NotFound(result.Error.Description);

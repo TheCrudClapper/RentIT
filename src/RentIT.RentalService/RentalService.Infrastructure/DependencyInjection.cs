@@ -24,6 +24,7 @@ namespace RentalService.Infrastructure
                     x => x.MigrationsAssembly("RentalService.Infrastructure"));
             });
             services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddScoped<IUserRentalRepository, UserRentalRepository>();
             return services;
         }
     }

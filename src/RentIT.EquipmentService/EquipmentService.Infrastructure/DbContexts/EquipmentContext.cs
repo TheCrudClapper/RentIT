@@ -22,6 +22,9 @@ namespace EquipmentService.Infrastructure.DbContexts
                 .HasQueryFilter(item => item.IsActive);
             modelBuilder.Entity<Category>()
                 .HasQueryFilter(item => item.IsActive);
+
+            modelBuilder.Entity<Category>().ToTable("Categories");
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

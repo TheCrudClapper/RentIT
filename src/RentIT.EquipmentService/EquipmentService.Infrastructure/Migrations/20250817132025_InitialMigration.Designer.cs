@@ -25,7 +25,7 @@ namespace EquipmentService.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("EquipmentService.Core.Domain.Entities.Category", b =>
+            modelBuilder.Entity("EquipmentService.Core.Domain.Entities.CategoryName", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,16 +111,16 @@ namespace EquipmentService.Infrastructure.Migrations
 
             modelBuilder.Entity("EquipmentService.Core.Domain.Entities.Equipment", b =>
                 {
-                    b.HasOne("EquipmentService.Core.Domain.Entities.Category", "Category")
+                    b.HasOne("EquipmentService.Core.Domain.Entities.CategoryName", "CategoryName")
                         .WithMany("EquipmentItems")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("CategoryName");
                 });
 
-            modelBuilder.Entity("EquipmentService.Core.Domain.Entities.Category", b =>
+            modelBuilder.Entity("EquipmentService.Core.Domain.Entities.CategoryName", b =>
                 {
                     b.Navigation("EquipmentItems");
                 });

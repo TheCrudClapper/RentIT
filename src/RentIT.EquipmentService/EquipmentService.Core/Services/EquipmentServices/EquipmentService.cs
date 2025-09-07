@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
@@ -12,10 +13,14 @@ namespace EquipmentService.Core.Services.EquipmentServices
     {
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly IEquipmentValidator _equipmentValidator;
-        public EquipmentService(IEquipmentRepository equipmentRepository, IEquipmentValidator equipmentValidator)
+        private readonly IUsersMicroserviceClient _usersMicroserviceClient;
+        public EquipmentService(IEquipmentRepository equipmentRepository,
+            IEquipmentValidator equipmentValidator,
+            IUsersMicroserviceClient usersMicroserviceClient)
         {
             _equipmentRepository = equipmentRepository;
             _equipmentValidator = equipmentValidator;
+            _usersMicroserviceClient = usersMicroserviceClient;
         }
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
@@ -41,6 +46,7 @@ namespace EquipmentService.Core.Services.EquipmentServices
         public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems()
         {
             var equipmentItems = await _equipmentRepository.GetAllEquipmentAsync();
+
             return equipmentItems.Select(item => item.ToEquipmentResponse());
         }
 
@@ -69,8 +75,20 @@ namespace EquipmentService.Core.Services.EquipmentServices
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
             var newEquipment = await _equipmentRepository.AddEquipmentAsync(equipment);
-
             return newEquipment.ToEquipmentResponse();
         }
+
+        public async Task<Result<bool>> DoesEquipmentExist(Guid equipmentId)
+        {
+            var exists = await _equipmentRepository.DoesEquipmentExistsAsync(equipmentId);
+
+            if (!exists)
+                return Result.Failure<bool>(EquipmentErrors.EquipmentNotFound);
+
+            return exists;
+        }
+
+            
+
     }
 }

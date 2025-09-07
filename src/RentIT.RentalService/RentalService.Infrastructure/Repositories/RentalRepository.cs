@@ -2,6 +2,7 @@
 using RentalService.Core.Domain.Entities;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
+using System.Linq.Expressions;
 
 namespace RentalService.Infrastructure.Repositories
 {
@@ -78,6 +79,18 @@ namespace RentalService.Infrastructure.Repositories
         {
             return await _context.Rentals
                 .FirstOrDefaultAsync(item => item.Id == rentalId && item.UserId == userId);
+        }
+
+        public async Task<Rental?> GetRentalByCondition(Expression<Func<Rental, bool>> conditionExpression)
+        {
+            return await _context.Rentals
+                .FirstOrDefaultAsync(conditionExpression);
+        }
+
+        public async Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression)
+        {
+            return await _context.Rentals.Where(conditionExpression)
+                .ToListAsync();
         }
     }
 }

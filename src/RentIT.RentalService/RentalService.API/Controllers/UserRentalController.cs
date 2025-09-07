@@ -4,21 +4,24 @@ using RentalService.Core.ServiceContracts;
 
 namespace RentalService.API.Controllers
 {
+    /// <summary>
+    /// WORK IN PROGRESS - USER ID WILL BE TAKEN FROM JWT TOKEN
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class RentalsController : ControllerBase
+    public class UserRentalController : ControllerBase
     {
-        private readonly IRentalService _rentalService;
-        public RentalsController(IRentalService rentalService)
+        private readonly IUserRentalService _userRentalService;
+        public readonly static Guid UserIdPlaceholder = new Guid();
+        public UserRentalController(IUserRentalService userRentalService)
         {
-            _rentalService = rentalService;
+            _userRentalService = userRentalService;
         }
-
         // GET: api/Rentals
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals()
         {
-            var rentals = await _rentalService.GetAllRentals();
+            var rentals = await _userRentalService.GetAllRentals(UserIdPlaceholder);
             return rentals.ToList();
         }
 
@@ -26,7 +29,8 @@ namespace RentalService.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RentalResponse>> GetRental(Guid id)
         {
-            var result = await _rentalService.GetRental(id);
+            var result = await _userRentalService.GetRental(id, UserIdPlaceholder);
+
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
@@ -37,9 +41,9 @@ namespace RentalService.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request)
         {
-            var result = await _rentalService.UpdateRental(id, request);
+            var result = await _userRentalService.UpdateRental(id, request, UserIdPlaceholder);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
             return NoContent();
@@ -47,20 +51,21 @@ namespace RentalService.API.Controllers
 
         // POST: api/Rentals
         [HttpPost]
-        public async Task<ActionResult<RentalResponse>> PostRental(RentalAddRequest request)
+        public async Task<ActionResult<RentalResponse>> PostRental(UserRentalAddRequest request)
         {
-            var result = await _rentalService.AddRental(request);
+            var result = await _userRentalService.AddRental(request, UserIdPlaceholder);
+
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
-            return result.Value;    
+            return result.Value;
         }
 
         // DELETE: api/Rentals/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRental(Guid id)
         {
-            var result = await _rentalService.DeleteRental(id);
+            var result = await _userRentalService.DeleteRental(id, UserIdPlaceholder);
 
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);

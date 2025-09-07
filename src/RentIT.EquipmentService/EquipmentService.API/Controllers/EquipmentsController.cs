@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
+using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Mvc;
 namespace EquipmentService.API.Controllers;
@@ -67,6 +68,18 @@ public class EquipmentsController : ControllerBase
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
+    }
+
+    // GET: api/Equipments/exists/5
+    [HttpGet("exists/{equipmentId}")]
+    public async Task<ActionResult> DoesEquipmentExist(Guid equipmentId)
+    {
+        var result = await _equipmentService.DoesEquipmentExist(equipmentId);
+
+        if(result.IsFailure)
+            return NotFound(result.Error.Description);
+
+        return Ok(result.Value);
     }
 
 }

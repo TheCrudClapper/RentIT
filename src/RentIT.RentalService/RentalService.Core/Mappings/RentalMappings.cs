@@ -5,14 +5,33 @@ namespace RentalService.Core.Mappings
 {
     public static class RentalMappings
     {
-        public static RentalResponse ToRentalResponse(this Rental rental)
+        public static RentalResponse ToRentalResponse(this Rental rental, EquipmentResponse equipment)
         {
-            return new RentalResponse
+            return new RentalResponse(rental.Id,
+                rental.ReturnedDate,
+                rental.StartDate,
+                rental.EndDate,
+                rental.RentalPrice,
+                new EquipmentResponse(
+                    equipment.Id,
+                    equipment.Name,
+                    equipment.CreatedByUserId,
+                    equipment.RentalPricePerDay,
+                    equipment.SerialNumber,
+                    equipment.CategoryName,
+                    equipment.Status,
+                    equipment.Notes));
+        }
+
+        public static Rental ToRental(this UserRentalAddRequest request)
+        {
+            return new Rental
             {
-                StartDate = rental.StartDate,
-                Id = rental.Id,
-                EndDate = rental.EndDate,
-                ReturnedDate = rental.ReturnedDate
+                EquipmentId = request.EquipmentId,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                IsActive = true,
+                DateCreated = DateTime.Now,
             };
         }
 
@@ -20,6 +39,7 @@ namespace RentalService.Core.Mappings
         {
             return new Rental
             {
+                UserId = request.UserId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 EquipmentId = request.EquipmentId,

@@ -1,5 +1,6 @@
 ﻿using EquipmentService.Core.Domain.Entities;
 using EquipmentService.Core.DTO.EquipmentDto;
+using EquipmentService.Core.DTO.UserDto;
 
 namespace EquipmentService.Core.Mappings;
 
@@ -57,7 +58,9 @@ public static class EquipmentMappings
         {
             Id = equipment.Id,
             Name = equipment.Name,
-            Category = equipment.Category.Name,
+            CategoryName = equipment.Category.Name,
+            CreatedByUserId = equipment.CreatedByUserId,
+            RentalPricePerDay = equipment.RentalPricePerDay,
             Notes = equipment.Notes,
             SerialNumber = equipment.SerialNumber,
             Status = equipment.Status.ToString(),

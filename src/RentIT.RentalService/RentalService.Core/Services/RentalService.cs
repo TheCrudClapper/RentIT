@@ -1,40 +1,49 @@
 ﻿using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Mappings;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
+using RentalService.Core.Validators.Contracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace RentalService.Core.Services
 {
-    //DISCLAIMER !
-    //Commented out ,for now, unused code or deprecated one. Will figure how to communicate with other apis soon
     public class RentalService : IRentalService
     {
         private readonly IRentalRepository _rentalRepository;
-        public RentalService(IRentalRepository rentalRepository)
+        private readonly IRentalValidator _rentalValidator;
+        private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
+        public RentalService(IRentalRepository rentalRepository,
+            IRentalValidator rentalValidator,
+            IEquipmentMicroserviceClient equipmentMicroserviceClient)
         {
             _rentalRepository = rentalRepository;
+            _rentalValidator = rentalValidator;
+            _equipmentMicroserviceClient = equipmentMicroserviceClient;
         }
 
         public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request)
         {
             Rental rental = request.ToRentalEntity();
-            
-            //var validationResult = await ValidateAddRentalEntity(rental);
 
-            //if (validationResult.IsFailure)
-            //    return Result.Failure<RentalResponse>(validationResult.Error);
+            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
+            if (equipmentResponse.IsFailure)
+                return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            //var dailyPrice = await _equipmentRepository.GetDailyPriceAsync(rental.EquipmentId);
-            //if (dailyPrice == null)
-            //    return Result.Failure<RentalResponse>(EquipmentErrors.EquipmentNotFound);
+            var validationResult = await _rentalValidator.ValidateNewEntity(rental, equipmentResponse.Value);
 
-            //rental.TotalRentalPrice = CalculateTotalRentalPrice(rental.StartDate, rental.EndDate, dailyPrice.Value);
+            if (validationResult.IsFailure)
+                return Result.Failure<RentalResponse>(validationResult.Error);
 
-            Rental newRental = await _rentalRepository.AddRentalAsync(rental);
-            
-            return newRental.ToRentalResponse();
+            //Calculating Total Rental Price
+            rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
+                rental.EndDate,
+                equipmentResponse.Value.RentalPricePerDay);
+
+            Rental newRental = await _rentalRepository.AddRentalAsync(rental);            
+            return newRental.ToRentalResponse(equipmentResponse.Value);
         }
 
         public async Task<Result> DeleteRental(Guid rentalId)
@@ -53,20 +62,38 @@ namespace RentalService.Core.Services
             if (rental == null)
                 return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
 
-            return rental.ToRentalResponse();
+            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
+            if (equipmentResponse.IsFailure)
+                return Result.Failure<RentalResponse>(equipmentResponse.Error);
+
+            return rental.ToRentalResponse(equipmentResponse.Value);
         }
 
+        //WIP
         public async Task<IEnumerable<RentalResponse>> GetAllRentals()
         {
-            IEnumerable<Rental> rentals = await _rentalRepository.GetAllRentalsAsync();
-            return rentals.Select(item => item.ToRentalResponse());
+            var rentals = await _rentalRepository.GetAllRentalsAsync();
+
+            var response = new List<RentalResponse>();
+
+            foreach(var rental in rentals)
+            {
+                var eqResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
+                if (eqResponse.IsFailure)
+                    continue;
+
+                response.Add(rental.ToRentalResponse(eqResponse.Value));
+            }
+
+            return response;
         }
 
+        //WIP
         public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request)
         {
             Rental rental = request.ToRentalEntity();
 
-            var validationResult = await ValidateUpdateRentalEntity(rental);
+            var validationResult = await _rentalValidator.ValidateUpdateEntity(rental, rentalId);
 
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);
@@ -84,44 +111,5 @@ namespace RentalService.Core.Services
             var days = (endDate.Date - startDate.Date).Days;
             return dailyPrice * days;
         }
-
-        //private async Task<Result> ValidateAddRentalEntity(Rental entity)
-        //{
-        //    var equipment = await _equipmentRepository.GetActiveEquipmentByIdAsync(entity.EquipmentId);
-
-        //    //Check nullability of equipment from request
-        //    if (equipment == null)
-        //        return Result.Failure(EquipmentErrors.EquipmentNotFound);
-
-        //    //Check if user exists
-        //    if (!await _userRepository.DoesUserExistsAsync(entity.RentedByUserId))
-        //        return Result.Failure(UserErrors.UserNotFound);
-
-        //    //Check ownership of item
-        //    if (equipment.CreatedByUserId != entity.RentedByUserId)
-        //        return Result.Failure(RentalErrors.RentalForSelfEquipment);
-
-        //    //Status check on equipment
-        //    if (equipment.Status == RentStatusEnum.Maintenance)
-        //        return Result.Failure(EquipmentErrors.EquipmentInMaintnance);
-
-        //    if(equipment.Status == RentStatusEnum.Rented)
-        //        return Result.Failure(EquipmentErrors.EquipmentRented(entity.StartDate, entity.EndDate));
-
-        //    return Result.Success();
-        //}
-
-        private async Task<Result> ValidateUpdateRentalEntity(Rental entity)
-        {
-            //Check given equipmentId
-            //if (!await _equipmentRepository.DoesEquipmentExistsAsync(entity.EquipmentId))
-            //    return Result.Failure(EquipmentErrors.EquipmentNotFound);
-            
-            //validate ownership, for now skip it, we dont have authentication or authorization
-
-
-            return Result.Success();
-        }
-
     }
 }

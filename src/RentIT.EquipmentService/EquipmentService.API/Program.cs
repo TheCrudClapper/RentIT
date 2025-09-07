@@ -3,7 +3,9 @@ using EquipmentService.API.Middleware;
 using EquipmentService.Core;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Infrastructure;
+using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.HttpClients;
+using EquipmentService.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,16 +32,22 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 });
 var app = builder.Build();
 
+await app.MigrateDatabaseAsync(builder.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<EquipmentContext>();
+    await AppDbSeeder.Seed(context);
 }
 
 //Add global exception handling middleware
 app.UseGlobalExceptionHandlingMiddleware();
 
-await app.MigrateDatabaseAsync(builder.Services);
+
 
 //Https supports
 app.UseHsts();
