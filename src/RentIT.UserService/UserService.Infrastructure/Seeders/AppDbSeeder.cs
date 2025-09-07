@@ -28,7 +28,7 @@ namespace UserService.Infrastructure.Seeders
                     Email = "jankowalski123@gmail.com",
                     DateCreated = DateTime.UtcNow,
                     IsActive = true,
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("D6D7EDCA-E2E0-4F08-A5DD-B4749BD8830A"),
                     UserName = "jankowalski123@gmail.com"
                 };
 
@@ -39,7 +39,7 @@ namespace UserService.Infrastructure.Seeders
                     Email = "jakubtester12@gmail.com",
                     DateCreated = DateTime.UtcNow,
                     IsActive = true,
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("D8862A46-6E4B-438D-AFB2-BD9498B2E708"),
                     UserName = "jakubtester12@gmail.com"
                 };
 
