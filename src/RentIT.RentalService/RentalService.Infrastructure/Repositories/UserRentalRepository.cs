@@ -6,13 +6,9 @@ using System.Linq.Expressions;
 
 namespace RentalService.Infrastructure.Repositories
 {
-    public class UserRentalRepository : IUserRentalRepository
+    public class UserRentalRepository : BaseRentalRepository,IUserRentalRepository 
     {
-        private readonly RentalDbContext _context;
-        public UserRentalRepository(RentalDbContext context)
-        {
-            _context = context;
-        }
+        public UserRentalRepository(RentalDbContext context) : base(context) { }
         public Task<Rental> AddRentalAsync(Rental rental, Guid userId)
         {
             throw new NotImplementedException();

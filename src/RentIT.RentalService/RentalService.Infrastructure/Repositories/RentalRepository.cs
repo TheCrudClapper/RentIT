@@ -6,13 +6,9 @@ using System.Linq.Expressions;
 
 namespace RentalService.Infrastructure.Repositories
 {
-    public class RentalRepository : IRentalRepository
+    public class RentalRepository : BaseRentalRepository ,IRentalRepository
     {
-        private readonly RentalDbContext _context;
-        public RentalRepository(RentalDbContext context)
-        {
-            _context = context;
-        }
+        public RentalRepository(RentalDbContext context) : base(context) { }
 
         public async Task<Rental> AddRentalAsync(Rental rental)
         {
@@ -81,16 +77,6 @@ namespace RentalService.Infrastructure.Repositories
                 .FirstOrDefaultAsync(item => item.Id == rentalId && item.UserId == userId);
         }
 
-        public async Task<Rental?> GetRentalByCondition(Expression<Func<Rental, bool>> conditionExpression)
-        {
-            return await _context.Rentals
-                .FirstOrDefaultAsync(conditionExpression);
-        }
-
-        public async Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression)
-        {
-            return await _context.Rentals.Where(conditionExpression)
-                .ToListAsync();
-        }
+   
     }
 }
