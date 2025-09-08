@@ -53,6 +53,7 @@ namespace RentalService.Core.Mappings
         {
             return new Rental
             {
+                UserId = request.UserId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 EquipmentId = request.EquipmentId,

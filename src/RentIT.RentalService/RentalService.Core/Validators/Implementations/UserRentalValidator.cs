@@ -6,6 +6,7 @@ namespace RentalService.Core.Validators.Implementations
 {
     public class UserRentalValidator : IUserRentalValidator
     {
+
         public Task<Result> ValidateNewEntity(Rental entity)
         {
             throw new NotImplementedException();

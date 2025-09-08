@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\RentIT.RentalService\RentalService.Core\RentalService.Core.csproj" />
       <ProjectReference Include="..\EquipmentService.Core\EquipmentService.Core.csproj" />
     </ItemGroup>
 

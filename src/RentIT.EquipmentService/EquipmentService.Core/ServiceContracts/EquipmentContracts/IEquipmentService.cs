@@ -9,6 +9,7 @@ namespace EquipmentService.Core.ServiceContracts.Equipment
         Task<Result<EquipmentResponse>> AddEquipment(EquipmentAddRequest request);
         Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId);
         Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems();
+        Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds);
         Task<Result> DeleteEquipment(Guid equipmentId);
         Task<Result<bool>> DoesEquipmentExist(Guid equipmentId);
     }

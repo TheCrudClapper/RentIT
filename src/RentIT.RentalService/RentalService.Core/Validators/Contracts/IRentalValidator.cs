@@ -8,5 +8,6 @@ namespace RentalService.Core.Validators.Contracts
     public interface IRentalValidator : IEntityValidator<Rental>
     {
         Task<Result> ValidateNewEntity(Rental entity, EquipmentResponse equipmentResponse);
+        Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId, EquipmentResponse equipmentResponse);
     }
 }

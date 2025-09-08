@@ -2,7 +2,6 @@
 using RentalService.Core.Domain.Entities;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
-using System.Linq.Expressions;
 
 namespace RentalService.Infrastructure.Repositories
 {

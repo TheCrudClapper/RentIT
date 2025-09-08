@@ -6,7 +6,6 @@ using RentalService.Core.Mappings;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
-using System.ComponentModel.DataAnnotations;
 
 namespace RentalService.Core.Services
 {
@@ -69,7 +68,7 @@ namespace RentalService.Core.Services
             return rental.ToRentalResponse(equipmentResponse.Value);
         }
 
-        //WIP
+        //Improve that so it doesnt send x requests
         public async Task<IEnumerable<RentalResponse>> GetAllRentals()
         {
             var rentals = await _rentalRepository.GetAllRentalsAsync();
@@ -88,15 +87,23 @@ namespace RentalService.Core.Services
             return response;
         }
 
-        //WIP
         public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request)
         {
             Rental rental = request.ToRentalEntity();
 
-            var validationResult = await _rentalValidator.ValidateUpdateEntity(rental, rentalId);
+            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
+            if (equipmentResponse.IsFailure)
+                return Result.Failure<RentalResponse>(equipmentResponse.Error);
+
+            var validationResult = await _rentalValidator.ValidateUpdateEntity(rental, rentalId, equipmentResponse.Value);
 
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);
+
+
+            rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
+                rental.EndDate,
+                equipmentResponse.Value.RentalPricePerDay);
 
             bool isSuccess = await _rentalRepository.UpdateRentalAsync(rentalId, rental);
 

@@ -45,5 +45,19 @@ namespace RentalService.Infrastructure.HttpClients
 
             return details;
         }
+
+        public async Task<IEnumerable<EquipmentResponse>> GetEquipments(IEnumerable<Guid> equipmentIds)
+        {
+            throw new NotImplementedException();
+            //if(!equipmentIds.Any())
+            //    return Enumerable.Empty<EquipmentResponse>();
+
+            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"/api/equipments/byIds", equipmentIds);
+
+            //if(!response.IsSuccessStatusCode)
+
+
+            //return await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+        }
     }
 }

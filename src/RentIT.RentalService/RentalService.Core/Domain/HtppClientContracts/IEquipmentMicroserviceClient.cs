@@ -7,5 +7,6 @@ namespace RentalService.Core.Domain.HtppClientContracts
     {
         Task<Result<bool>> DoesEquipmentExist(Guid equipmentId); 
         Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId);
+        Task<IEnumerable<EquipmentResponse>> GetEquipments(IEnumerable<Guid> equipmentIds);
     }
 }

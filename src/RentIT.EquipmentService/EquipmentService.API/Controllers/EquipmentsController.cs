@@ -76,11 +76,21 @@ public class EquipmentsController : ControllerBase
     {
         var result = await _equipmentService.DoesEquipmentExist(equipmentId);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
             return NotFound(result.Error.Description);
 
         return Ok(result.Value);
     }
 
+    //POST: api/Equipments/byIds
+    [HttpPost("/byIds")]
+    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid> equipmentIds)
+    {
+        if (!equipmentIds.Any())
+            return BadRequest("No equipment IDs provided.");
+
+        var equipments = await _equipmentService.GetAllEquipmentsByIds(equipmentIds);
+        return Ok(equipments);
+    }
 }
 

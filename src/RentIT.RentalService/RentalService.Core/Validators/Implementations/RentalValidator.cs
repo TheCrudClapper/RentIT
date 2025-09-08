@@ -10,44 +10,42 @@ namespace RentalService.Core.Validators.Implementations
     public class RentalValidator : IRentalValidator
     {
         private readonly IUsersMicroserviceClient _usersMicroserviceClient;
-        private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
         private readonly IRentalRepository _rentalRepository;
         public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,
-            IEquipmentMicroserviceClient equipmentMicroserviceClient,
-            IRentalRepository rentalRepository)
+            IRentalRepository rentalRepository,
+            IEquipmentMicroserviceClient equipmentMicroserviceClient)
         {
             _usersMicroserviceClient = usersMicroserviceClient;
-            _equipmentMicroserviceClient = equipmentMicroserviceClient;
             _rentalRepository = rentalRepository;
         }
-        public async Task<Result> ValidateNewEntity(Rental entity)
+
+        public Task<Result> ValidateNewEntity(Rental entity) =>
+            ValidateRental(entity);
+
+        public Task<Result> ValidateNewEntity(Rental entity, EquipmentResponse equipmentResponse) =>
+            ValidateRental(entity, equipmentResponse);
+
+        public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId) =>
+            ValidateRental(entity, isUpdate: true);
+
+        public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId, EquipmentResponse equipmentResponse) =>
+            ValidateRental(entity, equipmentResponse, isUpdate:true);
+
+        public async Task<Result> ValidateRental(Rental entity,
+            EquipmentResponse? equipmentResponse = null,
+            bool isUpdate = false)
         {
             var userValidation = await ValidateUser(entity.UserId);
             if (userValidation.IsFailure)
                 return userValidation;
 
-            return await ValidateRentalPeriod(entity);
-
-        }
-
-        public async Task<Result> ValidateNewEntity(Rental entity, EquipmentResponse equipmentResponse)
-        {
-            var userValidation = await ValidateUser(entity.UserId);
-            if (userValidation.IsFailure)
-                return userValidation;
-
-            if (entity.UserId == equipmentResponse.CreatedByUserId)
+            if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
                 return Result.Failure(RentalErrors.RentalForSelfEquipment);
 
             return await ValidateRentalPeriod(entity);
         }
 
-        public Task<Result> ValidateUpdateEntity(Rental entity, Guid entityId)
-        {
-            throw new NotImplementedException();
-        }
-
-        //PRIVATE HELPER METHODS
+        //Private Helper Methods
         private async Task<Result> ValidateRentalPeriod(Rental enitity)
         {
             var conflicts = await _rentalRepository.GetRentalsByCondition(item => item.EquipmentId == enitity.EquipmentId &&
@@ -62,9 +60,10 @@ namespace RentalService.Core.Validators.Implementations
         private async Task<Result> ValidateUser(Guid userId)
         {
             var userResult = await _usersMicroserviceClient.GetUserByUserId(userId);
-            return userResult.IsFailure 
-                ? Result.Failure(userResult.Error) 
+            return userResult.IsFailure
+                ? Result.Failure(userResult.Error)
                 : Result.Success();
         }
+
     }
 }

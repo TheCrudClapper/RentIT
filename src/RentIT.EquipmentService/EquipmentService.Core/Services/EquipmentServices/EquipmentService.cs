@@ -13,14 +13,11 @@ namespace EquipmentService.Core.Services.EquipmentServices
     {
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly IEquipmentValidator _equipmentValidator;
-        private readonly IUsersMicroserviceClient _usersMicroserviceClient;
         public EquipmentService(IEquipmentRepository equipmentRepository,
-            IEquipmentValidator equipmentValidator,
-            IUsersMicroserviceClient usersMicroserviceClient)
+            IEquipmentValidator equipmentValidator)
         {
             _equipmentRepository = equipmentRepository;
             _equipmentValidator = equipmentValidator;
-            _usersMicroserviceClient = usersMicroserviceClient;
         }
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
@@ -88,7 +85,10 @@ namespace EquipmentService.Core.Services.EquipmentServices
             return exists;
         }
 
-            
-
+        public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds)
+        {
+            var equipmentsByCondition = await _equipmentRepository.GetEquipmentsByCondition(item => equipmentIds.Contains(item.Id));
+            return equipmentsByCondition.Select(equipment => equipment.ToEquipmentResponse());
+        }
     }
 }

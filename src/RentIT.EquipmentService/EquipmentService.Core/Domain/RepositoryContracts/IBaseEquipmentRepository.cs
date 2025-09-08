@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace EquipmentService.Core.Domain.RepositoryContracts
 {
@@ -11,5 +12,7 @@ namespace EquipmentService.Core.Domain.RepositoryContracts
         Task<decimal?> GetDailyPriceAsync(Guid equipmentId);
         Task<bool> DoesEquipmentExistsAsync(Guid equipmentId);
         Task<RentStatusEnum?> GetEquipmentStatusAsync(Guid equipmentId);
+        Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression);
+        Task<Equipment?> GetEquipmentByCondition(Expression<Func<Equipment, bool>> expression);
     }
 }
