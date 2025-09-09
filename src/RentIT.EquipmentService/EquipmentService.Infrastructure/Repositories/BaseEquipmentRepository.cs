@@ -34,7 +34,10 @@ public abstract class BaseEquipmentRepository : IBaseEquipmentRepository
 
     public async Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression)
     {
-        return await _context.EquipmentItems.Where(expression).ToListAsync();
+        return await _context.EquipmentItems
+            .Include(item => item.Category)
+            .Where(expression)
+            .ToListAsync();
     }
 
     public Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<bool, Equipment>> expression)

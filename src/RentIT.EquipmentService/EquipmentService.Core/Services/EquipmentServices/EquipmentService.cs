@@ -88,7 +88,8 @@ namespace EquipmentService.Core.Services.EquipmentServices
         public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds)
         {
             var equipmentsByCondition = await _equipmentRepository.GetEquipmentsByCondition(item => equipmentIds.Contains(item.Id));
-            return equipmentsByCondition.Select(equipment => equipment.ToEquipmentResponse());
+
+            return equipmentsByCondition.Select(equipment => equipment.ToEquipmentResponse()).ToList();
         }
     }
 }

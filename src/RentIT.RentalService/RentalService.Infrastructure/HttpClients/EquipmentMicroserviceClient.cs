@@ -46,18 +46,19 @@ namespace RentalService.Infrastructure.HttpClients
             return details;
         }
 
-        public async Task<IEnumerable<EquipmentResponse>> GetEquipments(IEnumerable<Guid> equipmentIds)
+        public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds)
         {
-            throw new NotImplementedException();
-            //if(!equipmentIds.Any())
-            //    return Enumerable.Empty<EquipmentResponse>();
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds);
 
-            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"/api/equipments/byIds", equipmentIds);
+            if (!response.IsSuccessStatusCode)
+            {
+                string message = await response.Content.ReadAsStringAsync();
+                return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
+            }
 
-            //if(!response.IsSuccessStatusCode)
+            IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
 
-
-            //return await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+            return Result.Success(equipmentItems ?? Enumerable.Empty<EquipmentResponse>());
         }
     }
 }

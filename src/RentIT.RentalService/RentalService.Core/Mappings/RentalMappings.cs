@@ -10,6 +10,7 @@ namespace RentalService.Core.Mappings
             return new RentalResponse(rental.Id,
                 rental.ReturnedDate,
                 rental.StartDate,
+                rental.UserId,
                 rental.EndDate,
                 rental.RentalPrice,
                 new EquipmentResponse(

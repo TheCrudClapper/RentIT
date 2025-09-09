@@ -5,7 +5,7 @@ namespace RentalService.Core.ServiceContracts
 {
     public interface IRentalService
     {
-        Task<IEnumerable<RentalResponse>> GetAllRentals();
+        Task<Result<IEnumerable<RentalResponse>>> GetAllRentals();
         Task<Result<RentalResponse>> GetRental(Guid rentalId);
         Task<Result<RentalResponse>> AddRental(RentalAddRequest request);
         Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request);

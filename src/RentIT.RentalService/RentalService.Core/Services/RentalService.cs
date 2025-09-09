@@ -6,6 +6,7 @@ using RentalService.Core.Mappings;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
+using System.Linq;
 
 namespace RentalService.Core.Services
 {
@@ -69,22 +70,22 @@ namespace RentalService.Core.Services
         }
 
         //Improve that so it doesnt send x requests
-        public async Task<IEnumerable<RentalResponse>> GetAllRentals()
+        public async Task<Result<IEnumerable<RentalResponse>>> GetAllRentals()
         {
             var rentals = await _rentalRepository.GetAllRentalsAsync();
 
-            var response = new List<RentalResponse>();
+            var equipmentIds = rentals.Select(x => x.EquipmentId).Distinct();
 
-            foreach(var rental in rentals)
-            {
-                var eqResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
-                if (eqResponse.IsFailure)
-                    continue;
+            var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds);
+            if (eqResponse.IsFailure)
+                return Result.Failure<IEnumerable<RentalResponse>>(eqResponse.Error);
 
-                response.Add(rental.ToRentalResponse(eqResponse.Value));
-            }
+            var equipmentDict = eqResponse.Value.ToDictionary(x => x.Id, x => x);
 
-            return response;
+            return rentals
+            .Where(r => equipmentDict.ContainsKey(r.EquipmentId))
+            .Select(r => r.ToRentalResponse(equipmentDict[r.EquipmentId]))
+            .ToList();
         }
 
         public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request)
@@ -99,7 +100,6 @@ namespace RentalService.Core.Services
 
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);
-
 
             rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
                 rental.EndDate,

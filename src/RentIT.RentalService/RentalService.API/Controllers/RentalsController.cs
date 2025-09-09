@@ -18,8 +18,11 @@ namespace RentalService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals()
         {
-            var rentals = await _rentalService.GetAllRentals();
-            return rentals.ToList();
+            var response = await _rentalService.GetAllRentals();
+            if(response.IsFailure)
+                return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
+
+            return Ok(response.Value);
         }
 
         // GET: api/Rentals/5

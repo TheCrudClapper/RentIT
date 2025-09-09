@@ -26,14 +26,13 @@ namespace RentalService.Core.Validators.Implementations
             ValidateRental(entity, equipmentResponse);
 
         public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId) =>
-            ValidateRental(entity, isUpdate: true);
+            ValidateRental(entity);
 
         public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId, EquipmentResponse equipmentResponse) =>
-            ValidateRental(entity, equipmentResponse, isUpdate:true);
+            ValidateRental(entity, equipmentResponse);
 
         public async Task<Result> ValidateRental(Rental entity,
-            EquipmentResponse? equipmentResponse = null,
-            bool isUpdate = false)
+            EquipmentResponse? equipmentResponse = null)
         {
             var userValidation = await ValidateUser(entity.UserId);
             if (userValidation.IsFailure)
@@ -49,7 +48,7 @@ namespace RentalService.Core.Validators.Implementations
         private async Task<Result> ValidateRentalPeriod(Rental enitity)
         {
             var conflicts = await _rentalRepository.GetRentalsByCondition(item => item.EquipmentId == enitity.EquipmentId &&
-                enitity.StartDate < item.EndDate && item.StartDate < enitity.EndDate);
+                enitity.StartDate < item.EndDate && item.StartDate < enitity.EndDate && enitity.Id == default || item.Id != enitity.Id);
 
             return conflicts.Any()
                 ? Result.Failure(RentalErrors.RentalPeriodNotAvaliable)

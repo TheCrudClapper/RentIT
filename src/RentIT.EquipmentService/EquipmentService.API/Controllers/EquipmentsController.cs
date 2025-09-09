@@ -83,7 +83,7 @@ public class EquipmentsController : ControllerBase
     }
 
     //POST: api/Equipments/byIds
-    [HttpPost("/byIds")]
+    [HttpPost("byIds")]
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid> equipmentIds)
     {
         if (!equipmentIds.Any())
