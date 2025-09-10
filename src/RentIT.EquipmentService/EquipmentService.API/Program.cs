@@ -30,6 +30,12 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 });
+
+builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(client =>
+{
+    client.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}:{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
+});
+
 var app = builder.Build();
 
 await app.MigrateDatabaseAsync(builder.Services);

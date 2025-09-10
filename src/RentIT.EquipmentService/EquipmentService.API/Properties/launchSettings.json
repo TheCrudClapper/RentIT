@@ -12,7 +12,9 @@
         "DB_HOST": "localhost",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "USERS_MICROSERVICE_NAME": "localhost",
-        "USERS_MICROSERVICE_PORT": "8080"
+        "USERS_MICROSERVICE_PORT": "8080",
+        "RENTAL_MICROSERVICE_NAME": "localhost",
+        "RENTAL_MICROSERVICE_PORT": "8080"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5297"

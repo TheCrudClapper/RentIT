@@ -8,5 +8,6 @@ namespace RentalService.Core.Domain.RepositoryContracts
         Task<Rental> AddRentalAsync(Rental entity);
         Task<bool> UpdateRentalAsync(Guid rentalId, Rental rental);
         Task<bool> DeleteRentalAsync(Guid rentalId);
+        Task<bool> DeleteRentalsByEquipmentAsync(Guid equipmentId);
     }
 }

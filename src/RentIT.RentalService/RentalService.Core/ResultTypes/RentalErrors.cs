@@ -10,5 +10,8 @@
 
         public static readonly Error RentalPeriodNotAvaliable = new Error(
             400, "Equipment is already rented during the requested period.");
+
+        public static readonly Error FailedToDeleteRelatedRentals = new Error(
+            400, "Failed to delete related rentals, try again later.");
     }
 }

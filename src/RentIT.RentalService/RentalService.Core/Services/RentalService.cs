@@ -69,7 +69,6 @@ namespace RentalService.Core.Services
             return rental.ToRentalResponse(equipmentResponse.Value);
         }
 
-        //Improve that so it doesnt send x requests
         public async Task<Result<IEnumerable<RentalResponse>>> GetAllRentals()
         {
             var rentals = await _rentalRepository.GetAllRentalsAsync();
@@ -117,6 +116,16 @@ namespace RentalService.Core.Services
         {
             var days = (endDate.Date - startDate.Date).Days;
             return dailyPrice * days;
+        }
+
+        public async Task<Result> DeleteRentalByEquipmentId(Guid equipmentId)
+        {
+            bool isSuccess = await _rentalRepository.DeleteRentalsByEquipmentAsync(equipmentId);
+
+            if (!isSuccess)
+                return Result.Failure(RentalErrors.FailedToDeleteRelatedRentals);
+
+            return Result.Success();
         }
     }
 }

@@ -70,5 +70,16 @@ namespace RentalService.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("byEquipmentId/{id}")]
+        public async Task<IActionResult> DeleteRentalsByEquipmentId(Guid id)
+        {
+            var result = await _rentalService.DeleteRentalByEquipmentId(id);
+
+            if(result.IsFailure)
+                return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+
+            return NoContent();
+        } 
     }
 }

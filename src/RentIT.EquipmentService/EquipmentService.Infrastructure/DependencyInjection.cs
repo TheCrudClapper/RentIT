@@ -1,5 +1,4 @@
-﻿using EquipmentService.Core.Domain.HtppClientContracts;
-using EquipmentService.Core.Domain.RepositoryContracts;
+﻿using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;

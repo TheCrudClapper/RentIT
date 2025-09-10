@@ -62,5 +62,23 @@ namespace RentalService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> DeleteRentalsByEquipmentAsync(Guid equipmentId)
+        {
+            //download all rentals where given eq ID
+            var rentals = await _context.Rentals
+                .Where(rental => rental.EquipmentId == equipmentId)
+                .ToListAsync();
+
+            foreach(var  rental in rentals)
+            {
+                rental.IsActive = false;
+                rental.DateDeleted = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

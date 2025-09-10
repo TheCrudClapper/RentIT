@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
@@ -12,11 +13,14 @@ namespace EquipmentService.Core.Services.EquipmentServices
     {
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly IEquipmentValidator _equipmentValidator;
+        private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
         public EquipmentService(IEquipmentRepository equipmentRepository,
-            IEquipmentValidator equipmentValidator)
+            IEquipmentValidator equipmentValidator,
+            IRentalMicroserviceClient rentalMicroserviceClient)
         {
             _equipmentRepository = equipmentRepository;
             _equipmentValidator = equipmentValidator;
+            _rentalMicroserviceClient = rentalMicroserviceClient;
         }
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
@@ -25,6 +29,10 @@ namespace EquipmentService.Core.Services.EquipmentServices
 
             if(!deletionResult)
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
+
+            var rentalDeletionResult = await _rentalMicroserviceClient.DeleteRentalsByEquipmentId(equipmentId);
+            if (rentalDeletionResult.IsFailure)
+                return Result.Failure(rentalDeletionResult.Error);
 
             return Result.Success();   
         }
