@@ -32,7 +32,7 @@ namespace RentalService.Core.Services
             if (equipmentResponse.IsFailure)
                 return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            var validationResult = await _rentalValidator.ValidateNewEntity(rental, equipmentResponse.Value);
+            var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value);
 
             if (validationResult.IsFailure)
                 return Result.Failure<RentalResponse>(validationResult.Error);
@@ -96,7 +96,7 @@ namespace RentalService.Core.Services
             if (equipmentResponse.IsFailure)
                 return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            var validationResult = await _rentalValidator.ValidateUpdateEntity(rental, rentalId, equipmentResponse.Value);
+            var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value);
 
             if (validationResult.IsFailure)
                 return Result.Failure(validationResult.Error);

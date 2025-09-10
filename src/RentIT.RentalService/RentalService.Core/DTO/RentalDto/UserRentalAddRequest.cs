@@ -11,12 +11,12 @@ namespace RentalService.Core.DTO.RentalDto
     public record UserRentalAddRequest()
     {
         [Required]
-        public Guid EquipmentId;
+        public Guid EquipmentId { get; set; }
 
         [Required, FutureDateAttribute, MinDaysBetweenDates("EndDate", 1)]
-        public DateTime StartDate;
+        public DateTime StartDate { get; set; }
 
         [Required, FutureDateAttribute]
-        public DateTime EndDate;
+        public DateTime EndDate { get; set; }
     }
 }

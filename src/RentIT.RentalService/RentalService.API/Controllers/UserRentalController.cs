@@ -6,13 +6,14 @@ namespace RentalService.API.Controllers
 {
     /// <summary>
     /// WORK IN PROGRESS - USER ID WILL BE TAKEN FROM JWT TOKEN
+    /// FOR TIME BEING, USING GUID OF USER FROM DB SEEDER CLASS
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserRentalController : ControllerBase
     {
         private readonly IUserRentalService _userRentalService;
-        public readonly static Guid UserIdPlaceholder = new Guid();
+        public readonly static Guid UserIdPlaceholder = Guid.Parse("D6D7EDCA-E2E0-4F08-A5DD-B4749BD8830A");
         public UserRentalController(IUserRentalService userRentalService)
         {
             _userRentalService = userRentalService;
@@ -21,8 +22,11 @@ namespace RentalService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals()
         {
-            var rentals = await _userRentalService.GetAllRentals(UserIdPlaceholder);
-            return rentals.ToList();
+            var response = await _userRentalService.GetAllRentals(UserIdPlaceholder);
+            if (response.IsFailure)
+                return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
+
+            return Ok(response.Value);
         }
 
         // GET: api/Rentals/5
@@ -39,7 +43,7 @@ namespace RentalService.API.Controllers
 
         // PUT: api/Rentals/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request)
+        public async Task<IActionResult> PutRental(Guid id, UserRentalUpdateRequest request)
         {
             var result = await _userRentalService.UpdateRental(id, request, UserIdPlaceholder);
 

@@ -10,6 +10,9 @@ namespace RentalService.Core.DTO.RentalDto
     /// valid.</remarks>
     public class UserRentalUpdateRequest
     {
+        [Required, FutureDateAttribute, MinDaysBetweenDates("EndDate", 1)]
+        public DateTime StartDate { get; set; }
+
         [Required, FutureDateAttribute]
         public DateTime EndDate;
     }

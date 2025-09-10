@@ -7,32 +7,13 @@ using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Validators.Implementations
 {
-    public class RentalValidator : IRentalValidator
+    public class RentalValidator : BaseRentalValidator, IRentalValidator
     {
-        private readonly IUsersMicroserviceClient _usersMicroserviceClient;
-        private readonly IRentalRepository _rentalRepository;
-        public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,
-            IRentalRepository rentalRepository,
-            IEquipmentMicroserviceClient equipmentMicroserviceClient)
-        {
-            _usersMicroserviceClient = usersMicroserviceClient;
-            _rentalRepository = rentalRepository;
-        }
+        public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,IRentalRepository rentalRepository,
+            IEquipmentMicroserviceClient equipmentMicroserviceClient) 
+            : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
 
-        public Task<Result> ValidateNewEntity(Rental entity) =>
-            ValidateRental(entity);
-
-        public Task<Result> ValidateNewEntity(Rental entity, EquipmentResponse equipmentResponse) =>
-            ValidateRental(entity, equipmentResponse);
-
-        public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId) =>
-            ValidateRental(entity);
-
-        public Task<Result> ValidateUpdateEntity(Rental entity, Guid rentalId, EquipmentResponse equipmentResponse) =>
-            ValidateRental(entity, equipmentResponse);
-
-        public async Task<Result> ValidateRental(Rental entity,
-            EquipmentResponse? equipmentResponse = null)
+        public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, bool isUpdate = false)
         {
             var userValidation = await ValidateUser(entity.UserId);
             if (userValidation.IsFailure)
@@ -43,26 +24,5 @@ namespace RentalService.Core.Validators.Implementations
 
             return await ValidateRentalPeriod(entity);
         }
-
-        //Private Helper Methods
-        private async Task<Result> ValidateRentalPeriod(Rental enitity)
-        {
-            var conflicts = await _rentalRepository.GetRentalsByCondition(item => item.EquipmentId == enitity.EquipmentId &&
-                enitity.StartDate < item.EndDate && item.StartDate < enitity.EndDate && enitity.Id == default || item.Id != enitity.Id);
-
-            return conflicts.Any()
-                ? Result.Failure(RentalErrors.RentalPeriodNotAvaliable)
-                : Result.Success();
-
-        }
-
-        private async Task<Result> ValidateUser(Guid userId)
-        {
-            var userResult = await _usersMicroserviceClient.GetUserByUserId(userId);
-            return userResult.IsFailure
-                ? Result.Failure(userResult.Error)
-                : Result.Success();
-        }
-
     }
 }

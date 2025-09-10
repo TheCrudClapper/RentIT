@@ -62,20 +62,5 @@ namespace RentalService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-
-        public async Task<IEnumerable<Rental>> GetAllUserRentalsAsync(Guid userId)
-        {
-            return await _context.Rentals
-                .Where(item => item.UserId == userId)
-                .ToListAsync();
-        }
-
-        public async Task<Rental?> GetUserRentalByIdAsync(Guid rentalId, Guid userId)
-        {
-            return await _context.Rentals
-                .FirstOrDefaultAsync(item => item.Id == rentalId && item.UserId == userId);
-        }
-
-   
     }
 }

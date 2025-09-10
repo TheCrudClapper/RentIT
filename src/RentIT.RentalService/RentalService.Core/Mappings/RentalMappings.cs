@@ -24,15 +24,16 @@ namespace RentalService.Core.Mappings
                     equipment.Notes));
         }
 
-        public static Rental ToRental(this UserRentalAddRequest request)
+        public static Rental ToRental(this UserRentalAddRequest request, Guid userId)
         {
             return new Rental
             {
+                UserId = userId,
                 EquipmentId = request.EquipmentId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
+                StartDate = request.StartDate.ToUniversalTime(),
+                EndDate = request.EndDate.ToUniversalTime(),
                 IsActive = true,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
         }
 
@@ -41,8 +42,8 @@ namespace RentalService.Core.Mappings
             return new Rental
             {
                 UserId = request.UserId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
+                StartDate = request.StartDate.ToUniversalTime(),
+                EndDate = request.EndDate.ToUniversalTime(),
                 EquipmentId = request.EquipmentId,
                 ReturnedDate = null,
                 IsActive = true,
@@ -55,11 +56,21 @@ namespace RentalService.Core.Mappings
             return new Rental
             {
                 UserId = request.UserId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
+                StartDate = request.StartDate.ToUniversalTime(),
+                EndDate = request.EndDate.ToUniversalTime(),
                 EquipmentId = request.EquipmentId,
                 DateEdited = DateTime.UtcNow,
                 ReturnedDate = request.ReturnedDate,
+            };
+        }
+
+        public static Rental ToRentalEntity(this UserRentalUpdateRequest request)
+        {
+            return new Rental
+            {
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                DateEdited = DateTime.UtcNow,
             };
         }
     }
