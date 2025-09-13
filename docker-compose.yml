@@ -40,11 +40,11 @@ services:
         
   # Equipment Microservice
   equipmentservice.api:
-    image: thecrudclapper/rentit-equipment-microservice:latest
-    # image: equipment-microservice
-    # build:
-    #     context: .
-    #     dockerfile: src/RentIT.EquipmentService/EquipmentService.API/Dockerfile
+    # image: thecrudclapper/rentit-equipment-microservice:latest
+    image: equipment-microservice
+    build:
+        context: .
+        dockerfile: src/RentIT.EquipmentService/EquipmentService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres 
@@ -79,11 +79,11 @@ services:
 
   # Rental Microservice
   rentalmicroservice.api:
-    image: thecrudclapper/rentit-rental-microservice:latest
-    #  image: rental-microservice
-    #  build:
-    #      context: .
-    #      dockerfile: src/RentIT.RentalService/RentalService.API/Dockerfile
+    # image: thecrudclapper/rentit-rental-microservice:latest
+    image: rental-microservice
+    build:
+        context: .
+        dockerfile: src/RentIT.RentalService/RentalService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres

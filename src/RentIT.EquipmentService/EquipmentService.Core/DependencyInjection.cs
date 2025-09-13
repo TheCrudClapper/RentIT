@@ -1,4 +1,6 @@
-﻿using EquipmentService.Core.ServiceContracts.CategoryContracts;
+﻿using EquipmentService.Core.Policies.Contracts;
+using EquipmentService.Core.Policies.Implementations;
+using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
@@ -23,6 +25,8 @@ namespace EquipmentService.Core
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
+
+            services.AddTransient<IEquipmentServicePolicies, EquipmentServicePolicies>();
 
             return services;
         }

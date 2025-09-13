@@ -2,6 +2,8 @@ using RentalService.API.Extensions;
 using RentalService.API.Middleware;
 using RentalService.Core;
 using RentalService.Core.Domain.HtppClientContracts;
+using RentalService.Core.Policies.Contracts;
+using RentalService.Core.Policies.Implementations;
 using RentalService.Infrastructure;
 using RentalService.Infrastructure.DbContexts;
 using RentalService.Infrastructure.HttpClients;
@@ -21,16 +23,26 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
+builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePolicies>();
+
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
-});
+})
+.AddPolicyHandler(builder.Services.BuildServiceProvider()
+    .GetRequiredService<IRentalMicroservicePolicies>()
+    .GetRetryPolicy());
+
 builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["EQUIPMENT_MICROSERVICE_PORT"]}");
-});
+})
+.AddPolicyHandler(builder.Services.BuildServiceProvider()
+    .GetRequiredService<IRentalMicroservicePolicies>()
+    .GetRetryPolicy());
+
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();

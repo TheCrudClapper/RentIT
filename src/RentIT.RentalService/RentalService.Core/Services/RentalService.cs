@@ -6,7 +6,6 @@ using RentalService.Core.Mappings;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
-using System.Linq;
 
 namespace RentalService.Core.Services
 {

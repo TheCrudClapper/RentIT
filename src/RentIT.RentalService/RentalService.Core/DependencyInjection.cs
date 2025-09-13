@@ -19,6 +19,7 @@ public static class DependencyInjection
         //Add Validators
         services.AddScoped<IRentalValidator, RentalValidator>();
         services.AddScoped<IUserRentalValidator, UserRentalValidator>();
+
         return services;
     }
 }

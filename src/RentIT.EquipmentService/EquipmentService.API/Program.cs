@@ -2,6 +2,7 @@ using EquipmentService.API.Extensions;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
 using EquipmentService.Core.Domain.HtppClientContracts;
+using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Infrastructure;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.HttpClients;
@@ -26,15 +27,21 @@ builder.Services.AddCoreLayer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>( client =>
+builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
-});
+})
+.AddPolicyHandler(builder.Services.BuildServiceProvider()
+    .GetRequiredService<IEquipmentServicePolicies>()
+    .GetRetryPolicy());
 
 builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}:{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
-});
+})
+.AddPolicyHandler(builder.Services.BuildServiceProvider()
+    .GetRequiredService<IEquipmentServicePolicies>()
+    .GetRetryPolicy());
 
 var app = builder.Build();
 
@@ -52,7 +59,6 @@ if (app.Environment.IsDevelopment())
 
 //Add global exception handling middleware
 app.UseGlobalExceptionHandlingMiddleware();
-
 
 
 //Https supports
