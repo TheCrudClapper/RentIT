@@ -33,7 +33,7 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 })
 .AddPolicyHandler(builder.Services.BuildServiceProvider()
     .GetRequiredService<IEquipmentServicePolicies>()
-    .GetRetryPolicy());
+    .GetResiliencePolicy());
 
 builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(client =>
 {
@@ -41,7 +41,7 @@ builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClie
 })
 .AddPolicyHandler(builder.Services.BuildServiceProvider()
     .GetRequiredService<IEquipmentServicePolicies>()
-    .GetRetryPolicy());
+    .GetResiliencePolicy());
 
 var app = builder.Build();
 

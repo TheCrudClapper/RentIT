@@ -74,7 +74,6 @@ namespace RentalService.API.Controllers
         [HttpDelete("byEquipmentId/{id}")]
         public async Task<IActionResult> DeleteRentalsByEquipmentId(Guid id)
         {
-            throw new Exception();
             var result = await _rentalService.DeleteRentalByEquipmentId(id);
 
             if(result.IsFailure)

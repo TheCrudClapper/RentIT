@@ -1,6 +1,7 @@
 ﻿using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ResultTypes;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace RentalService.Infrastructure.HttpClients

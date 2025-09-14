@@ -26,6 +26,7 @@ public class EquipmentsController : ControllerBase
     [HttpGet("{equipmentId}")]
     public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId)
     {
+        
         var result = await _equipmentService.GetEquipment(equipmentId);
 
         if (result.IsFailure)
