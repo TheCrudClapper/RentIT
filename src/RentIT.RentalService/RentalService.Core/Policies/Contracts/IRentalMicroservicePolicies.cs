@@ -8,5 +8,9 @@ public interface IRentalMicroservicePolicies
     IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy();
 
     IAsyncPolicy<HttpResponseMessage> GetResiliencePolicy();
+    
+    IAsyncPolicy<HttpResponseMessage> GetFallbackPolicy();
+
+    IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerWithFallbackPolicy();
 }
 

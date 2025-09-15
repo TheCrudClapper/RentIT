@@ -34,6 +34,7 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
     .GetRequiredService<IRentalMicroservicePolicies>()
     .GetResiliencePolicy());
 
+
 builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
@@ -41,7 +42,7 @@ builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroservi
 })
 .AddPolicyHandler(builder.Services.BuildServiceProvider()
     .GetRequiredService<IRentalMicroservicePolicies>()
-    .GetResiliencePolicy());
+    .GetRetryPolicy());
 
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();

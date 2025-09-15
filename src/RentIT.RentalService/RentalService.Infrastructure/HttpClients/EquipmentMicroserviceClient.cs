@@ -1,7 +1,9 @@
-﻿using RentalService.Core.Domain.HtppClientContracts;
+﻿using Polly;
+using Polly.CircuitBreaker;
+using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.Policies.Contracts;
 using RentalService.Core.ResultTypes;
-using System.Net;
 using System.Net.Http.Json;
 
 namespace RentalService.Infrastructure.HttpClients
@@ -9,47 +11,53 @@ namespace RentalService.Infrastructure.HttpClients
     public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
     {
         private readonly HttpClient _httpClient;
-        public EquipmentMicroserviceClient(HttpClient htppClient)
+        private readonly IRentalMicroservicePolicies _policies;
+        public EquipmentMicroserviceClient(HttpClient htppClient, IRentalMicroservicePolicies policies)
         {
             _httpClient = htppClient;
-        }
-        public async Task<Result<bool>> DoesEquipmentExist(Guid equipmentId)
-        {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/api/equipments/exists/{equipmentId}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                string message = await response.Content.ReadAsStringAsync();
-                return Result.Failure<bool>(new Error((int)response.StatusCode, message));
-            }
-
-            if (response.Content == null)
-                return false;
-
-            return true;
+            _policies = policies;
         }
 
         public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
-
-            if (!response.IsSuccessStatusCode)
+            //local circuit breaker policy
+            var policy = _policies.GetCircuitBreakerPolicy();
+            try
             {
-                string message = await response.Content.ReadAsStringAsync();
-                return Result.Failure<EquipmentResponse>(new Error((int)response.StatusCode, message));
+                HttpResponseMessage response = await policy.ExecuteAsync(async () =>
+                {
+                   return await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
+                }); 
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string message = await response.Content.ReadAsStringAsync();
+                    return Result.Failure<EquipmentResponse>(new Error((int)response.StatusCode, message));
+                }
+
+                EquipmentResponse? details = await response.Content.ReadFromJsonAsync<EquipmentResponse>();
+
+                if (details == null)
+                    return Result.Failure<EquipmentResponse>(new Error(500, "Invalid response from Equipment service"));
+
+                return details;
             }
-
-            EquipmentResponse? details = await response.Content.ReadFromJsonAsync<EquipmentResponse>();
-
-            if (details == null)
-                return Result.Failure<EquipmentResponse>(new Error(500, "Invalid response from Equipment service"));
-
-            return details;
+            catch (BrokenCircuitException)
+            {
+                return Result.Failure<EquipmentResponse>(new Error(503, "Service unavaliable, try again later"));
+            }
         }
 
         public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds)
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds);
+            var context = new Context();
+            context["equipmentIds"] = equipmentIds;
+
+            var combinedPolicy = _policies.GetCircuitBreakerWithFallbackPolicy();
+
+            HttpResponseMessage response = await combinedPolicy.ExecuteAsync(
+              async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds),context
+            );
 
             if (!response.IsSuccessStatusCode)
             {

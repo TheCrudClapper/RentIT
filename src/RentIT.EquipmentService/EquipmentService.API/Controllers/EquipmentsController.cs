@@ -1,5 +1,4 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
-using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Mvc;
 namespace EquipmentService.API.Controllers;
@@ -26,7 +25,7 @@ public class EquipmentsController : ControllerBase
     [HttpGet("{equipmentId}")]
     public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId)
     {
-        
+        throw new NotImplementedException();
         var result = await _equipmentService.GetEquipment(equipmentId);
 
         if (result.IsFailure)
@@ -87,6 +86,9 @@ public class EquipmentsController : ControllerBase
     [HttpPost("byIds")]
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid> equipmentIds)
     {
+        await Task.Delay(100);
+        throw new NotImplementedException();
+        
         if (!equipmentIds.Any())
             return BadRequest("No equipment IDs provided.");
 
