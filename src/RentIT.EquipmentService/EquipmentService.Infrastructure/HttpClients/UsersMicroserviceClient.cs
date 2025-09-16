@@ -1,6 +1,7 @@
 ﻿using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.DTO.UserDto;
 using EquipmentService.Core.ResultTypes;
+using Polly.CircuitBreaker;
 using System.Net.Http.Json;
 
 namespace EquipmentService.Infrastructure.HttpClients
@@ -15,20 +16,28 @@ namespace EquipmentService.Infrastructure.HttpClients
 
         public async Task<Result<UserDTO?>> GetUserByUserId(Guid userId)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{userId}");
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                string message = await response.Content.ReadAsStringAsync();
-                return Result.Failure<UserDTO?>(new Error((int)response.StatusCode, message));
+                HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{userId}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string message = await response.Content.ReadAsStringAsync();
+                    return Result.Failure<UserDTO?>(new Error((int)response.StatusCode, message));
+                }
+
+                UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>();
+
+                if (user == null)
+                    return Result.Failure<UserDTO?>(new Error(500, "Invalid response from Users service"));
+
+                return Result.Success<UserDTO?>(user);
+
             }
-
-            UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>();
-
-            if (user == null)
-                return Result.Failure<UserDTO?>(new Error(500, "Invalid response from Users service"));
-
-            return Result.Success<UserDTO?>(user);
+            catch (BrokenCircuitException)
+            {
+                return Result.Failure<UserDTO?>(new Error(503, "Service unavaliable, try again later"));
+            }
         }
     }
 }

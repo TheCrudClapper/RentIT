@@ -7,6 +7,6 @@ public interface IEquipmentRepository : IBaseEquipmentRepository
     Task<bool> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment);
     Task<Equipment?> GetEquipmentByIdAsync(Guid equipmentId);
     Task<IEnumerable<Equipment>> GetAllEquipmentAsync();
-    Task<bool> DeleteEquipmentAsync(Guid equipmentId);
+    Task DeleteEquipmentAsync(Equipment equipment);
 }
 

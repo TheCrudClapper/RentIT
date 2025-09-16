@@ -26,8 +26,6 @@ namespace EquipmentService.Core
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
 
-            services.AddTransient<IEquipmentServicePolicies, EquipmentServicePolicies>();
-
             return services;
         }
     }

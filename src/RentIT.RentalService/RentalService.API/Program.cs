@@ -23,26 +23,32 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
-builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePolicies>();
+//Add custom resilience policies
+builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
+builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
+builder.Services.AddTransient<IEquipmentMicroservicePolicies, EquipmentMicroservicePolicies>();
 
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 })
-.AddPolicyHandler(builder.Services.BuildServiceProvider()
-    .GetRequiredService<IRentalMicroservicePolicies>()
-    .GetResiliencePolicy());
-
+    .AddPolicyHandler((serviceProvider, request) =>
+    {
+        var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
+        return policies.GetCombinedPolicy();
+    });
 
 builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["EQUIPMENT_MICROSERVICE_PORT"]}");
 })
-.AddPolicyHandler(builder.Services.BuildServiceProvider()
-    .GetRequiredService<IRentalMicroservicePolicies>()
-    .GetRetryPolicy());
+    .AddPolicyHandler((serviceProvider, request) =>
+    {
+        var policies = serviceProvider.GetRequiredService<IEquipmentMicroservicePolicies>();
+        return policies.GetCombinedPolicy();
+    });
 
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();

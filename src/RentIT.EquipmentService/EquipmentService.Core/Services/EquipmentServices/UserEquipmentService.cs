@@ -14,13 +14,16 @@ namespace EquipmentService.Core.Services.EquipmentServices
         private readonly IUserEquipmentRepository _userEquipmentRepository;
         private readonly IUserEquipmentValidator _userEquipmentValidator;
         private readonly IUsersMicroserviceClient _usersClient;
+        private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
         public UserEquipmentService(IUserEquipmentRepository userEquipmentRepository,
             IUserEquipmentValidator userEquipmentValidator,
-            IUsersMicroserviceClient usersClient)
+            IUsersMicroserviceClient usersClient,
+            IRentalMicroserviceClient rentalMicroserviceClient)
         {
             _userEquipmentRepository = userEquipmentRepository;
             _userEquipmentValidator = userEquipmentValidator;
             _usersClient = usersClient;
+            _rentalMicroserviceClient = rentalMicroserviceClient;
         }
 
         public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
@@ -60,7 +63,7 @@ namespace EquipmentService.Core.Services.EquipmentServices
             return Result.Success();            
         }
 
-        public async Task<Result<EquipmentResponse>> GetUserEquipment(Guid userId, Guid equipmentId)
+        public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId)
         {
             var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId);
 
@@ -78,10 +81,15 @@ namespace EquipmentService.Core.Services.EquipmentServices
 
         public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId)
         {
-            bool isDeleted = await _userEquipmentRepository.DeleteUserEquipmentAsync(userId, equipmentId);
+            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
+            if (equipment == null)
+                return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
 
-            if(!isDeleted)
-                return Result.Failure(EquipmentErrors.FailedToDeleteEquipment);
+            var rentalDeletionResult = await _rentalMicroserviceClient.DeleteRentalsByEquipmentId(equipmentId);
+            if (rentalDeletionResult.IsFailure)
+                return Result.Failure(rentalDeletionResult.Error);
+
+            await _userEquipmentRepository.DeleteUserEquipmentAsync(equipment);
 
             return Result.Success();
         }

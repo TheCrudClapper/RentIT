@@ -11,7 +11,7 @@ namespace EquipmentService.API.Controllers
     [ApiController]
     public class UserEquipmentController : ControllerBase
     {
-        public readonly static Guid UserIdPlaceholder = new Guid();
+        public readonly static Guid UserIdPlaceholder = Guid.Parse("D6D7EDCA-E2E0-4F08-A5DD-B4749BD8830A");
         private readonly IUserEquipmentService _userEquipmentService;
         public UserEquipmentController(IUserEquipmentService userEquipmentService)
         {
@@ -28,7 +28,7 @@ namespace EquipmentService.API.Controllers
         [HttpGet("{equipmentId}")]
         public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId)
         {
-            var result = await _userEquipmentService.GetUserEquipment(UserIdPlaceholder,equipmentId);
+            var result = await _userEquipmentService.GetUserEquipmentById(UserIdPlaceholder,equipmentId);
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 

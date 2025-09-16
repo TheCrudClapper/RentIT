@@ -1,6 +1,7 @@
 ﻿using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.ResultTypes;
 using Microsoft.AspNetCore.Mvc;
+using Polly.CircuitBreaker;
 using System.Text.Json;
 
 namespace EquipmentService.Infrastructure.HttpClients
@@ -14,30 +15,38 @@ namespace EquipmentService.Infrastructure.HttpClients
         }
         public async Task<Result> DeleteRentalsByEquipmentId(Guid equipmentId)
         {
-            HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Rentals/byEquipmentId/{equipmentId}");
-
-            if(!response.IsSuccessStatusCode)
+            try
             {
-                string content = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Rentals/byEquipmentId/{equipmentId}");
 
-                try
+                if (!response.IsSuccessStatusCode)
                 {
-                    var probDetails = JsonSerializer.Deserialize<ProblemDetails>(content, new JsonSerializerOptions
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    try
                     {
-                        PropertyNameCaseInsensitive = true
-                    });
+                        var probDetails = JsonSerializer.Deserialize<ProblemDetails>(content, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
 
-                    string errorMessage = probDetails?.Detail ?? "Unknow error happened";
-                    return Result.Failure(new Error(probDetails.Status.Value, errorMessage));
+                        string errorMessage = probDetails?.Detail ?? "Unknow error happened";
+                        return Result.Failure(new Error(probDetails.Status.Value, errorMessage));
+                    }
+                    catch (JsonException)
+                    {
+                        return Result.Failure(new Error(400, content));
+                    }
                 }
-                catch (JsonException)
-                {
-                    return Result.Failure(new Error(400, content));
-                }
+
+
+                return Result.Success();
             }
-
-
-            return Result.Success();
+            catch (BrokenCircuitException)
+            {
+                return Result.Failure(new Error(503, "Service unavaliable, try again later"));
+            }
+            
 ;       }
     }
 }

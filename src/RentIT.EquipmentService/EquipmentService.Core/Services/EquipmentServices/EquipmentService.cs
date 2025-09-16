@@ -25,14 +25,15 @@ namespace EquipmentService.Core.Services.EquipmentServices
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
         {
-            var deletionResult = await _equipmentRepository.DeleteEquipmentAsync(equipmentId);
-
-            if(!deletionResult)
+            var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId);
+            if(equipment == null)
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
             var rentalDeletionResult = await _rentalMicroserviceClient.DeleteRentalsByEquipmentId(equipmentId);
             if (rentalDeletionResult.IsFailure)
                 return Result.Failure(rentalDeletionResult.Error);
+
+            await _equipmentRepository.DeleteEquipmentAsync(equipment);
 
             return Result.Success();   
         }

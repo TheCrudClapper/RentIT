@@ -3,10 +3,13 @@ using EquipmentService.API.Middleware;
 using EquipmentService.Core;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Policies.Contracts;
+using EquipmentService.Core.Policies.Implementations;
 using EquipmentService.Infrastructure;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.HttpClients;
 using EquipmentService.Infrastructure.Seeders;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
+//Add resilience policies
+builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
+builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
+builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePolicies>();
+
 
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
@@ -31,17 +39,21 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 })
-.AddPolicyHandler(builder.Services.BuildServiceProvider()
-    .GetRequiredService<IEquipmentServicePolicies>()
-    .GetResiliencePolicy());
+.AddPolicyHandler((serviceProvider, request) =>
+{
+    var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
+    return policies.GetCombinedPolicy();
+});
 
 builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}:{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
 })
-.AddPolicyHandler(builder.Services.BuildServiceProvider()
-    .GetRequiredService<IEquipmentServicePolicies>()
-    .GetResiliencePolicy());
+.AddPolicyHandler((serviceProvider, request) =>
+{
+    var policies = serviceProvider.GetRequiredService<IRentalMicroservicePolicies>();
+    return policies.GetCombinedPolicy();
+});
 
 var app = builder.Build();
 

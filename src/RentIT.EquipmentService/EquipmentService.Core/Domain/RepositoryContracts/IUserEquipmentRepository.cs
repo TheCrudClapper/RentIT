@@ -8,6 +8,6 @@ namespace EquipmentService.Core.Domain.RepositoryContracts
         Task<bool> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment);
         Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId);
         Task<Equipment?> GetUserEquipmentByIdAsync(Guid equipmentId, Guid userId);
-        Task<bool> DeleteUserEquipmentAsync(Guid userId, Guid equipmentId);
+        Task DeleteUserEquipmentAsync(Equipment equipment);
     }
 }

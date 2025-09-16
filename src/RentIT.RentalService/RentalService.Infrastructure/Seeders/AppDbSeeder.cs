@@ -13,7 +13,7 @@ namespace RentalService.Infrastructure.Seeders
                 await context.AddRangeAsync(
                    new Rental
                    {
-                       Id = Guid.NewGuid(),
+                       Id = Guid.Parse("D5303D4F-7F55-49AF-B79D-DB5605594C78"),
                        IsActive = true,
                        DateCreated = DateTime.UtcNow,
                        StartDate = new DateTime(2025, 9, 12, 0, 0, 0, DateTimeKind.Utc),
@@ -25,7 +25,7 @@ namespace RentalService.Infrastructure.Seeders
                    },
                    new Rental
                    {
-                       Id = Guid.NewGuid(),
+                       Id = Guid.Parse("6A435D09-E63F-425F-B03E-474EC7CB1983"),
                        IsActive = true,
                        DateCreated = DateTime.UtcNow,
                        StartDate = new DateTime(2025, 9, 13, 0, 0, 0, DateTimeKind.Utc),

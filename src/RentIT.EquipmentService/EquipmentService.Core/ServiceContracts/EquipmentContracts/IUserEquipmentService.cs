@@ -12,6 +12,6 @@ namespace EquipmentService.Core.ServiceContracts.Equipment
         Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request);
         Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId);
         Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId);
-        Task<Result<EquipmentResponse>> GetUserEquipment(Guid userId, Guid equipmentId);
+        Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId);
     }
 }

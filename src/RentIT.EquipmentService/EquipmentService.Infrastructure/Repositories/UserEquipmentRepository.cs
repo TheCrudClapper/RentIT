@@ -40,6 +40,7 @@ namespace EquipmentService.Infrastructure.Repositories
         public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId)
         {
             return await _context.EquipmentItems
+                .Include(item => item.Category)
                 .Where(item => item.CreatedByUserId == userId)
                 .ToListAsync();
         }
@@ -50,17 +51,11 @@ namespace EquipmentService.Infrastructure.Repositories
                    .FirstOrDefaultAsync(item => item.Id == equipmentId && item.CreatedByUserId == userId);
         }
 
-        public async Task<bool> DeleteUserEquipmentAsync(Guid userId, Guid equipmentId)
+        public async Task DeleteUserEquipmentAsync(Equipment equipment)
         {
-            var equipment = await GetUserEquipmentByIdAsync(userId, equipmentId);
-            if (equipment == null)
-                return false;
-
             equipment.DateDeleted = DateTime.UtcNow;
             equipment.IsActive = false;
             await _context.SaveChangesAsync();
-
-            return true;
         }
 
     }

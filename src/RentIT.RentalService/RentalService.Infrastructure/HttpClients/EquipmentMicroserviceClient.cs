@@ -11,23 +11,18 @@ namespace RentalService.Infrastructure.HttpClients
     public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IRentalMicroservicePolicies _policies;
-        public EquipmentMicroserviceClient(HttpClient htppClient, IRentalMicroservicePolicies policies)
+        private readonly IEquipmentMicroservicePolicies _eqPolicies;
+        public EquipmentMicroserviceClient(HttpClient htppClient, IEquipmentMicroservicePolicies eqPolicies)
         {
             _httpClient = htppClient;
-            _policies = policies;
+            _eqPolicies = eqPolicies;
         }
 
         public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId)
         {
-            //local circuit breaker policy
-            var policy = _policies.GetCircuitBreakerPolicy();
             try
             {
-                HttpResponseMessage response = await policy.ExecuteAsync(async () =>
-                {
-                   return await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
-                }); 
+                HttpResponseMessage response = await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -50,24 +45,28 @@ namespace RentalService.Infrastructure.HttpClients
 
         public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds)
         {
-            var context = new Context();
-            context["equipmentIds"] = equipmentIds;
-
-            var combinedPolicy = _policies.GetCircuitBreakerWithFallbackPolicy();
-
-            HttpResponseMessage response = await combinedPolicy.ExecuteAsync(
-              async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds),context
-            );
-
-            if (!response.IsSuccessStatusCode)
+            var fallbackPolicy = _eqPolicies.GetFallbackPolicyForEquipmentsByIds();
             {
-                string message = await response.Content.ReadAsStringAsync();
-                return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
+                var context = new Context();
+                context["equipmentIds"] = equipmentIds;
+
+                HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
+                  async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds), context
+                );
+
+
+                //HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string message = await response.Content.ReadAsStringAsync();
+                    return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
+                }
+
+                IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+
+                return Result.Success(equipmentItems ?? Enumerable.Empty<EquipmentResponse>());
             }
-
-            IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
-
-            return Result.Success(equipmentItems ?? Enumerable.Empty<EquipmentResponse>());
         }
     }
 }

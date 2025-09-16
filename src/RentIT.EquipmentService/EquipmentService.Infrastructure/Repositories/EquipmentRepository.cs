@@ -9,18 +9,11 @@ namespace EquipmentService.Infrastructure.Repositories
     {
         public EquipmentRepository(EquipmentContext context) : base(context){ }
 
-        public async Task<bool> DeleteEquipmentAsync(Guid equipmentId)
+        public async Task DeleteEquipmentAsync(Equipment equipment)
         {
-            var equipment = await GetEquipmentByIdAsync(equipmentId);
-
-            if (equipment == null)
-                return false;
-
             equipment.DateDeleted = DateTime.UtcNow;
             equipment.IsActive = false;
             await _context.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<Equipment?> GetEquipmentByIdAsync(Guid equipmentId)
