@@ -40,6 +40,7 @@ namespace EquipmentService.Infrastructure.Repositories
         public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId)
         {
             return await _context.EquipmentItems
+                .AsNoTracking()
                 .Include(item => item.Category)
                 .Where(item => item.CreatedByUserId == userId)
                 .ToListAsync();

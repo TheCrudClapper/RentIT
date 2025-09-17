@@ -41,7 +41,7 @@ namespace RentalService.Core.Policies.Implementations
                      ).ToList();
                  }
 
-                 var response = new HttpResponseMessage(HttpStatusCode.OK)
+                 var response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
                  {
                      Content = new StringContent(JsonSerializer.Serialize(dummyList), Encoding.UTF8, "application/json")
                  };

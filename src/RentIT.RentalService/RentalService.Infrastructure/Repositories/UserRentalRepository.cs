@@ -33,6 +33,7 @@ namespace RentalService.Infrastructure.Repositories
         public async Task<IEnumerable<Rental>> GetAllRentalsAsync(Guid userId)
         {
             return await _context.Rentals
+               .AsNoTracking()
                .Where(item => item.UserId == userId)
                .ToListAsync();
         }

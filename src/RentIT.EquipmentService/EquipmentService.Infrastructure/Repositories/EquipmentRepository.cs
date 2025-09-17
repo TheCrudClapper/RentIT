@@ -52,7 +52,9 @@ namespace EquipmentService.Infrastructure.Repositories
 
         public async Task<IEnumerable<Equipment>> GetAllEquipmentAsync()
         {
-            return await _context.EquipmentItems.Where(item => item.IsActive)
+            return await _context.EquipmentItems
+                .AsNoTracking()
+                .Where(item => item.IsActive)
                 .Include(item => item.Category)
                 .ToListAsync();
         }

@@ -21,7 +21,9 @@ namespace UserService.Infrastructure.Repositories
 
         public async Task<IEnumerable<User>> GetAllActiveUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

@@ -26,6 +26,7 @@ namespace RentalService.Infrastructure.Repositories
         public async Task<IEnumerable<Rental>> GetAllRentalsAsync()
         {
             return await _context.Rentals
+                .AsNoTracking()
                 .ToListAsync();
         }
 
