@@ -95,6 +95,8 @@ services:
         - USERS_MICROSERVICE_PORT=8080
         - EQUIPMENT_MICROSERVICE_PORT=8080
         - EQUIPMENT_MICROSERVICE_NAME=equipmentservice.api
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379 
     ports:
         - "5004:8080"
         - "5005:8081"
@@ -117,6 +119,16 @@ services:
     networks:
         - rental-microservice-network
 
+  #Redis Cental Cache
+  redis:
+    image: redis:latest
+    ports:
+        - "6379:6379"
+    networks:
+        - rentit-internal-network
+    volumes:
+        - /src/redis-cache:/data 
+    
 # Networks
 networks:
   users-microservice-network:

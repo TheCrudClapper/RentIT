@@ -20,6 +20,11 @@ public static class DependencyInjection
         services.AddScoped<IRentalValidator, RentalValidator>();
         services.AddScoped<IUserRentalValidator, UserRentalValidator>();
 
+        //Add Redis Cache
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
+        });
         return services;
     }
 }
