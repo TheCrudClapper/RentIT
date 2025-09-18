@@ -5,6 +5,7 @@ using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Policies.Contracts;
 using RentalService.Core.ResultTypes;
+using RentalService.Infrastructure.Helpers;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -15,28 +16,27 @@ namespace RentalService.Infrastructure.HttpClients
     {
         private readonly HttpClient _httpClient;
         private readonly IEquipmentMicroservicePolicies _eqPolicies;
+        private readonly CachingHelper _cachingHelper;
         private readonly IDistributedCache _distributedCache;
         public EquipmentMicroserviceClient(HttpClient htppClient, IEquipmentMicroservicePolicies eqPolicies,
-            IDistributedCache distributedCache)
+            IDistributedCache distributedCache,
+            CachingHelper cachingHelper)
         {
             _httpClient = htppClient;
             _eqPolicies = eqPolicies;
             _distributedCache = distributedCache;
+            _cachingHelper = cachingHelper;
         }
 
         public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId)
         {
             try
             {
-                string cacheKey = $"equipment:{equipmentId}";
-                string? cachedEquipment = await _distributedCache.GetStringAsync(cacheKey);
+                string cacheKey = CachingHelper.GenerateCacheKey("equipment", equipmentId);
 
-                if (cachedEquipment != null)
-                {
-
-                    EquipmentResponse? cachedObject = JsonSerializer.Deserialize<EquipmentResponse>(cachedEquipment);
-                    return cachedObject;
-                }
+                var cachedObj = await _cachingHelper.GetCachedObject<EquipmentResponse>(cacheKey);
+                if (cachedObj.Value != null)
+                    return cachedObj.Value;
 
                 HttpResponseMessage response = await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
 
@@ -51,16 +51,11 @@ namespace RentalService.Infrastructure.HttpClients
                 if (details == null)
                     return Result.Failure<EquipmentResponse>(new Error(500, "Invalid response from Equipment service"));
 
-                var obj = JsonSerializer.Serialize(details);
-                var cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(30))
+                var cacheOptions = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(30))
                     .SetSlidingExpiration(TimeSpan.FromSeconds(10));
 
-                string cacheKeyToWrite = $"equipment:{equipmentId}";
-
-                await _distributedCache.SetStringAsync(cacheKeyToWrite, obj, cacheOptions);
-
-                //Key: equipment:{equipmentId}
-                //Value: { "Name", etc..}
+                await _cachingHelper.CacheObject<EquipmentResponse>(details, cacheKey, cacheOptions);
 
                 return details;
 
@@ -71,41 +66,45 @@ namespace RentalService.Infrastructure.HttpClients
             }
         }
 
-        //TO DO : IMPLEMENT CACHING
         public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds)
         {
-            //To Do: read from cache here
+            var cacheKey = CachingHelper.GenerateCacheKey("equipments", equipmentIds);
+            var cachedObj = await _cachingHelper.GetCachedObject<IEnumerable<EquipmentResponse>>(cacheKey);
+            if (cachedObj.Value != null)
+                return Result.Success(cachedObj.Value);
 
             var fallbackPolicy = _eqPolicies.GetFallbackPolicyForEquipmentsByIds();
+
+            var context = new Context();
+            context["equipmentIds"] = equipmentIds;
+
+            HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
+              async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds), context
+            );
+
+            if (!response.IsSuccessStatusCode)
             {
-                var context = new Context();
-                context["equipmentIds"] = equipmentIds;
-
-                HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
-                  async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds), context
-                );
-
-
-                //HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds);
-
-                if (!response.IsSuccessStatusCode)
+                if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
                 {
-                    if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
-                    {
-                        IEnumerable<EquipmentResponse>? equipmentItemsFromFallback = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+                    IEnumerable<EquipmentResponse>? equipmentItemsFromFallback = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
 
-                        return Result.Success(equipmentItemsFromFallback ?? Enumerable.Empty<EquipmentResponse>());
-                    }
-                    string message = await response.Content.ReadAsStringAsync();
-                    return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
+                    return Result.Success(equipmentItemsFromFallback ?? []);
                 }
-                //TO DO: save to cache here
 
-
-                IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
-
-                return Result.Success(equipmentItems ?? Enumerable.Empty<EquipmentResponse>());
+                string message = await response.Content.ReadAsStringAsync();
+                return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
             }
+
+            IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+
+            var cacheOptions = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(1000))
+                .SetSlidingExpiration(TimeSpan.FromSeconds(1000));
+
+            await _cachingHelper.CacheObject(equipmentItems, cacheKey, cacheOptions);
+
+            return Result.Success(equipmentItems ?? []);
+
         }
     }
 }
