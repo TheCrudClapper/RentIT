@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
+using RentalService.Infrastructure.Helpers;
 using RentalService.Infrastructure.Repositories;
 namespace RentalService.Infrastructure
 {
@@ -25,6 +26,9 @@ namespace RentalService.Infrastructure
             });
             services.AddScoped<IRentalRepository, RentalRepository>();
             services.AddScoped<IUserRentalRepository, UserRentalRepository>();
+
+            //Add caching helper
+            services.AddScoped<CachingHelper>();
             return services;
         }
     }
