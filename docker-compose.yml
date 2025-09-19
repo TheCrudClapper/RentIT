@@ -119,7 +119,7 @@ services:
     networks:
         - rental-microservice-network
 
-  #Redis Cental Cache
+  # Redis Cental Cache
   redis:
     image: redis:latest
     ports:
@@ -128,6 +128,20 @@ services:
         - rentit-internal-network
     volumes:
         - /src/redis-cache:/data 
+
+
+  # Ocelot API Gateway
+  api-gateway:
+     image: ocelot-gateway
+     build:
+        context: .
+        dockerfile: src/RentITApiGateway/Dockerfile
+     networks:
+        -  rentit-internal-network
+     ports:
+        - "5050:8080"
+  
+  
     
 # Networks
 networks:

@@ -1,0 +1,204 @@
+{
+  "Routes": [
+    {
+      // Users Microservice Routes
+      "UpstreamPathTemplate": "/gateway/Auth",
+      "DownstreamPathTemplate": "/api/Auth",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Users/{userId}",
+      "DownstreamPathTemplate": "/api/Users/{userId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Auth/Register",
+      "DownstreamPathTemplate": "/api/Auth/Register",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Auth/Login",
+      "DownstreamPathTemplate": "/api/Auth/Login",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    },
+
+    // Equipments Microservice Routes
+    {
+      "UpstreamPathTemplate": "/gateway/Categories",
+      "DownstreamPathTemplate": "/api/Categories",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Categories/{equipmentId}",
+      "DownstreamPathTemplate": "/api/Categories/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Equipments",
+      "DownstreamPathTemplate": "/api/Equipments",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Equipments/{equipmentId}",
+      "DownstreamPathTemplate": "/api/Equipments/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Equipments/byIds",
+      "DownstreamPathTemplate": "/api/Equipments/byIds",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/UserEquipment",
+      "DownstreamPathTemplate": "/api/UserEquipment",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/UserEquipment/{equipmentId}",
+      "DownstreamPathTemplate": "/api/UserEquipment/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Put", "Get", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    //Rental Microservice Routes
+    {
+      "UpstreamPathTemplate": "/gateway/Rentals/",
+      "DownstreamPathTemplate": "/api/Rentals/",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Rentals/{id}",
+      "DownstreamPathTemplate": "/api/Rentals/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Put", "Get", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Rentals/byEquipmentId/{id}",
+      "DownstreamPathTemplate": "/api/Rentals/byEquipmentId/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/UserRental",
+      "DownstreamPathTemplate": "/api/UserRental",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/UserRental/{id}",
+      "DownstreamPathTemplate": "/api/UserRental/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5050"
+  }
+}

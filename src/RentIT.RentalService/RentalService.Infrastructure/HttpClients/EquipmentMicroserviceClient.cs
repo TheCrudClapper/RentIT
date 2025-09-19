@@ -17,14 +17,11 @@ namespace RentalService.Infrastructure.HttpClients
         private readonly HttpClient _httpClient;
         private readonly IEquipmentMicroservicePolicies _eqPolicies;
         private readonly CachingHelper _cachingHelper;
-        private readonly IDistributedCache _distributedCache;
         public EquipmentMicroserviceClient(HttpClient htppClient, IEquipmentMicroservicePolicies eqPolicies,
-            IDistributedCache distributedCache,
             CachingHelper cachingHelper)
         {
             _httpClient = htppClient;
             _eqPolicies = eqPolicies;
-            _distributedCache = distributedCache;
             _cachingHelper = cachingHelper;
         }
 
