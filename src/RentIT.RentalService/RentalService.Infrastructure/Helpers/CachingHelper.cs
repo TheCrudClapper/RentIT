@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace RentalService.Infrastructure.Helpers;
@@ -22,6 +23,7 @@ public class CachingHelper
 
         try
         {
+
             T? cachedObj = JsonSerializer.Deserialize<T>(stringObj);
             return (true, cachedObj);
         }

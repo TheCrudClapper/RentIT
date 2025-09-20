@@ -10,7 +10,7 @@
           "Port": 8080
         }
       ],
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
+      "UpstreamHttpMethod": [ "Post" ],
       "UpstreamScheme": "http"
     },
     {
@@ -61,7 +61,12 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get", "Post" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 30,
+        "TimeoutValue": 10000
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/Categories/{equipmentId}",
@@ -73,7 +78,10 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/Equipments",
@@ -85,7 +93,10 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get", "Post" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/Equipments/{equipmentId}",
@@ -97,7 +108,10 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/Equipments/byIds",
@@ -121,7 +135,12 @@
         }
       ],
       "UpstreamHttpMethod": [ "Post", "Get" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 30,
+        "TimeoutValue": 10000
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/UserEquipment/{equipmentId}",
@@ -133,7 +152,10 @@
         }
       ],
       "UpstreamHttpMethod": [ "Put", "Get", "Delete", "Options" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
     },
     //Rental Microservice Routes
     {
@@ -146,7 +168,17 @@
         }
       ],
       "UpstreamHttpMethod": [ "Post", "Get" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "RateLimitOptions": {
+        "Limit": 5,
+        "Period": "1m",
+        "HttpStatusCode": 429,
+        "EnableRateLimiting": true,
+        "PeriodTimespan": 30
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/Rentals/{id}",
@@ -170,7 +202,14 @@
         }
       ],
       "UpstreamHttpMethod": [ "Delete", "Options" ],
-      "UpstreamScheme": "http"
+      "UpstreamScheme": "http",
+      "RateLimitOptions": {
+        "Limit": 5,
+        "Period": "1m",
+        "HttpStatusCode": 429,
+        "EnableRateLimiting": true,
+        "PeriodTimespan": 30
+      }
     },
     {
       "UpstreamPathTemplate": "/gateway/UserRental",
