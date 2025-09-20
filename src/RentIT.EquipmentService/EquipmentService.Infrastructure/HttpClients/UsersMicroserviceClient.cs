@@ -18,7 +18,7 @@ namespace EquipmentService.Infrastructure.HttpClients
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{userId}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/users/{userId}");
 
                 if (!response.IsSuccessStatusCode)
                 {

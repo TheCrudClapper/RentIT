@@ -50,11 +50,11 @@ services:
         - DB_USER=postgres 
         - DB_NAME=equipment
         - DB_PORT=5432
-        - USERS_MICROSERVICE_NAME=userservice.api
+        - USERS_MICROSERVICE_NAME=api-gateway
         - USERS_MICROSERVICE_PORT=8080
         - DB_HOST=equipment-microservices-db-postgress
         - DB_PASSWORD=admin
-        - RENTAL_MICROSERVICE_NAME=rentalmicroservice.api
+        - RENTAL_MICROSERVICE_NAME=api-gateway
         - RENTAL_MICROSERVICE_PORT=8080
     ports:
         - "5002:8080"
@@ -91,10 +91,10 @@ services:
         - DB_PORT=5432
         - DB_HOST=rental-service-db-postgress
         - DB_PASSWORD=admin
-        - USERS_MICROSERVICE_NAME=userservice.api
+        - USERS_MICROSERVICE_NAME=api-gateway
         - USERS_MICROSERVICE_PORT=8080
         - EQUIPMENT_MICROSERVICE_PORT=8080
-        - EQUIPMENT_MICROSERVICE_NAME=equipmentservice.api
+        - EQUIPMENT_MICROSERVICE_NAME=api-gateway
         - REDIS_HOST=redis
         - REDIS_PORT=6379 
     ports:

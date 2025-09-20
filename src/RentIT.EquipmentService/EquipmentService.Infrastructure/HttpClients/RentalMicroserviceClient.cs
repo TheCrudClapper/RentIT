@@ -17,7 +17,7 @@ namespace EquipmentService.Infrastructure.HttpClients
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/Rentals/byEquipmentId/{equipmentId}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"/gateway/Rentals/byEquipmentId/{equipmentId}");
 
                 if (!response.IsSuccessStatusCode)
                 {

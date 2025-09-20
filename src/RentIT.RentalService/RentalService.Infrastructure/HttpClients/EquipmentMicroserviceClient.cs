@@ -35,7 +35,7 @@ namespace RentalService.Infrastructure.HttpClients
                 if (cachedObj.Value != null)
                     return cachedObj.Value;
 
-                HttpResponseMessage response = await _httpClient.GetAsync($"/api/equipments/{equipmentId}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/equipments/{equipmentId}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -76,7 +76,7 @@ namespace RentalService.Infrastructure.HttpClients
             context["equipmentIds"] = equipmentIds;
 
             HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
-              async (ctx) => await _httpClient.PostAsJsonAsync("api/equipments/byIds", equipmentIds), context
+              async (ctx) => await _httpClient.PostAsJsonAsync("gateway/equipments/byIds", equipmentIds), context
             );
 
             if (!response.IsSuccessStatusCode)
