@@ -55,6 +55,11 @@ services:
         - DB_PASSWORD=admin
         - RENTAL_MICROSERVICE_NAME=api-gateway
         - RENTAL_MICROSERVICE_PORT=8080
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
     ports:
         - "5002:8080"
         - "5003:8081"
@@ -96,6 +101,11 @@ services:
         - EQUIPMENT_MICROSERVICE_NAME=api-gateway
         - REDIS_HOST=redis
         - REDIS_PORT=6379 
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
     ports:
         - "5004:8080"
         - "5005:8081"
@@ -140,6 +150,18 @@ services:
      ports:
         - "5050:8080"
   
+  # RabbitMQ 
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    environment:
+        - RABBITMQ_DEFAULT_USER=user 
+        - RABBITMQ_DEFAULT_PASS=admin
+    networks:
+        - rentit-internal-network
+
   
     
 # Networks

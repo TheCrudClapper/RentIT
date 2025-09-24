@@ -5,67 +5,66 @@ using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 
-namespace EquipmentService.Core.Services.CategoryServices
+namespace EquipmentService.Core.Services.CategoryServices;
+
+public class CategoryService : ICategoryService
 {
-    public class CategoryService : ICategoryService
+    private readonly ICategoryRepository _categoryRepository;
+    public CategoryService(ICategoryRepository categoryRepository)
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository)
-        {
-            _categoryRepository = categoryRepository;
-        }
+        _categoryRepository = categoryRepository;
+    }
 
-        public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request)
-        {
-            Category category = request.ToCategory();
+    public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request)
+    {
+        Category category = request.ToCategory();
 
-            if(!await _categoryRepository.IsCategoryUnique(category))
-                return Result.Failure<CategoryResponse>(CategoryErrors.CategoryAlreadyExists);
+        if (!await _categoryRepository.IsCategoryUnique(category))
+            return Result.Failure<CategoryResponse>(CategoryErrors.CategoryAlreadyExists);
 
-            Category newCategory = await _categoryRepository.AddCategoryAsync(category);
+        Category newCategory = await _categoryRepository.AddCategoryAsync(category);
 
-            return Result.Success(newCategory.ToCategoryResponse());
-        }
+        return Result.Success(newCategory.ToCategoryResponse());
+    }
 
-        public async Task<Result> DeleteCategory(Guid categoryId)
-        {
-            bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId);
+    public async Task<Result> DeleteCategory(Guid categoryId)
+    {
+        bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId);
 
-            if (!isSuccess)
-                return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (!isSuccess)
+            return Result.Failure(CategoryErrors.CategoryNotFound);
 
-            return Result.Success();
-        }
+        return Result.Success();
+    }
 
-        public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request)
-        {
-            Category categoryToEdit = request.ToCategory();
+    public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request)
+    {
+        Category categoryToEdit = request.ToCategory();
 
-            if(!await _categoryRepository.IsCategoryUnique(categoryToEdit, categoryId))
-                return Result.Failure(CategoryErrors.CategoryAlreadyExists);
+        if (!await _categoryRepository.IsCategoryUnique(categoryToEdit, categoryId))
+            return Result.Failure(CategoryErrors.CategoryAlreadyExists);
 
-            bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit);
+        bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit);
 
-            if (!isSuccess)
-                return Result.Failure(CategoryErrors.CategoryNotFound);
+        if (!isSuccess)
+            return Result.Failure(CategoryErrors.CategoryNotFound);
 
-            return Result.Success();
-        }
+        return Result.Success();
+    }
 
-        public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
-        {
-            IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync();
-            return categories.Select(item => item.ToCategoryResponse());
-        }
+    public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+    {
+        IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync();
+        return categories.Select(item => item.ToCategoryResponse());
+    }
 
-        public async Task<Result<CategoryResponse>> GetCategory(Guid id)
-        {
-            Category? category = await _categoryRepository.GetCategoryByIdAsync(id);
+    public async Task<Result<CategoryResponse>> GetCategory(Guid id)
+    {
+        Category? category = await _categoryRepository.GetCategoryByIdAsync(id);
 
-            if (category == null)
-                return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
+        if (category == null)
+            return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
 
-            return category.ToCategoryResponse();
-        }
+        return category.ToCategoryResponse();
     }
 }

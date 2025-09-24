@@ -1,5 +1,6 @@
 ﻿using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
+using EquipmentService.Core.RabbitMQ;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
@@ -25,6 +26,9 @@ namespace EquipmentService.Core
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
+
+            //Add RabbitMQ Components
+            services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
 
             return services;
         }
