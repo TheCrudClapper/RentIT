@@ -2,6 +2,7 @@
 {
     public interface IRabbitMQEquipmentDeletedConsumer
     {
-        void Consume<T>();
+        void Consume();
+        void Dispose();
     }
 }

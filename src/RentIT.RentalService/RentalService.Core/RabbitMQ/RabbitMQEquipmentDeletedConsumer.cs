@@ -2,20 +2,24 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RentalService.Core.RabbitMQ.Messages;
+using RentalService.Core.ServiceContracts;
 using System.Text;
 using System.Text.Json;
 
 namespace RentalService.Core.RabbitMQ;
 
-public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsumer
+public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsumer, IDisposable
 {
 
     private readonly IConfiguration _configuration;
     private readonly IModel _channel;
     private readonly IConnection _connection;
+    private readonly IRentalService _rentalService;
 
-    public RabbitMQEquipmentDeletedConsumer(IConfiguration configuration)
+    public RabbitMQEquipmentDeletedConsumer(IConfiguration configuration,
+        IRentalService rentalService)
     {
+        _rentalService = rentalService;
         _configuration = configuration;
 
         string hostName = _configuration["RABBITMQ_HOST_NAME"]!;
@@ -29,6 +33,7 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
             UserName = userName,
             Password = password,
             Port = Convert.ToInt32(port),
+            DispatchConsumersAsync = true
         };
 
         _connection = connectionFactory.CreateConnection();
@@ -42,12 +47,12 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
         _connection.Dispose();
     }
 
-    public void Consume<T>()
+    public void Consume()
     {
         //Routing / binding key 
         string routingKey = "equipment.delete";
 
-        string queueName = "orders.equipment.delete.queue";
+        string queueName = "equipment.delete.queue";
 
         //Create exchange
         string exchangeName = _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!;
@@ -62,10 +67,10 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
 
         _channel.QueueBind(queueName, exchangeName, routingKey);
 
-        var consumer = new EventingBasicConsumer(_channel);
+        var consumer = new AsyncEventingBasicConsumer(_channel);
 
         //write code for the recieved message
-        consumer.Received += (sender, args) =>
+        consumer.Received += async (sender, args) =>
         {
             byte[] body = args.Body.ToArray();
             string message = Encoding.UTF8.GetString(body);
@@ -73,7 +78,9 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
             if(message != null)
             {
                 EquipmentDeletedMessage? obj = JsonSerializer.Deserialize<EquipmentDeletedMessage>(message);
+                await _rentalService.DeleteRentalByEquipmentId(obj.EquipmentId);
             }
+            
         };
 
         _channel.BasicConsume(queue: queueName, consumer: consumer, autoAck: true);
