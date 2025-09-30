@@ -65,6 +65,7 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
             autoDelete: false,
             arguments: null);
 
+        //Bind the message to exchange
         _channel.QueueBind(queueName, exchangeName, routingKey);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -78,11 +79,12 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
             if(message != null)
             {
                 EquipmentDeletedMessage? obj = JsonSerializer.Deserialize<EquipmentDeletedMessage>(message);
-                await _rentalService.DeleteRentalByEquipmentId(obj.EquipmentId);
+                await _rentalService.DeleteRentalByEquipmentId(obj!.EquipmentId);
             }
             
         };
 
         _channel.BasicConsume(queue: queueName, consumer: consumer, autoAck: true);
+
     }
 }

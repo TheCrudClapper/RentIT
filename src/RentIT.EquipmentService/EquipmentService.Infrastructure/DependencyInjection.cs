@@ -1,4 +1,5 @@
-﻿using EquipmentService.Core.Domain.RepositoryContracts;
+﻿using EquipmentService.Core.Caching;
+using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -25,10 +26,15 @@ namespace EquipmentService.Infrastructure
                     x => x.MigrationsAssembly("EquipmentService.Infrastructure"));
             });
 
+            
             //Add Repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IUserEquipmentRepository, UserEquipmentRepository>();
+
+            //Add Caching
+            services.AddScoped<ICachingHelper, CachingHelper>();
+
             return services;
         }
     }

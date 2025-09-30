@@ -28,7 +28,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
             Port = Convert.ToInt32(port),
         };
 
-        _connection =  connectionFactory.CreateConnection();
+        _connection = connectionFactory.CreateConnection();
 
         _channel = _connection.CreateModel();
     }
@@ -41,18 +41,27 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
 
     public void Publish<T>(string routingKey, T message)
     {
-        string jsonMessage = JsonSerializer.Serialize(message);
-        byte[] messageBodyInBytes = Encoding.UTF8.GetBytes(jsonMessage);
+        string messageJson = JsonSerializer.Serialize(message);
+        byte[] bytes = Encoding.UTF8.GetBytes(messageJson);
 
-        //Create exchange
+        //Create an exchange
         string exchangeName = _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!;
-        _channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct, durable: true);
+        _channel.ExchangeDeclare(
+            exchange: exchangeName,
+            type: ExchangeType.Direct,
+            durable: true,
+            autoDelete: false
+            );
 
-        //Post the message
+        //Publish Message
         _channel.BasicPublish(
             exchange: exchangeName,
             routingKey: routingKey,
             basicProperties: null,
-            body: messageBodyInBytes);
+            body: bytes);
+
+        //basic properties is for headers
+
+
     }
 }
