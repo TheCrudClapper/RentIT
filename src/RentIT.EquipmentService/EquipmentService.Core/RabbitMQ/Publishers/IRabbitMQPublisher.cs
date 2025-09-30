@@ -1,4 +1,4 @@
-﻿namespace EquipmentService.Core.RabbitMQ;
+﻿namespace EquipmentService.Core.RabbitMQ.Publishers;
 
 public interface IRabbitMQPublisher
 {

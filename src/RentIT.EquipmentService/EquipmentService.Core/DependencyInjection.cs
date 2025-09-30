@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.Caching;
 using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
-using EquipmentService.Core.RabbitMQ;
+using EquipmentService.Core.RabbitMQ.Publishers;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
