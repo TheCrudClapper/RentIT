@@ -3,9 +3,12 @@ using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
+using EquipmentService.Core.RabbitMQ;
+using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Validators.ValidatorContracts;
+using Microsoft.Extensions.Configuration;
 
 namespace EquipmentService.Core.Services.EquipmentServices
 {
@@ -15,15 +18,23 @@ namespace EquipmentService.Core.Services.EquipmentServices
         private readonly IUserEquipmentValidator _userEquipmentValidator;
         private readonly IUsersMicroserviceClient _usersClient;
         private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
-        public UserEquipmentService(IUserEquipmentRepository userEquipmentRepository,
+        private readonly IRabbitMQPublisher _rabbitMQPublisher;
+        private readonly IConfiguration _configuration;
+        public UserEquipmentService(
+            IUserEquipmentRepository userEquipmentRepository,
             IUserEquipmentValidator userEquipmentValidator,
             IUsersMicroserviceClient usersClient,
-            IRentalMicroserviceClient rentalMicroserviceClient)
+            IRentalMicroserviceClient rentalMicroserviceClient,
+            IRabbitMQPublisher rabbitMQPublisher,
+            IConfiguration configuration
+            )
         {
             _userEquipmentRepository = userEquipmentRepository;
             _userEquipmentValidator = userEquipmentValidator;
             _usersClient = usersClient;
             _rentalMicroserviceClient = rentalMicroserviceClient;
+            _rabbitMQPublisher = rabbitMQPublisher;
+            _configuration = configuration;
         }
 
         public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
@@ -85,11 +96,12 @@ namespace EquipmentService.Core.Services.EquipmentServices
             if (equipment == null)
                 return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
 
-            var rentalDeletionResult = await _rentalMicroserviceClient.DeleteRentalsByEquipmentId(equipmentId);
-            if (rentalDeletionResult.IsFailure)
-                return Result.Failure(rentalDeletionResult.Error);
-
             await _userEquipmentRepository.DeleteUserEquipmentAsync(equipment);
+
+            //Publish delete message to exchange
+            _rabbitMQPublisher.Publish("equipment.delete",
+                new EquipmentDeletedMessage(equipmentId),
+                _configuration["equipment.exchange"]!);
 
             return Result.Success();
         }

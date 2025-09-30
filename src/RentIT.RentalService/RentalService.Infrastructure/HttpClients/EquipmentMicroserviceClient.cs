@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Polly;
+﻿using Polly;
 using Polly.CircuitBreaker;
 using RentalService.Core.Caching;
 using RentalService.Core.Domain.HtppClientContracts;
@@ -15,9 +14,9 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
 {
     private readonly HttpClient _httpClient;
     private readonly IEquipmentMicroservicePolicies _eqPolicies;
-    private readonly CachingHelper _cachingHelper;
+    private readonly ICachingHelper _cachingHelper;
     public EquipmentMicroserviceClient(HttpClient htppClient, IEquipmentMicroservicePolicies eqPolicies,
-        CachingHelper cachingHelper)
+        ICachingHelper cachingHelper)
     {
         _httpClient = htppClient;
         _eqPolicies = eqPolicies;

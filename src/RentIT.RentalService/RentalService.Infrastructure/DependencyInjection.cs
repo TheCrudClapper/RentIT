@@ -28,8 +28,7 @@ public static  class DependencyInjection
         services.AddScoped<IRentalRepository, RentalRepository>();
         services.AddScoped<IUserRentalRepository, UserRentalRepository>();
 
-        //Add caching helper
-        services.AddScoped<ICachingHelper, CachingHelper>();
+     
         return services;
     }
 }

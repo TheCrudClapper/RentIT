@@ -8,8 +8,6 @@ using EquipmentService.Infrastructure;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.HttpClients;
 using EquipmentService.Infrastructure.Seeders;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -84,9 +84,9 @@ public class EquipmentsController : ControllerBase
 
     //POST: api/Equipments/byIds
     [HttpPost("byIds")]
-    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid> equipmentIds)
+    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid>? equipmentIds)
     {
-        if (!equipmentIds.Any())
+        if (equipmentIds == null || !equipmentIds.Any())
             return BadRequest("No equipment IDs provided.");
 
         var equipments = await _equipmentService.GetAllEquipmentsByIds(equipmentIds);

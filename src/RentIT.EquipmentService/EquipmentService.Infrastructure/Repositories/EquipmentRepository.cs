@@ -32,22 +32,25 @@ namespace EquipmentService.Infrastructure.Repositories
             return equipment;
         }
      
-        public async Task<bool> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment)
+        public async Task<Equipment?> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment)
         {
             var equipmentToUpdate = await GetEquipmentByIdAsync(equipmentId);
 
             if (equipmentToUpdate == null)
-                return false;
+                return null;
 
             equipmentToUpdate.Name = equipment.Name;
             equipmentToUpdate.Status = equipment.Status;
             equipmentToUpdate.Notes = equipment.Notes;
+            equipmentToUpdate.CreatedByUserId = equipment.CreatedByUserId;  
             equipmentToUpdate.RentalPricePerDay = equipment.RentalPricePerDay;
             equipmentToUpdate.SerialNumber = equipment.SerialNumber;
             equipmentToUpdate.CategoryId = equipment.CategoryId;
 
+            await _context.Entry(equipmentToUpdate).Reference(item => item.Category).LoadAsync();
             await _context.SaveChangesAsync();
-            return true;
+            
+            return equipmentToUpdate;
         }
 
         public async Task<IEnumerable<Equipment>> GetAllEquipmentAsync()

@@ -8,6 +8,7 @@ using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Validators.ValidatorContracts;
+using Microsoft.Extensions.Configuration;
 
 namespace EquipmentService.Core.Services.EquipmentServices
 {
@@ -17,15 +18,18 @@ namespace EquipmentService.Core.Services.EquipmentServices
         private readonly IEquipmentValidator _equipmentValidator;
         private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
         private readonly IRabbitMQPublisher _rabbitMQPublisher;
+        private readonly IConfiguration _configuration;
         public EquipmentService(IEquipmentRepository equipmentRepository,
             IEquipmentValidator equipmentValidator,
             IRentalMicroserviceClient rentalMicroserviceClient,
-            IRabbitMQPublisher rabbitMQ)
+            IRabbitMQPublisher rabbitMQ,
+            IConfiguration configuration)
         {
             _equipmentRepository = equipmentRepository;
             _equipmentValidator = equipmentValidator;
             _rentalMicroserviceClient = rentalMicroserviceClient;
             _rabbitMQPublisher = rabbitMQ;
+            _configuration = configuration;
         }
 
         public async Task<Result> DeleteEquipment(Guid equipmentId)
@@ -34,15 +38,13 @@ namespace EquipmentService.Core.Services.EquipmentServices
             if (equipment == null)
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
-            //var rentalDeletionResult = await _rentalMicroserviceClient.DeleteRentalsByEquipmentId(equipmentId);
-            //if (rentalDeletionResult.IsFailure)
-            //    return Result.Failure(rentalDeletionResult.Error);
-
             //Delete EQ
             await _equipmentRepository.DeleteEquipmentAsync(equipment);
 
             //Delete corresponding rentals
-            _rabbitMQPublisher.Publish("equipment.delete", new EquipmentDeletedMessage(equipmentId));
+            _rabbitMQPublisher.Publish("equipment.delete",
+                new EquipmentDeletedMessage(equipmentId),
+                _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
             return Result.Success();
         }
@@ -72,10 +74,17 @@ namespace EquipmentService.Core.Services.EquipmentServices
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
-            bool updationResult = await _equipmentRepository.UpdateEquipmentAsync(equipmentId, equipment);
+            var updatedEntity = await _equipmentRepository.UpdateEquipmentAsync(equipmentId, equipment);
 
-            if (!updationResult)
+            if (updatedEntity == null)
                 return Result.Failure(EquipmentErrors.EquipmentNotFound);
+
+            //Publish update message
+            _rabbitMQPublisher.Publish(
+                "equipment.update",
+                updatedEntity.ToEquipmentResponse(),
+                _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!
+                );
 
             return Result.Success();
         }
@@ -88,8 +97,16 @@ namespace EquipmentService.Core.Services.EquipmentServices
             if (validationResult.IsFailure)
                 return Result.Failure<EquipmentResponse>(validationResult.Error);
 
-            var newEquipment = await _equipmentRepository.AddEquipmentAsync(equipment);
-            return newEquipment.ToEquipmentResponse();
+            var newObj = await _equipmentRepository.AddEquipmentAsync(equipment);
+
+            //Publish create message
+            _rabbitMQPublisher.Publish(
+                "equipment.create",
+                newObj.ToEquipmentResponse(),
+                _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!
+                );
+
+            return newObj.ToEquipmentResponse();
         }
 
         public async Task<Result<bool>> DoesEquipmentExist(Guid equipmentId)

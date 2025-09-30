@@ -39,18 +39,17 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
         _connection.Dispose();
     }
 
-    public void Publish<T>(string routingKey, T message)
+    public void Publish<T>(string routingKey, T message, string exchangeName)
     {
         string messageJson = JsonSerializer.Serialize(message);
         byte[] bytes = Encoding.UTF8.GetBytes(messageJson);
 
         //Create an exchange
-        string exchangeName = _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!;
         _channel.ExchangeDeclare(
             exchange: exchangeName,
             type: ExchangeType.Direct,
             durable: true,
-            autoDelete: false
+            autoDelete: false 
             );
 
         //Publish Message

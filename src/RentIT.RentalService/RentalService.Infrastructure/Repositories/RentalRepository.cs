@@ -71,7 +71,7 @@ namespace RentalService.Infrastructure.Repositories
                 .Where(rental => rental.EquipmentId == equipmentId)
                 .ToListAsync();
 
-            foreach(var  rental in rentals)
+            foreach(var rental in rentals)
             {
                 rental.IsActive = false;
                 rental.DateDeleted = DateTime.UtcNow;

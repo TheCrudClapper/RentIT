@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RentalService.Core.RabbitMQ;
+using RentalService.Core.Caching;
+using RentalService.Core.RabbitMQ.Consumers;
+using RentalService.Core.RabbitMQ.Consumers.Base;
+using RentalService.Core.RabbitMQ.HostedServices;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Services;
 using RentalService.Core.Validators.Contracts;
@@ -27,9 +30,14 @@ public static class DependencyInjection
             options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
         });
 
+        //Add caching helper
+        services.AddScoped<ICachingHelper, CachingHelper>();
+
         //Add Consumers
-        services.AddTransient<IRabbitMQEquipmentDeletedConsumer, RabbitMQEquipmentDeletedConsumer>();
-        services.AddHostedService<RabbitMQEquipmentDeleteHostedService>();
+        services.AddTransient<RabbitMQEquipmentDeletedConsumer>();
+        services.AddTransient<RabbitMQEquipmentCreateConsumer>();
+        services.AddTransient<RabbitMQEquipmentUpdateConsumer>();
+        services.AddHostedService<RabbitMQConsumersHostedService>();
 
         return services;
     }

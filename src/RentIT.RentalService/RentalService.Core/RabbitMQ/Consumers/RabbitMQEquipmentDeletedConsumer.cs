@@ -1,53 +1,41 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RentalService.Core.Caching;
+using RentalService.Core.RabbitMQ.Consumers.Base;
 using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.ServiceContracts;
 using System.Text;
 using System.Text.Json;
 
-namespace RentalService.Core.RabbitMQ;
+namespace RentalService.Core.RabbitMQ.Consumers;
 
-public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsumer, IDisposable
+public class RabbitMQEquipmentDeletedConsumer : RabbitMQBaseConsumer
 {
-
-    private readonly IConfiguration _configuration;
-    private readonly IModel _channel;
-    private readonly IConnection _connection;
     private readonly IRentalService _rentalService;
+    private readonly ICachingHelper _cachingHelper;
+    private readonly ILogger<RabbitMQEquipmentDeletedConsumer> _logger;
 
-    public RabbitMQEquipmentDeletedConsumer(IConfiguration configuration,
-        IRentalService rentalService)
+    public RabbitMQEquipmentDeletedConsumer(
+        IConfiguration configuration,
+        IRentalService rentalService,
+        ICachingHelper cachingHelper,
+        ILogger<RabbitMQEquipmentDeletedConsumer> logger) : base(configuration)
     {
         _rentalService = rentalService;
-        _configuration = configuration;
-
-        string hostName = _configuration["RABBITMQ_HOST_NAME"]!;
-        string password = _configuration["RABBITMQ_PASSWORD"]!;
-        string userName = _configuration["RABBITMQ_USER_NAME"]!;
-        string port = _configuration["RABBITMQ_PORT"]!;
-
-        ConnectionFactory connectionFactory = new ConnectionFactory()
-        {
-            HostName = hostName,
-            UserName = userName,
-            Password = password,
-            Port = Convert.ToInt32(port),
-            DispatchConsumersAsync = true
-        };
-
-        _connection = connectionFactory.CreateConnection();
-
-        _channel = _connection.CreateModel();
+        _cachingHelper = cachingHelper;
+        _logger = logger;
     }
 
-    public void Dispose()
+    private async Task HandleEquipmentDelete(Guid id)
     {
-        _channel.Dispose();
-        _connection.Dispose();
+        _logger.LogInformation("Handling Equipment Delete");
+        await _rentalService.DeleteRentalByEquipmentId(id);
+        await _cachingHelper.InvalidateCache($"equipment:{id}");
     }
 
-    public void Consume()
+    public override void Consume()
     {
         //Routing / binding key 
         string routingKey = "equipment.delete";
@@ -76,15 +64,14 @@ public class RabbitMQEquipmentDeletedConsumer : IRabbitMQEquipmentDeletedConsume
             byte[] body = args.Body.ToArray();
             string message = Encoding.UTF8.GetString(body);
 
-            if(message != null)
+            if (message != null)
             {
                 EquipmentDeletedMessage? obj = JsonSerializer.Deserialize<EquipmentDeletedMessage>(message);
-                await _rentalService.DeleteRentalByEquipmentId(obj!.EquipmentId);
+                await HandleEquipmentDelete(obj!.EquipmentId);
             }
-            
+
         };
 
         _channel.BasicConsume(queue: queueName, consumer: consumer, autoAck: true);
-
     }
 }

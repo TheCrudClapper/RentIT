@@ -72,7 +72,12 @@ namespace RentalService.Core.Services
         {
             var rentals = await _rentalRepository.GetAllRentalsAsync();
 
-            var equipmentIds = rentals.Select(x => x.EquipmentId).Distinct();
+            var equipmentIds = rentals
+                .Select(x => x.EquipmentId)
+                .Distinct();
+
+            if (!equipmentIds.Any())
+                return Result.Success(Enumerable.Empty<RentalResponse>());
 
             var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds);
             if (eqResponse.IsFailure)
