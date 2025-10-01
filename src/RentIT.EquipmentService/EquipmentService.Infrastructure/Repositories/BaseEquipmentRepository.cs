@@ -13,49 +13,39 @@ public abstract class BaseEquipmentRepository : IBaseEquipmentRepository
     {
         _context = context;
     }
-    public async Task<bool> DoesEquipmentExistsAsync(Guid equipmentId)
+    public async Task<bool> DoesEquipmentExistsAsync(Guid equipmentId, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
-            .AnyAsync(item => item.Id == equipmentId);
+            .AnyAsync(item => item.Id == equipmentId, cancellationToken);
     }
 
-    public async Task<decimal?> GetDailyPriceAsync(Guid equipmentId)
+    public async Task<decimal?> GetDailyPriceAsync(Guid equipmentId, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
             .Where(item => item.Id == equipmentId && item.IsActive)
             .Select(item => item.RentalPricePerDay)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Equipment?> GetEquipmentByCondition(Expression<Func<Equipment, bool>> expression)
+    public async Task<Equipment?> GetEquipmentByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken)
     {
-        return await _context.EquipmentItems.FirstOrDefaultAsync(expression);
+        return await _context.EquipmentItems
+            .FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
             .Include(item => item.Category)
             .Where(expression)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<bool, Equipment>> expression)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<RentStatusEnum?> GetEquipmentStatusAsync(Guid equipmentId)
-    {
-        return await _context.EquipmentItems.Where(item => item.IsActive && item.Id == equipmentId)
-            .Select(item => item.Status)
-            .FirstOrDefaultAsync();
-    }
-    public async  Task<bool> IsEquipmentUnique(Equipment equipment, Guid? excludeId = null)
+    public async  Task<bool> IsEquipmentUnique(Equipment equipment, CancellationToken cancellationToken, Guid? excludeId = null)
     {
         return !await _context.EquipmentItems
             .AnyAsync(item => (item.Name == equipment.Name || item.SerialNumber == equipment.SerialNumber
-            && (excludeId == null || item.Id != excludeId)));
+            && (excludeId == null || item.Id != excludeId)), cancellationToken);
     }
 
 }

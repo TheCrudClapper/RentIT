@@ -3,10 +3,11 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RentalService.Core.Caching;
 using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.RabbitMQ.Consumers.Base;
 using System.Text;
 using System.Text.Json;
 
-namespace RentalService.Core.RabbitMQ.Consumers.Base;
+namespace RentalService.Core.RabbitMQ.Consumers;
 
 public class RabbitMQEquipmentUpdateConsumer : RabbitMQBaseConsumer
 {

@@ -20,9 +20,9 @@ public class CategoriesController : ControllerBase
 
     //POST: api/Categories
     [HttpPost]
-    public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request)
+    public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.AddCategory(request);
+        var result = await _categoryService.AddCategory(request, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -33,9 +33,9 @@ public class CategoriesController : ControllerBase
     //GET :api/Categories/categoryId
     [HttpGet("{categoryId}")]
     [AllowAnonymous]
-    public async Task<ActionResult<CategoryResponse>> GetCategory(Guid categoryId)
+    public async Task<ActionResult<CategoryResponse>> GetCategory(Guid categoryId, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetCategory(categoryId);
+        var result = await _categoryService.GetCategory(categoryId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -45,17 +45,17 @@ public class CategoriesController : ControllerBase
 
     //GET :api/Categories
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories()
+    public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories(CancellationToken cancellationToken)
     {
-        var categories = await _categoryService.GetAllCategories();
+        var categories = await _categoryService.GetAllCategories(cancellationToken);
         return categories.ToList();
     }
 
     //PUT :api/Categories
     [HttpPut("{categoryId}")]
-    public async Task<IActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request)
+    public async Task<IActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.UpdateCategory(categoryId, request);
+        var result = await _categoryService.UpdateCategory(categoryId, request, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -65,9 +65,9 @@ public class CategoriesController : ControllerBase
 
     //DELETE: api/Categories/categoryId
     [HttpDelete("{categoryId}")]
-    public async Task<IActionResult> DeleteCategory(Guid categoryId)
+    public async Task<IActionResult> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.DeleteCategory(categoryId);
+        var result = await _categoryService.DeleteCategory(categoryId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);

@@ -1,13 +1,12 @@
 ﻿using EquipmentService.Core.Domain.Entities;
 
-namespace EquipmentService.Core.Domain.RepositoryContracts
+namespace EquipmentService.Core.Domain.RepositoryContracts;
+
+public interface IUserEquipmentRepository : IBaseEquipmentRepository
 {
-    public interface IUserEquipmentRepository : IBaseEquipmentRepository
-    {
-        Task<Equipment> AddUserEquipment(Equipment equipment, Guid userId);
-        Task<bool> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment);
-        Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId);
-        Task<Equipment?> GetUserEquipmentByIdAsync(Guid equipmentId, Guid userId);
-        Task DeleteUserEquipmentAsync(Equipment equipment);
-    }
+    Task<Equipment> AddUserEquipment(Equipment equipment, Guid userId, CancellationToken cancellationToken);
+    Task<bool> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken);
+    Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId, CancellationToken cancellationToken);
+    Task<Equipment?> GetUserEquipmentByIdAsync(Guid equipmentId, Guid userId, CancellationToken cancellationToken);
+    Task DeleteUserEquipmentAsync(Equipment equipment, CancellationToken cancellationToken);
 }

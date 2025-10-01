@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RentalService.Core.RabbitMQ.Consumers;
-using RentalService.Core.RabbitMQ.Consumers.Base;
 
 namespace RentalService.Core.RabbitMQ.HostedServices;
 

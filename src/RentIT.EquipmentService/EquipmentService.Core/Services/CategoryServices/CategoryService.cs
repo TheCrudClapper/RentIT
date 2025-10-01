@@ -15,21 +15,21 @@ public class CategoryService : ICategoryService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request)
+    public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request, CancellationToken cancellationToken)
     {
         Category category = request.ToCategory();
 
-        if (!await _categoryRepository.IsCategoryUnique(category))
+        if (!await _categoryRepository.IsCategoryUnique(category, cancellationToken))
             return Result.Failure<CategoryResponse>(CategoryErrors.CategoryAlreadyExists);
 
-        Category newCategory = await _categoryRepository.AddCategoryAsync(category);
+        Category newCategory = await _categoryRepository.AddCategoryAsync(category, cancellationToken);
 
         return Result.Success(newCategory.ToCategoryResponse());
     }
 
-    public async Task<Result> DeleteCategory(Guid categoryId)
+    public async Task<Result> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
     {
-        bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId);
+        bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId, cancellationToken);
 
         if (!isSuccess)
             return Result.Failure(CategoryErrors.CategoryNotFound);
@@ -37,14 +37,14 @@ public class CategoryService : ICategoryService
         return Result.Success();
     }
 
-    public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request)
+    public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
     {
         Category categoryToEdit = request.ToCategory();
 
-        if (!await _categoryRepository.IsCategoryUnique(categoryToEdit, categoryId))
+        if (!await _categoryRepository.IsCategoryUnique(categoryToEdit, cancellationToken, categoryId))
             return Result.Failure(CategoryErrors.CategoryAlreadyExists);
 
-        bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit);
+        bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit, cancellationToken);
 
         if (!isSuccess)
             return Result.Failure(CategoryErrors.CategoryNotFound);
@@ -52,15 +52,15 @@ public class CategoryService : ICategoryService
         return Result.Success();
     }
 
-    public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+    public async Task<IEnumerable<CategoryResponse>> GetAllCategories(CancellationToken cancellationToken)
     {
-        IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync();
+        IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync(cancellationToken);
         return categories.Select(item => item.ToCategoryResponse());
     }
 
-    public async Task<Result<CategoryResponse>> GetCategory(Guid id)
+    public async Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken cancellationToken)
     {
-        Category? category = await _categoryRepository.GetCategoryByIdAsync(id);
+        Category? category = await _categoryRepository.GetCategoryByIdAsync(id, cancellationToken);
 
         if (category == null)
             return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);

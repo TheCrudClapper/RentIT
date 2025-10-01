@@ -5,7 +5,7 @@ namespace UserService.Core.ServiceContracts;
 
 public interface IUserService
 {
-    Task<Result<UserDTO>> GetUserByUserId(Guid userId);
-    Task<IEnumerable<UserResponse>> GetAllUsersAsync();
+    Task<Result<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken);
+    Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken cancellationToken);
 }
 

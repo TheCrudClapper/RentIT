@@ -1,16 +1,15 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.ResultTypes;
 
-namespace EquipmentService.Core.ServiceContracts.Equipment
+namespace EquipmentService.Core.ServiceContracts.Equipment;
+
+public interface IEquipmentService
 {
-    public interface IEquipmentService
-    {
-        Task<Result> UpdateEquipment(Guid equipmentId,EquipmentUpdateRequest request);
-        Task<Result<EquipmentResponse>> AddEquipment(EquipmentAddRequest request);
-        Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId);
-        Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems();
-        Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds);
-        Task<Result> DeleteEquipment(Guid equipmentId);
-        Task<Result<bool>> DoesEquipmentExist(Guid equipmentId);
-    }
+    Task<Result> UpdateEquipment(Guid equipmentId,EquipmentUpdateRequest request, CancellationToken cancellationToken);
+    Task<Result<EquipmentResponse>> AddEquipment(EquipmentAddRequest request, CancellationToken cancellationToken);
+    Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken);
+    Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems(CancellationToken cancellationToken);
+    Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken);
+    Task<Result> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken);
+    Task<Result<bool>> DoesEquipmentExist(Guid equipmentId, CancellationToken cancellationToken);
 }

@@ -4,12 +4,12 @@ namespace EquipmentService.Core.Domain.RepositoryContracts;
 
 public interface ICategoryRepository
 {
-    Task<Category?> GetCategoryByIdAsync(Guid categoryId);
-    Task<Category> AddCategoryAsync(Category category);
-    Task<bool> UpdateCategoryAsync(Guid categoryId, Category category);
-    Task<bool> DeleteCategoryAsync(Guid categoryId);
-    Task<IEnumerable<Category>> GetAllCategoriesAsync();
-    Task<bool> IsCategoryUnique(Category dbObject, Guid? excludeId = null);
-    Task<bool> DoesCategoryExist(Guid categoryId);
+    Task<Category?> GetCategoryByIdAsync(Guid categoryId, CancellationToken cancellationToken);
+    Task<Category> AddCategoryAsync(Category category, CancellationToken cancellationToken);
+    Task<bool> UpdateCategoryAsync(Guid categoryId, Category category, CancellationToken cancellationToken);
+    Task<bool> DeleteCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
+    Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken);
+    Task<bool> IsCategoryUnique(Category dbObject, CancellationToken cancellationToken, Guid? excludeId = null);
+    Task<bool> DoesCategoryExist(Guid categoryId, CancellationToken cancellationToken);
 }
 

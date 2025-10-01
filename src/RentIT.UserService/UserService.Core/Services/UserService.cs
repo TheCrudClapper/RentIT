@@ -18,13 +18,13 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
+    public async Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync();
+        IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync(cancellationToken);
         return users.Select(item => item.ToUserResponse());
     }
 
-    public async Task<Result<UserDTO>> GetUserByUserId(Guid userId)
+    public async Task<Result<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user == null)

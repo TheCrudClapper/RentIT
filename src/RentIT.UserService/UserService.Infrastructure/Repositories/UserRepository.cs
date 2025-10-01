@@ -13,17 +13,17 @@ namespace UserService.Infrastructure.Repositories
             _context = dbContext;
         }
 
-        public Task<bool> DoesUserExistsAsync(Guid userId)
+        public Task<bool> DoesUserExistsAsync(Guid userId, CancellationToken cancellationToken)
         {
             return _context.Users
-                .AnyAsync(item => item.Id == userId);
+                .AnyAsync(item => item.Id == userId,cancellationToken);
         }
 
-        public async Task<IEnumerable<User>> GetAllActiveUsersAsync()
+        public async Task<IEnumerable<User>> GetAllActiveUsersAsync(CancellationToken cancellationToken)
         {
             return await _context.Users
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
     }
 }

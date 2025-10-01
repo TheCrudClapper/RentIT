@@ -16,9 +16,9 @@ namespace UserService.API.Controllers
 
         //GET :/api/Users/5
         [HttpGet("{userId}")]
-        public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid userId)
+        public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
         {
-            var result = await _userService.GetUserByUserId(userId);
+            var result = await _userService.GetUserByUserId(userId, cancellationToken);
 
             if (result.IsFailure)
                 return NotFound(result.Error.Description);
@@ -28,9 +28,9 @@ namespace UserService.API.Controllers
 
         //GET :/api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _userService.GetAllUsersAsync(cancellationToken);
             return users.ToList();
         }
     }

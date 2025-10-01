@@ -19,16 +19,16 @@ namespace EquipmentService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems()
+        public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems(CancellationToken cancellationToken)
         {
-            var equipmentItems = await _userEquipmentService.GetAllUserEquipment(UserIdPlaceholder);
+            var equipmentItems = await _userEquipmentService.GetAllUserEquipment(UserIdPlaceholder, cancellationToken);
             return equipmentItems.ToList();
         }
 
         [HttpGet("{equipmentId}")]
-        public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId)
+        public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
         {
-            var result = await _userEquipmentService.GetUserEquipmentById(UserIdPlaceholder,equipmentId);
+            var result = await _userEquipmentService.GetUserEquipmentById(UserIdPlaceholder,equipmentId, cancellationToken);
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
@@ -36,9 +36,9 @@ namespace EquipmentService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EquipmentResponse>> PostEquipment(UserEquipmentAddRequest request)
+        public async Task<ActionResult<EquipmentResponse>> PostEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
         {
-            var result = await _userEquipmentService.AddUserEquipment(UserIdPlaceholder, request);
+            var result = await _userEquipmentService.AddUserEquipment(UserIdPlaceholder, request, cancellationToken);
             if(result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
@@ -46,9 +46,9 @@ namespace EquipmentService.API.Controllers
         }
 
         [HttpPut("{equipmentId}")]
-        public async Task<IActionResult> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request)
+        public async Task<IActionResult> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
         {
-            var result = await _userEquipmentService.UpdateUserEquipment(equipmentId, UserIdPlaceholder, request);
+            var result = await _userEquipmentService.UpdateUserEquipment(equipmentId, UserIdPlaceholder, request, cancellationToken);
             if(result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
@@ -56,9 +56,9 @@ namespace EquipmentService.API.Controllers
         }
 
         [HttpDelete("{equipmentId}")]
-        public async Task<IActionResult> DeleteEquipment(Guid equipmentId)
+        public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
         {
-            var result = await _userEquipmentService.DeleteUserEquipment(UserIdPlaceholder, equipmentId);
+            var result = await _userEquipmentService.DeleteUserEquipment(UserIdPlaceholder, equipmentId, cancellationToken);
             if(result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 

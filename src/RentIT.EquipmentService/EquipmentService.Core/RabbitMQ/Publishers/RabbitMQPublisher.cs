@@ -60,7 +60,5 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
             body: bytes);
 
         //basic properties is for headers
-
-
     }
 }

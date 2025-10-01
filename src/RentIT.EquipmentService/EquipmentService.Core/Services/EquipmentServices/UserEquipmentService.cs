@@ -10,100 +10,96 @@ using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Validators.ValidatorContracts;
 using Microsoft.Extensions.Configuration;
 
-namespace EquipmentService.Core.Services.EquipmentServices
+namespace EquipmentService.Core.Services.EquipmentServices;
+
+public class UserEquipmentService : IUserEquipmentService
 {
-    public class UserEquipmentService : IUserEquipmentService
+    private readonly IUserEquipmentRepository _userEquipmentRepository;
+    private readonly IUserEquipmentValidator _userEquipmentValidator;
+    private readonly IUsersMicroserviceClient _usersClient;
+    private readonly IRabbitMQPublisher _rabbitMQPublisher;
+    private readonly IConfiguration _configuration;
+    public UserEquipmentService(
+        IUserEquipmentRepository userEquipmentRepository,
+        IUserEquipmentValidator userEquipmentValidator,
+        IUsersMicroserviceClient usersClient,
+        IRabbitMQPublisher rabbitMQPublisher,
+        IConfiguration configuration
+        )
     {
-        private readonly IUserEquipmentRepository _userEquipmentRepository;
-        private readonly IUserEquipmentValidator _userEquipmentValidator;
-        private readonly IUsersMicroserviceClient _usersClient;
-        private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
-        private readonly IRabbitMQPublisher _rabbitMQPublisher;
-        private readonly IConfiguration _configuration;
-        public UserEquipmentService(
-            IUserEquipmentRepository userEquipmentRepository,
-            IUserEquipmentValidator userEquipmentValidator,
-            IUsersMicroserviceClient usersClient,
-            IRentalMicroserviceClient rentalMicroserviceClient,
-            IRabbitMQPublisher rabbitMQPublisher,
-            IConfiguration configuration
-            )
-        {
-            _userEquipmentRepository = userEquipmentRepository;
-            _userEquipmentValidator = userEquipmentValidator;
-            _usersClient = usersClient;
-            _rentalMicroserviceClient = rentalMicroserviceClient;
-            _rabbitMQPublisher = rabbitMQPublisher;
-            _configuration = configuration;
-        }
+        _userEquipmentRepository = userEquipmentRepository;
+        _userEquipmentValidator = userEquipmentValidator;
+        _usersClient = usersClient;
+        _rabbitMQPublisher = rabbitMQPublisher;
+        _configuration = configuration;
+    }
 
-        public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
-        {
-            var response = await _usersClient.GetUserByUserId(userId);
+    public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _usersClient.GetUserByUserId(userId, cancellationToken);
 
-            if (response.IsFailure)
-                return Result.Failure<EquipmentResponse>(response.Error);
+        if (response.IsFailure)
+            return Result.Failure<EquipmentResponse>(response.Error);
 
-            Equipment equipment = request.ToEquipment();
+        Equipment equipment = request.ToEquipment();
 
-            var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment);
+        var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment, cancellationToken);
 
-            if (validationResult.IsFailure)
-                return Result.Failure<EquipmentResponse>(validationResult.Error);
+        if (validationResult.IsFailure)
+            return Result.Failure<EquipmentResponse>(validationResult.Error);
 
-            var newEquipment = await _userEquipmentRepository.AddUserEquipment(equipment, userId);
+        var newEquipment = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
-            return newEquipment.ToEquipmentResponse();
-        }
+        return newEquipment.ToEquipmentResponse();
+    }
 
-        public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request)
-        {
-            var equipmentToUpdate = request.ToEquipment();
-            equipmentToUpdate.CreatedByUserId = userId;
+    public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+    {
+        var equipmentToUpdate = request.ToEquipment();
+        equipmentToUpdate.CreatedByUserId = userId;
 
-            var validationResult = await _userEquipmentValidator.ValidateUpdateEntity(equipmentToUpdate, equipmentId);
+        var validationResult = await _userEquipmentValidator.ValidateUpdateEntity(equipmentToUpdate, equipmentId, cancellationToken);
 
-            if (validationResult.IsFailure)
-                return Result.Failure(validationResult.Error);
+        if (validationResult.IsFailure)
+            return Result.Failure(validationResult.Error);
 
-            var isSuccess = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate);
+        var isSuccess = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate, cancellationToken);
 
-            if(!isSuccess)
-                return Result.Failure(EquipmentErrors.EquipmentNotFound);
+        if(!isSuccess)
+            return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
-            return Result.Success();            
-        }
+        return Result.Success();            
+    }
 
-        public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId)
-        {
-            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId);
+    public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken cancellationToken)
+    {
+        var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId, cancellationToken);
 
-            if (equipment == null)
-                return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
+        if (equipment == null)
+            return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
 
-            return equipment.ToEquipmentResponse();
-        }
+        return equipment.ToEquipmentResponse();
+    }
 
-        public async Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId)
-        {
-            var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId);
-            return userEquipments.Select(item => item.ToEquipmentResponse());
-        }
+    public async Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken)
+    {
+        var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId, cancellationToken);
+        return userEquipments.Select(item => item.ToEquipmentResponse());
+    }
 
-        public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId)
-        {
-            var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId);
-            if (equipment == null)
-                return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
+    public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId, CancellationToken cancellationToken)
+    {
+        var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId, cancellationToken);
+        if (equipment == null)
+            return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
 
-            await _userEquipmentRepository.DeleteUserEquipmentAsync(equipment);
+        await _userEquipmentRepository.DeleteUserEquipmentAsync(equipment, cancellationToken);
 
-            //Publish delete message to exchange
-            _rabbitMQPublisher.Publish("equipment.delete",
-                new EquipmentDeletedMessage(equipmentId),
-                _configuration["equipment.exchange"]!);
+        //Publish delete message to exchange
+        _rabbitMQPublisher.Publish("equipment.delete",
+            new EquipmentDeletedMessage(equipmentId),
+            _configuration["equipment.exchange"]!);
 
-            return Result.Success();
-        }
+        return Result.Success();
     }
 }

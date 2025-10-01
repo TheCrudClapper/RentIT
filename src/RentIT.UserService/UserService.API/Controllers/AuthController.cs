@@ -16,9 +16,9 @@ namespace UserService.API.Controllers
         //POST :api/User/Register
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var result = await _authService.RegisterAsync(request);
+            var result = await _authService.RegisterAsync(request, cancellationToken);
 
             if (!result.Succeeded)
             {
@@ -38,9 +38,9 @@ namespace UserService.API.Controllers
         //POST :api/User/Login
         [Route("Login")]
         [HttpPost]
-        public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request)
+        public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
         {
-            var result = await _authService.LoginAsync(request);
+            var result = await _authService.LoginAsync(request, cancellationToken);
 
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description,

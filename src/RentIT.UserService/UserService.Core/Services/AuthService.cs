@@ -18,7 +18,7 @@ namespace UserService.Core.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
+        public async Task<IdentityResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
             User user = request.ToUserEntity();
 
@@ -49,7 +49,7 @@ namespace UserService.Core.Services
 
             return IdentityResult.Success;
         }
-        public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request)
+        public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 

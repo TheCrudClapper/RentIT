@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RentalService.Core.Caching;
 using RentalService.Core.RabbitMQ.Consumers;
-using RentalService.Core.RabbitMQ.Consumers.Base;
 using RentalService.Core.RabbitMQ.HostedServices;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Services;

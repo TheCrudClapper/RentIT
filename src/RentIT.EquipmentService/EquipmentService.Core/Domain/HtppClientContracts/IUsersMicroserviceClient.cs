@@ -10,6 +10,6 @@ namespace EquipmentService.Core.Domain.HtppClientContracts;
 /// return user data in the form of a <see cref="UserDTO"/>.</remarks>
 public interface IUsersMicroserviceClient
 {
-    Task<Result<UserDTO?>> GetUserByUserId(Guid userId);
+    Task<Result<UserDTO?>> GetUserByUserId(Guid userId, CancellationToken cancellationToken);
 }
 
