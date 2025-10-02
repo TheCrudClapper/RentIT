@@ -8,6 +8,7 @@ using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.ServiceContracts;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 namespace RentalService.Core.RabbitMQ.Consumers;
 
@@ -28,14 +29,14 @@ public class RabbitMQEquipmentDeletedConsumer : RabbitMQBaseConsumer
         _logger = logger;
     }
 
-    private async Task HandleEquipmentDelete(Guid id)
+    private async Task HandleEquipmentDelete(Guid id, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling Equipment Delete");
-        await _rentalService.DeleteRentalByEquipmentId(id);
+        await _rentalService.DeleteRentalByEquipmentId(id, cancellationToken);
         await _cachingHelper.InvalidateCache($"equipment:{id}");
     }
 
-    public override void Consume()
+    public override void Consume(CancellationToken cancellationToken)
     {
         //Routing / binding key 
         string routingKey = "equipment.delete";
@@ -67,7 +68,7 @@ public class RabbitMQEquipmentDeletedConsumer : RabbitMQBaseConsumer
             if (message != null)
             {
                 EquipmentDeletedMessage? obj = JsonSerializer.Deserialize<EquipmentDeletedMessage>(message);
-                await HandleEquipmentDelete(obj!.EquipmentId);
+                await HandleEquipmentDelete(obj!.EquipmentId, cancellationToken);
             }
 
         };

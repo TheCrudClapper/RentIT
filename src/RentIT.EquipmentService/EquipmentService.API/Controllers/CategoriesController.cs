@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentService.API.Controllers;
 
-/// <summary>
-/// 
-/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class CategoriesController : ControllerBase

@@ -18,12 +18,12 @@ public class RabbitMQEquipmentCreateConsumer : RabbitMQBaseConsumer
     {
         _cachingHelper = cachingHelper;
     }
-    private async Task Handle(EquipmentResponse obj)
+    private async Task Handle(EquipmentResponse obj, CancellationToken cancellationToken)
     {
         string cacheKey = CachingHelper.GenerateCacheKey("equipment", obj.Id);
-        await _cachingHelper.CacheObject(obj, cacheKey, CachingProfiles.ShortTTLCacheOption);
+        await _cachingHelper.CacheObject(obj, cacheKey, CachingProfiles.ShortTTLCacheOption, cancellationToken);
     }
-    public override void Consume()
+    public override void Consume(CancellationToken cancellationToken)
     {
         string routingKey = "equipment.create";
 
@@ -55,7 +55,7 @@ public class RabbitMQEquipmentCreateConsumer : RabbitMQBaseConsumer
             if (message != null)
             {
                 EquipmentResponse? obj = JsonSerializer.Deserialize<EquipmentResponse>(message);
-                await Handle(obj!);
+                await Handle(obj!, cancellationToken);
             }
         };
 

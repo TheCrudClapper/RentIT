@@ -7,129 +7,128 @@ using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
 
-namespace RentalService.Core.Services
+namespace RentalService.Core.Services;
+
+public class RentalService : IRentalService
 {
-    public class RentalService : IRentalService
+    private readonly IRentalRepository _rentalRepository;
+    private readonly IRentalValidator _rentalValidator;
+    private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
+    public RentalService(IRentalRepository rentalRepository,
+        IRentalValidator rentalValidator,
+        IEquipmentMicroserviceClient equipmentMicroserviceClient)
     {
-        private readonly IRentalRepository _rentalRepository;
-        private readonly IRentalValidator _rentalValidator;
-        private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
-        public RentalService(IRentalRepository rentalRepository,
-            IRentalValidator rentalValidator,
-            IEquipmentMicroserviceClient equipmentMicroserviceClient)
-        {
-            _rentalRepository = rentalRepository;
-            _rentalValidator = rentalValidator;
-            _equipmentMicroserviceClient = equipmentMicroserviceClient;
-        }
+        _rentalRepository = rentalRepository;
+        _rentalValidator = rentalValidator;
+        _equipmentMicroserviceClient = equipmentMicroserviceClient;
+    }
 
-        public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request)
-        {
-            Rental rental = request.ToRentalEntity();
+    public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request, CancellationToken cancellationToken)
+    {
+        Rental rental = request.ToRentalEntity();
 
-            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
-            if (equipmentResponse.IsFailure)
-                return Result.Failure<RentalResponse>(equipmentResponse.Error);
+        var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId, cancellationToken);
+        if (equipmentResponse.IsFailure)
+            return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value);
+        var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
-            if (validationResult.IsFailure)
-                return Result.Failure<RentalResponse>(validationResult.Error);
+        if (validationResult.IsFailure)
+            return Result.Failure<RentalResponse>(validationResult.Error);
 
-            //Calculating Total Rental Price
-            rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
-                rental.EndDate,
-                equipmentResponse.Value.RentalPricePerDay);
+        //Calculating Total Rental Price
+        rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
+            rental.EndDate,
+            equipmentResponse.Value.RentalPricePerDay);
 
-            Rental newRental = await _rentalRepository.AddRentalAsync(rental);            
-            return newRental.ToRentalResponse(equipmentResponse.Value);
-        }
+        Rental newRental = await _rentalRepository.AddRentalAsync(rental, cancellationToken);            
+        return newRental.ToRentalResponse(equipmentResponse.Value);
+    }
 
-        public async Task<Result> DeleteRental(Guid rentalId)
-        {
-            bool isSuccess = await _rentalRepository.DeleteRentalAsync(rentalId);
+    public async Task<Result> DeleteRental(Guid rentalId, CancellationToken cancellationToken)
+    {
+        bool isSuccess = await _rentalRepository.DeleteRentalAsync(rentalId, cancellationToken);
 
-            if (!isSuccess)
-                return Result.Failure(RentalErrors.RentalNotFound);
+        if (!isSuccess)
+            return Result.Failure(RentalErrors.RentalNotFound);
 
-            return Result.Success();
-        }
+        return Result.Success();
+    }
 
-        public async Task<Result<RentalResponse>> GetRental(Guid rentalId)
-        {
-            Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId);
-            if (rental == null)
-                return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
+    public async Task<Result<RentalResponse>> GetRental(Guid rentalId, CancellationToken cancellationToken)
+    {
+        Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId, cancellationToken);
+        if (rental == null)
+            return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
 
-            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
-            if (equipmentResponse.IsFailure)
-                return Result.Failure<RentalResponse>(equipmentResponse.Error);
+        var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId, cancellationToken);
+        if (equipmentResponse.IsFailure)
+            return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            return rental.ToRentalResponse(equipmentResponse.Value);
-        }
+        return rental.ToRentalResponse(equipmentResponse.Value);
+    }
 
-        public async Task<Result<IEnumerable<RentalResponse>>> GetAllRentals()
-        {
-            var rentals = await _rentalRepository.GetAllRentalsAsync();
+    public async Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
+    {
+        var rentals = await _rentalRepository.GetAllRentalsAsync(cancellationToken);
 
-            var equipmentIds = rentals
-                .Select(x => x.EquipmentId)
-                .Distinct();
+        var equipmentIds = rentals
+            .Select(x => x.EquipmentId)
+            .Distinct();
 
-            if (!equipmentIds.Any())
-                return Result.Success(Enumerable.Empty<RentalResponse>());
+        if (!equipmentIds.Any())
+            return Result.Success(Enumerable.Empty<RentalResponse>());
 
-            var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds);
-            if (eqResponse.IsFailure)
-                return Result.Failure<IEnumerable<RentalResponse>>(eqResponse.Error);
+        var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds, cancellationToken);
+        if (eqResponse.IsFailure)
+            return Result.Failure<IEnumerable<RentalResponse>>(eqResponse.Error);
 
-            var equipmentDict = eqResponse.Value.ToDictionary(x => x.Id, x => x);
+        var equipmentDict = eqResponse.Value.ToDictionary(x => x.Id, x => x);
 
-            return rentals
-            .Where(r => equipmentDict.ContainsKey(r.EquipmentId))
-            .Select(r => r.ToRentalResponse(equipmentDict[r.EquipmentId]))
-            .ToList();
-        }
+        return rentals
+        .Where(r => equipmentDict.ContainsKey(r.EquipmentId))
+        .Select(r => r.ToRentalResponse(equipmentDict[r.EquipmentId]))
+        .ToList();
+    }
 
-        public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request)
-        {
-            Rental rental = request.ToRentalEntity();
+    public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request, CancellationToken cancellationToken)
+    {
+        Rental rental = request.ToRentalEntity();
 
-            var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId);
-            if (equipmentResponse.IsFailure)
-                return Result.Failure<RentalResponse>(equipmentResponse.Error);
+        var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId, cancellationToken);
+        if (equipmentResponse.IsFailure)
+            return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-            var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value);
+        var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
-            if (validationResult.IsFailure)
-                return Result.Failure(validationResult.Error);
+        if (validationResult.IsFailure)
+            return Result.Failure(validationResult.Error);
 
-            rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
-                rental.EndDate,
-                equipmentResponse.Value.RentalPricePerDay);
+        rental.RentalPrice = CalculateTotalRentalPrice(rental.StartDate,
+            rental.EndDate,
+            equipmentResponse.Value.RentalPricePerDay);
 
-            bool isSuccess = await _rentalRepository.UpdateRentalAsync(rentalId, rental);
+        bool isSuccess = await _rentalRepository.UpdateRentalAsync(rentalId, rental, cancellationToken);
 
-            if (!isSuccess)
-                return Result.Failure(RentalErrors.RentalNotFound);
+        if (!isSuccess)
+            return Result.Failure(RentalErrors.RentalNotFound);
 
-            return Result.Success();
-        }
+        return Result.Success();
+    }
 
-        private decimal CalculateTotalRentalPrice(DateTime startDate, DateTime endDate, decimal dailyPrice)
-        {
-            var days = (endDate.Date - startDate.Date).Days;
-            return dailyPrice * days;
-        }
+    private decimal CalculateTotalRentalPrice(DateTime startDate, DateTime endDate, decimal dailyPrice)
+    {
+        var days = (endDate.Date - startDate.Date).Days;
+        return dailyPrice * days;
+    }
 
-        public async Task<Result> DeleteRentalByEquipmentId(Guid equipmentId)
-        {
-            bool isSuccess = await _rentalRepository.DeleteRentalsByEquipmentAsync(equipmentId);
+    public async Task<Result> DeleteRentalByEquipmentId(Guid equipmentId, CancellationToken cancellationToken)
+    {
+        bool isSuccess = await _rentalRepository.DeleteRentalsByEquipmentAsync(equipmentId, cancellationToken);
 
-            if (!isSuccess)
-                return Result.Failure(RentalErrors.FailedToDeleteRelatedRentals);
+        if (!isSuccess)
+            return Result.Failure(RentalErrors.FailedToDeleteRelatedRentals);
 
-            return Result.Success();
-        }
+        return Result.Success();
     }
 }

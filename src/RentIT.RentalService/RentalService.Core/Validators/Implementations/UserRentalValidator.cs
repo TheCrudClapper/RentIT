@@ -5,20 +5,19 @@ using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.Validators.Contracts;
 
-namespace RentalService.Core.Validators.Implementations
+namespace RentalService.Core.Validators.Implementations;
+
+public class UserRentalValidator : BaseRentalValidator ,IUserRentalValidator
 {
-    public class UserRentalValidator : BaseRentalValidator ,IUserRentalValidator
+    public UserRentalValidator(IUsersMicroserviceClient usersMicroserviceClient, IRentalRepository rentalRepository,
+       IEquipmentMicroserviceClient equipmentMicroserviceClient)
+       : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
+
+    public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
     {
-        public UserRentalValidator(IUsersMicroserviceClient usersMicroserviceClient, IRentalRepository rentalRepository,
-           IEquipmentMicroserviceClient equipmentMicroserviceClient)
-           : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
+        if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
+            return Result.Failure(RentalErrors.RentalForSelfEquipment);
 
-        public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, bool isUpdate = false)
-        {
-            if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
-                return Result.Failure(RentalErrors.RentalForSelfEquipment);
-
-            return await ValidateRentalPeriod(entity);
-        }
+        return await ValidateRentalPeriod(entity, cancellationToken);
     }
 }

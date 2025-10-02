@@ -23,30 +23,30 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         _cachingHelper = cachingHelper;
     }
 
-    public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId)
+    public async Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
     {
         try
         {
             string cacheKey = CachingHelper.GenerateCacheKey("equipment", equipmentId);
 
-            var cachedObj = await _cachingHelper.GetCachedObject<EquipmentResponse>(cacheKey);
+            var cachedObj = await _cachingHelper.GetCachedObject<EquipmentResponse>(cacheKey, cancellationToken);
             if (cachedObj.Value != null)
                 return cachedObj.Value;
 
-            HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/equipments/{equipmentId}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/equipments/{equipmentId}", cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
-                string message = await response.Content.ReadAsStringAsync();
+                string message = await response.Content.ReadAsStringAsync(cancellationToken);
                 return Result.Failure<EquipmentResponse>(new Error((int)response.StatusCode, message));
             }
 
-            EquipmentResponse? details = await response.Content.ReadFromJsonAsync<EquipmentResponse>();
+            EquipmentResponse? details = await response.Content.ReadFromJsonAsync<EquipmentResponse>(cancellationToken);
 
             if (details == null)
                 return Result.Failure<EquipmentResponse>(new Error(500, "Invalid response from Equipment service"));
 
-            await _cachingHelper.CacheObject(details, cacheKey, CachingProfiles.ShortTTLCacheOption);
+            await _cachingHelper.CacheObject(details, cacheKey, CachingProfiles.ShortTTLCacheOption, cancellationToken);
 
             return details;
 
@@ -57,10 +57,10 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         }
     }
 
-    public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds)
+    public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
     {
         var cacheKey = CachingHelper.GenerateCacheKey("equipments", equipmentIds);
-        var cachedObj = await _cachingHelper.GetCachedObject<IEnumerable<EquipmentResponse>>(cacheKey);
+        var cachedObj = await _cachingHelper.GetCachedObject<IEnumerable<EquipmentResponse>>(cacheKey, cancellationToken);
         if (cachedObj.Value != null)
             return Result.Success(cachedObj.Value);
 
@@ -70,7 +70,7 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         context["equipmentIds"] = equipmentIds;
 
         HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
-          async (ctx) => await _httpClient.PostAsJsonAsync("gateway/equipments/byIds", equipmentIds), context
+          async (ctx, token) => await _httpClient.PostAsJsonAsync("gateway/equipments/byIds", equipmentIds), context, cancellationToken
         );
 
         if (!response.IsSuccessStatusCode)
@@ -86,9 +86,9 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
             return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
         }
 
-        IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+        IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>(cancellationToken);
 
-        await _cachingHelper.CacheObject(equipmentItems, cacheKey, CachingProfiles.ShortTTLCacheOption);
+        await _cachingHelper.CacheObject(equipmentItems, cacheKey, CachingProfiles.ShortTTLCacheOption, cancellationToken);
 
         return Result.Success(equipmentItems ?? []);
 

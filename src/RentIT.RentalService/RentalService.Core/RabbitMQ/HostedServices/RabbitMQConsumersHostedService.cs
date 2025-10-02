@@ -21,9 +21,9 @@ public class RabbitMQConsumersHostedService : IHostedService
         _equipmentDeleteConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQEquipmentDeletedConsumer>();
         _equipmentCreateConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQEquipmentCreateConsumer>();
         _equipmentUpdateConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQEquipmentUpdateConsumer>();
-        _equipmentDeleteConsumer.Consume();
-        _equipmentCreateConsumer.Consume();
-        _equipmentUpdateConsumer.Consume();
+        _equipmentDeleteConsumer.Consume(cancellationToken);
+        _equipmentCreateConsumer.Consume(cancellationToken);
+        _equipmentUpdateConsumer.Consume(cancellationToken);
         return Task.CompletedTask;
     }
 

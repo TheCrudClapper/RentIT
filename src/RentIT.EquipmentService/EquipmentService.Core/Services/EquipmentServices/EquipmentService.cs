@@ -1,5 +1,4 @@
 ﻿using EquipmentService.Core.Domain.Entities;
-using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;

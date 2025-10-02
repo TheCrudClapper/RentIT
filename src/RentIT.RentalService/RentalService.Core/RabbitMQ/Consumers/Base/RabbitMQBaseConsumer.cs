@@ -43,7 +43,7 @@ public abstract class RabbitMQBaseConsumer : IRabbitMQBaseConsumer, IDisposable
         _channel = _connection.CreateModel();
     }
 
-    public abstract void Consume();
+    public abstract void Consume(CancellationToken cancellationToken);
     public void Dispose()
     {
         _channel.Dispose();

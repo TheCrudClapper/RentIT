@@ -28,14 +28,21 @@
             }
             catch(Exception ex)
             {
-                _logger.LogError($"{ex.GetType().ToString()}: {ex.Message}");
-
+                if (ex is TaskCanceledException or OperationCanceledException)
+                {
+                    _logger.LogInformation("Request canceled by user");
+                    httpContext.Response.StatusCode = 499;
+                    await httpContext.Response.WriteAsync(ex.Message);
+                    return;
+                }
 
                 if (ex.InnerException != null)
                 {
                     _logger.LogError($"{ex.InnerException.GetType().ToString()}:" +
                         $" {ex.InnerException.Message}");
                 }
+
+                _logger.LogError($"{ex.GetType().ToString()}: {ex.Message}");
 
                 httpContext.Response.StatusCode = 500;
                 await httpContext.Response.WriteAsJsonAsync(new { Message = ex.Message, Type = $"{ex.GetType().ToString()}" });

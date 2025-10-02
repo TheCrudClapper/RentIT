@@ -14,9 +14,9 @@ public class CachingHelper : ICachingHelper
         _distributedCache = distributedCache;
         _logger = logger;
     }
-    public async Task<(bool Found, T? Value)> GetCachedObject<T>(string cacheKey)
+    public async Task<(bool Found, T? Value)> GetCachedObject<T>(string cacheKey, CancellationToken cancellationToken = default)
     {
-        byte[]? objInBytes = await _distributedCache.GetAsync(cacheKey);
+        byte[]? objInBytes = await _distributedCache.GetAsync(cacheKey, cancellationToken);
         if (objInBytes is null)
             return (false, default);
 
@@ -29,20 +29,20 @@ public class CachingHelper : ICachingHelper
         }
         catch (JsonException ex)
         {
-            await _distributedCache.RemoveAsync(cacheKey);
+            await _distributedCache.RemoveAsync(cacheKey, cancellationToken);
             _logger.LogWarning(ex, $"Found corrupted cache of key: {cacheKey} - removing");
             return (false, default);
         }
 
     }
 
-    public async Task CacheObject<T>(T obj, string cacheKey, DistributedCacheEntryOptions options)
+    public async Task CacheObject<T>(T obj, string cacheKey, DistributedCacheEntryOptions options, CancellationToken cancellationToken = default)
     {
         byte[] objSerialized;
         try
         {
             objSerialized = JsonSerializer.SerializeToUtf8Bytes(obj);
-            await _distributedCache.SetAsync(cacheKey, objSerialized, options);
+            await _distributedCache.SetAsync(cacheKey, objSerialized, options, cancellationToken);
             _logger.LogInformation($"Successfully saved key: {cacheKey} object to cache");
         }
         catch(Exception ex)
@@ -51,9 +51,9 @@ public class CachingHelper : ICachingHelper
         }
     }
 
-    public async Task InvalidateCache(string cacheKey)
+    public async Task InvalidateCache(string cacheKey, CancellationToken cancellationToken = default)
     {
-        await _distributedCache.RemoveAsync(cacheKey);
+        await _distributedCache.RemoveAsync(cacheKey, cancellationToken);
         _logger.LogInformation($"Invalidated obj in cache with key: {cacheKey}");
     }
 

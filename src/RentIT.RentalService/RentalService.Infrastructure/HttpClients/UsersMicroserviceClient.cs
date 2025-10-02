@@ -14,19 +14,19 @@ namespace RentalService.Infrastructure.HttpClients
             _httpClient = httpClient;
         }
 
-        public async Task<Result<UserDTO?>> GetUserByUserId(Guid userId)
+        public async Task<Result<UserDTO?>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/users/{userId}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/users/{userId}", cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    string message = await response.Content.ReadAsStringAsync();
+                    string message = await response.Content.ReadAsStringAsync(cancellationToken);
                     return Result.Failure<UserDTO?>(new Error((int)response.StatusCode, message));
                 }
 
-                UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>();
+                UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>(cancellationToken);
 
                 if (user == null)
                     return Result.Failure<UserDTO?>(new Error(500, "Invalid response from Users service"));

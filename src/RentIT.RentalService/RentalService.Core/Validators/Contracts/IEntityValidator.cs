@@ -6,6 +6,6 @@ namespace EquipmentService.Core.Validators.ValidatorContracts;
 
 public interface IEntityValidator
 {
-    Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, bool isUpdate = false);
+    Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken);
 }
 

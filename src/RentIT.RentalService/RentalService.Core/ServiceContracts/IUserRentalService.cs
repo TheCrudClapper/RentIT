@@ -1,14 +1,13 @@
 ﻿using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ResultTypes;
 
-namespace RentalService.Core.ServiceContracts
+namespace RentalService.Core.ServiceContracts;
+
+public interface IUserRentalService
 {
-    public interface IUserRentalService
-    {
-        Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(Guid userId);
-        Task<Result<RentalResponse>> GetRental(Guid rentalId, Guid userId);
-        Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId);
-        Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId);
-        Task<Result> DeleteRental(Guid rentalId, Guid userId);
-    }
+    Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(Guid userId, CancellationToken cancellationToken);
+    Task<Result<RentalResponse>> GetRental(Guid rentalId, Guid userId, CancellationToken cancellationToken);
+    Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken);
+    Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken);
+    Task<Result> DeleteRental(Guid rentalId, Guid userId, CancellationToken cancellationToken);
 }

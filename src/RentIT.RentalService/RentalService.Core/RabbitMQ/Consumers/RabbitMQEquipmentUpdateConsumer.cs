@@ -21,7 +21,7 @@ public class RabbitMQEquipmentUpdateConsumer : RabbitMQBaseConsumer
         string cacheKey = CachingHelper.GenerateCacheKey("equipment", obj.Id);
         await _cachingHelper.CacheObject(obj, cacheKey, CachingProfiles.ShortTTLCacheOption);
     }
-    public override void Consume()
+    public override void Consume(CancellationToken cancellationToken)
     {
         string routingKey = "equipment.update";
 

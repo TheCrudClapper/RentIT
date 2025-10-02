@@ -5,24 +5,23 @@ using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.Validators.Contracts;
 
-namespace RentalService.Core.Validators.Implementations
+namespace RentalService.Core.Validators.Implementations;
+
+public class RentalValidator : BaseRentalValidator, IRentalValidator
 {
-    public class RentalValidator : BaseRentalValidator, IRentalValidator
+    public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,IRentalRepository rentalRepository,
+        IEquipmentMicroserviceClient equipmentMicroserviceClient) 
+        : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
+
+    public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
     {
-        public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,IRentalRepository rentalRepository,
-            IEquipmentMicroserviceClient equipmentMicroserviceClient) 
-            : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
+        var userValidation = await ValidateUser(entity.UserId, cancellationToken);
+        if (userValidation.IsFailure)
+            return userValidation;
 
-        public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, bool isUpdate = false)
-        {
-            var userValidation = await ValidateUser(entity.UserId);
-            if (userValidation.IsFailure)
-                return userValidation;
+        if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
+            return Result.Failure(RentalErrors.RentalForSelfEquipment);
 
-            if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
-                return Result.Failure(RentalErrors.RentalForSelfEquipment);
-
-            return await ValidateRentalPeriod(entity);
-        }
+        return await ValidateRentalPeriod(entity, cancellationToken);
     }
 }
