@@ -50,6 +50,12 @@ public class UserEquipmentService : IUserEquipmentService
 
         var newEquipment = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
+        //Send message that equipment is created
+        _rabbitMQPublisher.Publish<EquipmentResponse>(
+            "equipment.create",
+            newEquipment.ToEquipmentResponse(),
+            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
+
         return newEquipment.ToEquipmentResponse();
     }
 
@@ -63,10 +69,14 @@ public class UserEquipmentService : IUserEquipmentService
         if (validationResult.IsFailure)
             return Result.Failure(validationResult.Error);
 
-        var isSuccess = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate, cancellationToken);
-
-        if(!isSuccess)
+        var updatedEntity = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate, cancellationToken);
+        if(updatedEntity == null)
             return Result.Failure(EquipmentErrors.EquipmentNotFound);
+
+        _rabbitMQPublisher.Publish(
+           "equipment.update",
+           updatedEntity.ToEquipmentResponse(),
+           _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
         return Result.Success();            
     }

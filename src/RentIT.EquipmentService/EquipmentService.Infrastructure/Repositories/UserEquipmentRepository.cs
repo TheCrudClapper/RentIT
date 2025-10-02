@@ -18,12 +18,12 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
         return equipment;
     }
 
-    public async Task<bool> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken)
+    public async Task<Equipment?> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken)
     {
         Equipment? equipmentToUpdate = await GetUserEquipmentByIdAsync(equipment.CreatedByUserId ,equipmentId, cancellationToken);
 
         if (equipmentToUpdate == null)
-            return false;
+            return null;
 
         equipmentToUpdate.Name = equipment.Name;
         equipmentToUpdate.Status = equipment.Status;
@@ -33,8 +33,9 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
         equipmentToUpdate.CategoryId = equipment.CategoryId;
 
         await _context.SaveChangesAsync(cancellationToken);
+        await _context.Entry(equipmentToUpdate).Reference(item => item.Category).LoadAsync(cancellationToken);
 
-        return true;
+        return equipmentToUpdate;
     }
 
     public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId, CancellationToken cancellationToken)
