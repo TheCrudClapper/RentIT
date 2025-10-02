@@ -43,20 +43,20 @@ public class UserEquipmentService : IUserEquipmentService
 
         Equipment equipment = request.ToEquipment();
 
-        var validationResult = await _userEquipmentValidator.ValidateNewEntity(equipment, cancellationToken);
+        var validationResult = await _userEquipmentValidator.ValidateEntity(equipment, null, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure<EquipmentResponse>(validationResult.Error);
 
-        var newEquipment = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
+        var createdEntity = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
         //Send message that equipment is created
         _rabbitMQPublisher.Publish<EquipmentResponse>(
             "equipment.create",
-            newEquipment.ToEquipmentResponse(),
+            createdEntity.ToEquipmentResponse(),
             _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
-        return newEquipment.ToEquipmentResponse();
+        return createdEntity.ToEquipmentResponse();
     }
 
     public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
@@ -64,7 +64,7 @@ public class UserEquipmentService : IUserEquipmentService
         var equipmentToUpdate = request.ToEquipment();
         equipmentToUpdate.CreatedByUserId = userId;
 
-        var validationResult = await _userEquipmentValidator.ValidateUpdateEntity(equipmentToUpdate, equipmentId, cancellationToken);
+        var validationResult = await _userEquipmentValidator.ValidateEntity(equipmentToUpdate, equipmentId, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure(validationResult.Error);
@@ -83,7 +83,7 @@ public class UserEquipmentService : IUserEquipmentService
 
     public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken cancellationToken)
     {
-        var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(userId, equipmentId, cancellationToken);
+        var equipment = await _userEquipmentRepository.GetUserEquipmentByIdAsync(equipmentId, userId, cancellationToken);
 
         if (equipment == null)
             return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);

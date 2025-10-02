@@ -1,4 +1,5 @@
-﻿using EquipmentService.Core.Domain.Interfaces;
+﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.Interfaces;
 using EquipmentService.Core.ResultTypes;
 
 namespace EquipmentService.Core.Validators.ValidatorContracts;
@@ -14,24 +15,5 @@ namespace EquipmentService.Core.Validators.ValidatorContracts;
 public interface IEntityValidator<T> 
     where T : class, IBaseEntity
 {
-    /// <summary>
-    /// Validates the provided entity before it is created and persisted.
-    /// </summary>
-    /// <param name="entity">The new entity instance to validate.</param>
-    /// <returns>
-    /// A <see cref="Result"/> indicating whether the entity passed validation 
-    /// and, if not, containing error details.
-    /// </returns>
-    Task<Result> ValidateNewEntity(T entity, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Validates the provided entity before it is updated in persistence storage.
-    /// </summary>
-    /// <param name="entity">The modified entity instance to validate.</param>
-    /// <param name="entityId">The identifier of the entity being updated.</param>
-    /// <returns>
-    /// A <see cref="Result"/> indicating whether the update operation is valid 
-    /// and, if not, containing error details.
-    /// </returns>
-    Task<Result> ValidateUpdateEntity(T entity, Guid entityId, CancellationToken cancellationToken);
+    Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default);
 }

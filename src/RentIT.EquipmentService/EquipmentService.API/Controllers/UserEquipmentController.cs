@@ -28,7 +28,7 @@ namespace EquipmentService.API.Controllers
         [HttpGet("{equipmentId}")]
         public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
         {
-            var result = await _userEquipmentService.GetUserEquipmentById(UserIdPlaceholder,equipmentId, cancellationToken);
+            var result = await _userEquipmentService.GetUserEquipmentById(UserIdPlaceholder, equipmentId, cancellationToken);
             if (result.IsFailure)
                 return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 

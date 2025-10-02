@@ -1,40 +1,28 @@
 ﻿using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.Validators.ValidatorContracts;
 
 namespace EquipmentService.Core.Validators.Implementations;
 
-public class UserEquipmentValidator : IUserEquipmentValidator
+public class UserEquipmentValidator : BaseEquipmentValidator, IUserEquipmentValidator
 {
     private readonly IUserEquipmentRepository _userEquipmentRepository;
-    private readonly ICategoryRepository _categoryRepository;
-    public UserEquipmentValidator(IUserEquipmentRepository userEquipmentRepository, ICategoryRepository categoryRepository)
+    public UserEquipmentValidator(IUserEquipmentRepository userEquipmentRepository,
+        ICategoryRepository categoryRepository,
+        IUsersMicroserviceClient usersMicroserviceClient) :base(categoryRepository, usersMicroserviceClient)
     {
         _userEquipmentRepository = userEquipmentRepository;
-        _categoryRepository = categoryRepository;
     }
 
-    public async Task<Result> ValidateNewEntity(Equipment entity, CancellationToken cancellationToken)
+    public async override Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default)
     {
-        if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId, cancellationToken))
-            return Result.Failure(CategoryErrors.CategoryNotFound);
+        var categoryValidationResult = await ValidateCategory(entity.CategoryId, cancellationToken);
+        if (categoryValidationResult.IsFailure)
+            return Result.Failure(categoryValidationResult.Error);
 
-        bool isValid = await _userEquipmentRepository.IsEquipmentUnique(entity, cancellationToken);
-
-        if (!isValid)
-            return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
-
-        return Result.Success();
-    }
-
-    public async Task<Result> ValidateUpdateEntity(Equipment equipment, Guid equipmentId, CancellationToken cancellationToken)
-    {
-        if (!await _categoryRepository.DoesCategoryExist(equipment.CategoryId, cancellationToken))
-            return Result.Failure(CategoryErrors.CategoryNotFound);
-
-        bool isValid = await _userEquipmentRepository.IsEquipmentUnique(equipment, cancellationToken, equipmentId);
-
+        var isValid = await _userEquipmentRepository.IsEquipmentUnique(entity, cancellationToken, entityId);
         if (!isValid)
             return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
 

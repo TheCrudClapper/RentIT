@@ -31,6 +31,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
         equipmentToUpdate.RentalPricePerDay = equipment.RentalPricePerDay;
         equipmentToUpdate.SerialNumber = equipment.SerialNumber;
         equipmentToUpdate.CategoryId = equipment.CategoryId;
+        equipment.DateEdited = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
         await _context.Entry(equipmentToUpdate).Reference(item => item.Category).LoadAsync(cancellationToken);
@@ -50,6 +51,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
     public async Task<Equipment?> GetUserEquipmentByIdAsync(Guid equipmentId, Guid userId, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
+               .Include(item => item.Category)
                .FirstOrDefaultAsync(item => item.Id == equipmentId && item.CreatedByUserId == userId, cancellationToken);
     }
 

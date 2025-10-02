@@ -66,7 +66,7 @@ public class EquipmentService : IEquipmentService
     {
         Equipment equipment = request.ToEquipment();
 
-        var validationResult = await _equipmentValidator.ValidateUpdateEntity(equipment, equipmentId, cancellationToken);
+        var validationResult = await _equipmentValidator.ValidateEntity(equipment, equipmentId, cancellationToken);
         if (validationResult.IsFailure)
             return Result.Failure<EquipmentResponse>(validationResult.Error);
 
@@ -89,20 +89,20 @@ public class EquipmentService : IEquipmentService
     {
         Equipment equipment = request.ToEquipment();
 
-        var validationResult = await _equipmentValidator.ValidateNewEntity(equipment, cancellationToken);
+        var validationResult = await _equipmentValidator.ValidateEntity(equipment, null, cancellationToken);
         if (validationResult.IsFailure)
             return Result.Failure<EquipmentResponse>(validationResult.Error);
 
-        var newObj = await _equipmentRepository.AddEquipmentAsync(equipment, cancellationToken);
+        var createdEntity = await _equipmentRepository.AddEquipmentAsync(equipment, cancellationToken);
 
         //Publish create message
         _rabbitMQPublisher.Publish(
             "equipment.create",
-            newObj.ToEquipmentResponse(),
+            createdEntity.ToEquipmentResponse(),
             _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!
             );
 
-        return newObj.ToEquipmentResponse();
+        return createdEntity.ToEquipmentResponse();
     }
 
     public async Task<Result<bool>> DoesEquipmentExist(Guid equipmentId, CancellationToken cancellationToken)

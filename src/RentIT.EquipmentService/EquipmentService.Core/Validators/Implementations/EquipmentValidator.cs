@@ -6,48 +6,25 @@ using EquipmentService.Core.Validators.ValidatorContracts;
 
 namespace EquipmentService.Core.Validators.Implementations;
 
-public class EquipmentValidator : IEquipmentValidator
+public class EquipmentValidator : BaseEquipmentValidator, IEquipmentValidator
 {
     private readonly IEquipmentRepository _equipmentRepository;
-    private readonly ICategoryRepository _categoryRepository;
-    private readonly IUsersMicroserviceClient _usersClient;
     public EquipmentValidator(IEquipmentRepository equipmentRepository,
         ICategoryRepository categoryRepository,
-        IUsersMicroserviceClient usersClient
-        )
+        IUsersMicroserviceClient usersMicroserviceClient) :base(categoryRepository, usersMicroserviceClient)
     {
         _equipmentRepository = equipmentRepository;
-        _categoryRepository = categoryRepository;
-        _usersClient = usersClient;
     }
 
-    public async Task<Result> ValidateNewEntity(Equipment entity, CancellationToken cancellationToken)
+    public override async Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default)
     {
-        if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId, cancellationToken))
-            return Result.Failure(CategoryErrors.CategoryNotFound);
+        var categoryValidationResult = await ValidateCategory(entity.CategoryId, cancellationToken);
+        if (categoryValidationResult.IsFailure)
+            return Result.Failure(categoryValidationResult.Error);
 
-        var response = await _usersClient.GetUserByUserId(entity.CreatedByUserId, cancellationToken);
-
-        if (response.IsFailure)
-            return Result.Failure(response.Error);
-
-        bool isValid = await _equipmentRepository.IsEquipmentUnique(entity, cancellationToken);
-
-        if (!isValid)
-            return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
-
-        return Result.Success();
-    }
-
-    public async Task<Result> ValidateUpdateEntity(Equipment entity, Guid entityId, CancellationToken cancellationToken)
-    {
-        if (!await _categoryRepository.DoesCategoryExist(entity.CategoryId, cancellationToken))
-            return Result.Failure(CategoryErrors.CategoryNotFound);
-
-        var response = await _usersClient.GetUserByUserId(entity.CreatedByUserId, cancellationToken);
-
-        if (response.IsFailure)
-            return Result.Failure(response.Error);
+        var userValidationResult = await ValidateUser(entity.CreatedByUserId, cancellationToken);
+        if(userValidationResult.IsFailure)
+            return Result.Failure(userValidationResult.Error);
 
         bool isValid = await _equipmentRepository.IsEquipmentUnique(entity, cancellationToken, entityId);
 
@@ -56,4 +33,5 @@ public class EquipmentValidator : IEquipmentValidator
 
         return Result.Success();
     }
+
 }

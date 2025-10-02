@@ -29,7 +29,6 @@ public abstract class BaseRentalValidator : IEntityValidator
         return conflicts.Any()
             ? Result.Failure(RentalErrors.RentalPeriodNotAvaliable)
             : Result.Success();
-
     }
 
     protected virtual async Task<Result> ValidateUser(Guid userId, CancellationToken cancellationToken)
