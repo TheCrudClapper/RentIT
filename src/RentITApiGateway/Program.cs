@@ -10,7 +10,19 @@ builder.Services
     .AddOcelot()
     .AddPolly();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.WithOrigins("http://127.0.0.1:5500");
+        builder.AllowAnyMethod();
+        builder.AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 await app.UseOcelot();
 

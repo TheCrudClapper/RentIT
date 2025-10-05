@@ -1,4 +1,8 @@
-﻿namespace UserService.API.Middleware;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Text.Json;
+
+namespace UserService.API.Middleware;
 
 /// <summary>
 /// Middleware that provides centralized exception handling for HTTP requests in an ASP.NET Core application.
@@ -26,7 +30,7 @@ public class GlobalExceptionHandlingMiddleware
         {
             await _next(httpContext);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
             if (ex is TaskCanceledException or OperationCanceledException)
@@ -45,8 +49,21 @@ public class GlobalExceptionHandlingMiddleware
 
             _logger.LogError($"{ex.GetType().ToString()}: {ex.Message}");
 
-            httpContext.Response.StatusCode = 500;
-            await httpContext.Response.WriteAsJsonAsync(new { Message = ex.Message, Type = $"{ex.GetType().ToString()}" });
+            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            ProblemDetails details = new ProblemDetails()
+            {
+                Status = (int)HttpStatusCode.InternalServerError,
+                Type = "Server Error",
+                Title = "Servcer Error",
+                Detail = "An internal server error has occured",
+            };
+
+            string json = JsonSerializer.Serialize(details);
+
+            httpContext.Response.ContentType = "application/json";
+
+            await httpContext.Response.WriteAsync(json);
         }
 
     }

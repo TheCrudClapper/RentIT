@@ -55,6 +55,13 @@ builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClie
 
 var app = builder.Build();
 
+//Add global exception handling middleware
+app.UseGlobalExceptionHandlingMiddleware();
+
+//Https supports
+app.UseHsts();
+//app.UseHttpsRedirection();
+
 await app.MigrateDatabaseAsync(builder.Services);
 
 // Configure the HTTP request pipeline.
@@ -66,14 +73,6 @@ if (app.Environment.IsDevelopment())
     var context = scope.ServiceProvider.GetRequiredService<EquipmentContext>();
     await AppDbSeeder.Seed(context);
 }
-
-//Add global exception handling middleware
-app.UseGlobalExceptionHandlingMiddleware();
-
-
-//Https supports
-app.UseHsts();
-//app.UseHttpsRedirection();
 
 //Use Swagger
 app.UseSwagger();

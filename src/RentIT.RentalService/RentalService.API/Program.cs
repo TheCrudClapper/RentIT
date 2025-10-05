@@ -59,6 +59,9 @@ var app = builder.Build();
 //Add global exception handling middleware
 app.UseGlobalExceptionHandlingMiddleware();
 
+//Https supports
+app.UseHsts();
+//app.UseHttpsRedirection();
 
 await app.MigrateDatabaseAsync(builder.Services);
 
@@ -71,10 +74,6 @@ if (app.Environment.IsDevelopment())
     var context = scope.ServiceProvider.GetRequiredService<RentalDbContext>();
     await AppDbSeeder.Seed(context);
 }
-
-//Https supports
-app.UseHsts();
-//app.UseHttpsRedirection();
 
 //Use Swagger
 app.UseSwagger();
@@ -89,4 +88,5 @@ app.MapControllers();
 //Authentication && Authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.Run();
