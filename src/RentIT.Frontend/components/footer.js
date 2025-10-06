@@ -1,0 +1,5 @@
+function renderFooter(){
+    return `
+        
+    `
+}
