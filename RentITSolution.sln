@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11012.119 d18.0
+VisualStudioVersion = 18.0.11012.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -32,6 +32,14 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.ApiGateway", "src\RentITApiGateway\RentIT.ApiGateway.csproj", "{587974BC-FFB4-4896-8685-7F25D3C3C284}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RentIT.ReviewsService", "RentIT.ReviewsService", "{7E000646-1364-4A66-AED4-60AF16E54D51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewService.API", "src\RentIT.ReviewsService\ReviewService.API\ReviewService.API.csproj", "{7D21E7AA-2C27-41F6-B54B-4719E2EC3751}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewService.Core", "src\RentIT.ReviewsService\ReviewService.Core\ReviewService.Core.csproj", "{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewService.Infrastructure", "src\RentIT.ReviewsService\ReviewService.Infrastructure\ReviewService.Infrastructure.csproj", "{7B013116-C26D-4F7C-A981-4BDFAF096442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +91,18 @@ Global
 		{587974BC-FFB4-4896-8685-7F25D3C3C284}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{587974BC-FFB4-4896-8685-7F25D3C3C284}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{587974BC-FFB4-4896-8685-7F25D3C3C284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D21E7AA-2C27-41F6-B54B-4719E2EC3751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D21E7AA-2C27-41F6-B54B-4719E2EC3751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D21E7AA-2C27-41F6-B54B-4719E2EC3751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D21E7AA-2C27-41F6-B54B-4719E2EC3751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B013116-C26D-4F7C-A981-4BDFAF096442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B013116-C26D-4F7C-A981-4BDFAF096442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B013116-C26D-4F7C-A981-4BDFAF096442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B013116-C26D-4F7C-A981-4BDFAF096442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +121,10 @@ Global
 		{6B983BAE-D9CC-49A0-9A04-487125332F21} = {13019CB7-B3C3-4A90-B3EE-818F55420444}
 		{5C5CF09D-5E70-531B-3E4F-DCCD0D6F3906} = {5CF6391B-A57F-4427-BCBD-1DEEB8D230C1}
 		{587974BC-FFB4-4896-8685-7F25D3C3C284} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7E000646-1364-4A66-AED4-60AF16E54D51} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7D21E7AA-2C27-41F6-B54B-4719E2EC3751} = {7E000646-1364-4A66-AED4-60AF16E54D51}
+		{544EF9B8-A892-49B1-B9C5-2CEE7E4F8FAC} = {7E000646-1364-4A66-AED4-60AF16E54D51}
+		{7B013116-C26D-4F7C-A981-4BDFAF096442} = {7E000646-1364-4A66-AED4-60AF16E54D51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B4ED6B7-1926-45F4-B6DD-392B68932D4A}
