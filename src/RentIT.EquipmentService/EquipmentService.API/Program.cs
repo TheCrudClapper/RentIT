@@ -28,7 +28,6 @@ builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
 builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
 builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePolicies>();
 
-
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
@@ -81,8 +80,10 @@ app.UseSwaggerUI();
 //Use Routing
 app.UseRouting();
 
+
 //Mapping API controllers 
 app.MapControllers();
+
 
 //Authentication && Authorization
 app.UseAuthentication();
