@@ -71,7 +71,7 @@ public class RentalsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("byEquipmentId/{id}")]
+    [HttpDelete("by-equipment-id/{id}")]
     public async Task<IActionResult> DeleteRentalsByEquipmentId(Guid id, CancellationToken cancellationToken)
     {
         var result = await _rentalService.DeleteRentalByEquipmentId(id, cancellationToken);
@@ -80,5 +80,16 @@ public class RentalsController : ControllerBase
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
         return NoContent();
-    } 
+    }
+
+    [HttpPost("mark-equipment-as-returned")]
+    public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _rentalService.MarkEquipmentAsReturned(request, cancellationToken);
+
+        if (result.IsFailure)
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+
+        return NoContent();
+    }
 }

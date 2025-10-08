@@ -77,4 +77,15 @@ public class UserRentalController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("mark-equipment-as-returned/{id}")]
+    public async Task<IActionResult> MarkEquipmentAsReturned(Guid id, UserReturnEquipmentRequest request ,CancellationToken cancellationToken)
+    {
+        var result = await _userRentalService.MarkEquipmentAsReturned(id, UserIdPlaceholder, request, cancellationToken);
+
+        if (result.IsFailure)
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+
+        return NoContent();
+    }
 }

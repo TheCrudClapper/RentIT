@@ -106,6 +106,7 @@ services:
         - RABBITMQ_PASSWORD=admin
         - RABBITMQ_PORT=5672
         - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - DAYS_OVERDUE_COST_MULTIPLIER=1.5
     ports:
         - "5004:8080"
         - "5005:8081"

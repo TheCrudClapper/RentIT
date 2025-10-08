@@ -13,6 +13,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj", "src/RentIT.ReviewsService/ReviewService.API/"]
+COPY ["src/RentIT.ReviewsService/ReviewService.Core/ReviewService.Core.csproj", "src/RentIT.ReviewsService/ReviewService.Core/"]
+COPY ["src/RentIT.ReviewsService/ReviewService.Infrastructure/ReviewService.Infrastructure.csproj", "src/RentIT.ReviewsService/ReviewService.Infrastructure/"]
 RUN dotnet restore "./src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj"
 COPY . .
 WORKDIR "/src/src/RentIT.ReviewsService/ReviewService.API"

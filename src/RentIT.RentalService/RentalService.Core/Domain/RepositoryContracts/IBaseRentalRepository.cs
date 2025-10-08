@@ -10,7 +10,10 @@ namespace RentalService.Core.Domain.RepositoryContracts;
 /// the provided token.</remarks>
 public interface IBaseRentalRepository
 {
-    Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken);
-    Task<Rental?> GetRentalByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken);
+    Task<Rental?> GetRentalByIdAsync(Guid rentalId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken = default);
+    Task<Rental?> GetRentalByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken = default);
+    Task MarkEquipmentAsReturned(Rental rental, DateTime returnedDate, CancellationToken cancellationToken = default);
+    Task UpdateRentalTotalCost(Rental rental, decimal totalCost, CancellationToken cancellationToken = default);
 }
 

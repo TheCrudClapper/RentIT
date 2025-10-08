@@ -1,4 +1,5 @@
-﻿using RentalService.Core.Domain.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using RentalService.Core.Domain.Entities;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.DTO.RentalDto;
@@ -9,19 +10,24 @@ using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Services;
 
-public class UserRentalService : IUserRentalService
+public class UserRentalService : BaseRentalService,  IUserRentalService
 {
     private readonly IUserRentalRepository _userRentalRepository;
     private readonly IUserRentalValidator _userRentalValidator;
     private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
+
     public UserRentalService(IUserRentalRepository userRentalRepository,
         IUserRentalValidator validator,
-        IEquipmentMicroserviceClient equipmentMicroserviceClient)
+        IEquipmentMicroserviceClient equipmentMicroserviceClient,
+        IConfiguration configuration) 
+            : base(configuration)
     {
         _userRentalRepository = userRentalRepository;
         _userRentalValidator = validator;
         _equipmentMicroserviceClient = equipmentMicroserviceClient;
+       
     }
+
     public async Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken)
     {
         var rental = request.ToRental(userId);
@@ -85,6 +91,37 @@ public class UserRentalService : IUserRentalService
         return rental.ToRentalResponse(equipmentResponse.Value);
     }
 
+    public async Task<Result> MarkEquipmentAsReturned(Guid rentalId, Guid userId, UserReturnEquipmentRequest request, CancellationToken cancellationToken)
+    {
+        Rental? rental = await _userRentalRepository.GetRentalByIdAsync (rentalId, cancellationToken);
+
+        if (rental is null)
+            return Result.Failure(RentalErrors.RentalNotFound);
+
+        var equipmentResponse = await _equipmentMicroserviceClient
+            .GetEquipment(rental.EquipmentId, cancellationToken);
+
+        if (equipmentResponse.IsFailure)
+            return Result.Failure(equipmentResponse.Error);
+
+        if (equipmentResponse.Value.CreatedByUserId != userId)
+            return Result.Failure(EquipmentErrors.NotOwnerOfEquipment);
+        
+        var dateDiff = request.ReturnedDate.Date -  rental.StartDate.Date;
+        if(dateDiff.TotalDays < 1)
+            return Result.Failure(RentalErrors.InvalidReturnedDate);
+
+        await _userRentalRepository.MarkEquipmentAsReturned(rental, request.ReturnedDate, cancellationToken);
+
+        var calculatedTotalValue = CalculateTotalRentalPrice
+            (rental.StartDate, rental.EndDate, request.ReturnedDate, equipmentResponse.Value.RentalPricePerDay);
+
+        if(calculatedTotalValue != rental.RentalPrice)
+            await _userRentalRepository.UpdateRentalTotalCost(rental, calculatedTotalValue, cancellationToken);
+
+        return Result.Success();
+    }
+
     public async Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken)
     {
         Rental rental = request.ToRentalEntity();
@@ -108,10 +145,5 @@ public class UserRentalService : IUserRentalService
             return Result.Failure(RentalErrors.RentalNotFound);
 
         return Result.Success();
-    }
-    private decimal CalculateTotalRentalPrice(DateTime startDate, DateTime endDate, decimal dailyPrice)
-    {
-        var days = (endDate.Date - startDate.Date).Days;
-        return dailyPrice * days;
     }
 }
