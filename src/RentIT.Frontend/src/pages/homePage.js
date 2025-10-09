@@ -1,31 +1,43 @@
-import { getAllEquipments, getEquipment } from "../services/equipmentService";
-export function renderHome(){
+export function renderHome() {
     const container = document.createElement("div");
-    container.classList.add("container-fluid");
+    container.classList.add("container-fluid", "hero-container", "vh-100");
+
+    const heroSection = document.createElement("div");
+    heroSection.classList.add("hero-section");
 
     const heroImg = document.createElement("img");
-    heroImg.src = "../../public/hero-image.jpg";
-    heroImg.classList.add("img-fluid");
+    heroImg.src = "../../public/hero.jpg";
+    heroImg.alt = "Hero background";
     heroImg.classList.add("hero");
-    container.appendChild(heroImg);
 
-    const button = document.createElement("button");
-    button.classList.add("btn", "btn-warning");
-    button.innerText = "Fetch All Equipments!";
-    container.appendChild(button);
+    const heroOverlay = document.createElement("div");
+    heroOverlay.classList.add("hero-overlay");
 
-    const list = document.createElement("ul");
-    container.appendChild(list);
+    const slogan = document.createElement("h1");
+    slogan.classList.add("hero-slogan");
+    slogan.innerText = "Rent. Run. Return. Repeat.";
 
-    button.addEventListener("click", async () => {
-        const equipments = await getAllEquipments();
-        list.innerHTML = '';
-        equipments.forEach(equipment => {
-            const li = document.createElement("li");
-            li.textContent = `${equipment.id} + ${equipment.name} - ${equipment.status} - ${equipment.rentalPricePerDay}$`;
-            list.appendChild(li);
-        });
-    });
+    const description = document.createElement("h2");
+    description.classList.add("hero-description");
+    description.innerText = "Rent IT Stuff for heavy play";
+
+    const btnContainer = document.createElement("div");
+    btnContainer.classList.add("hero-buttons");
+
+    const btnOffer = document.createElement("button");
+    btnOffer.classList.add("hero-btn");
+    btnOffer.innerText = "Rent Now";
+
+    const btnContact = document.createElement("button");
+    btnContact.classList.add("hero-btn", "hero-btn-outline");
+    btnContact.innerText = "Contact";
+
+    btnContainer.append(btnOffer, btnContact);
+    heroOverlay.append(slogan, btnContainer);
+    heroOverlay.append(slogan, description, btnContainer);
+
+    heroSection.append(heroImg, heroOverlay);
+    container.appendChild(heroSection);
 
     return container;
 }
