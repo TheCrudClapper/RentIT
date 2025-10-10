@@ -12,10 +12,14 @@ namespace UserService.Core.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        public AuthService(UserManager<User> userManager, RoleManager<Role> roleManager)
+        private readonly IJwtTokenService _jwtTokenService;
+        public AuthService(UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            IJwtTokenService jwtTokenService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _jwtTokenService = jwtTokenService;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
@@ -53,17 +57,17 @@ namespace UserService.Core.Services
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
-            if (user == null)
+            if (user is null)
                 return Result.Failure<UserAuthResponse>(UserErrors.UserDoesNotExist);
 
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
                 return Result.Failure<UserAuthResponse>(UserErrors.WrongPassword);
 
-            //generate and return JWT TOKEN
-            //TO BE CHANGED
+            IList<string> roles = await _userManager.GetRolesAsync(user);
 
-            //fill token later
-            return new UserAuthResponse(user.Id, user.Email!, "token");
+            var token = _jwtTokenService.GenerateJwtToken(user, roles);
+
+            return new UserAuthResponse(token);
         }
 
         private async Task<IdentityResult> CreateRole(UserRoleOption roleOption)

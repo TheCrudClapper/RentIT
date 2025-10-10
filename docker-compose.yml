@@ -15,6 +15,10 @@ services:
         - DB_PORT=5432
         - DB_HOST=user-microservice-db-postgress
         - DB_PASSWORD=admin
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
     ports:
         - "5000:8080"
         - "5001:8081"
