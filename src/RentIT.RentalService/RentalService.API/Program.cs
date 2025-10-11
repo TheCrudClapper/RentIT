@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using RentalService.API.Extensions;
 using RentalService.API.Middleware;
 using RentalService.Core;
@@ -8,6 +10,8 @@ using RentalService.Infrastructure;
 using RentalService.Infrastructure.DbContexts;
 using RentalService.Infrastructure.HttpClients;
 using RentalService.Infrastructure.Seeders;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +57,25 @@ builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroservi
 //Add OpenAPI support and Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
+    };
+});
+
 
 var app = builder.Build();
 

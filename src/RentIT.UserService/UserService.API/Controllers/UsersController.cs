@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.ServiceContracts;
 
@@ -30,6 +31,9 @@ namespace UserService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
         {
+            string? role = "";
+            var userId = User.Claims.FirstOrDefault(roleClaim => roleClaim.Properties.TryGetValue("role", out role));
+            Console.WriteLine(role);
             var users = await _userService.GetAllUsersAsync(cancellationToken);
             return users.ToList();
         }

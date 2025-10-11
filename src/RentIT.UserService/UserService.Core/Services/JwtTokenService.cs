@@ -34,9 +34,14 @@ public class JwtTokenService : IJwtTokenService
         [
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.Email, user.Email!),
-                ..roles.Select(role => new Claim(ClaimTypes.Role, role))
+            ////append collection insise collection expression
+            //    ..roles.Select(role => new Claim(ClaimTypes.Role, role))
         ];
 
+        foreach(var claim in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, claim));
+        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -45,7 +50,7 @@ public class JwtTokenService : IJwtTokenService
                 .AddMinutes(_configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
             SigningCredentials = credentials,
             Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"],
+            Audience = _configuration["Jwt:Audience"]
         };
 
         var tokenHandler = new JsonWebTokenHandler();

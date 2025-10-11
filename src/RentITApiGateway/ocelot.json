@@ -1,7 +1,6 @@
 {
   "Routes": [
     {
-      // Users Microservice Routes
       "UpstreamPathTemplate": "/gateway/Auth",
       "DownstreamPathTemplate": "/api/Auth",
       "DownstreamHostAndPorts": [
@@ -14,16 +13,42 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Users/{userId}",
-      "DownstreamPathTemplate": "/api/Users/{userId}",
+      "UpstreamPathTemplate": "/gateway/Users",
+      "DownstreamPathTemplate": "/api/Users",
+      "UpstreamHttpMethod": [ "Get" ],
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
       "DownstreamHostAndPorts": [
         {
           "Host": "userservice.api",
           "Port": 8080
         }
       ],
+      "AddHeadersToRequest": { "Authorization": "{Authorization}" }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Users/{userId}",
+      "DownstreamPathTemplate": "/api/Users/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamScheme": "http"
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "AddHeadersToRequest": { "Authorization": "{Authorization}" }
     },
     {
       "UpstreamPathTemplate": "/gateway/Auth/Register",
@@ -49,8 +74,6 @@
       "UpstreamHttpMethod": [ "Post" ],
       "UpstreamScheme": "http"
     },
-
-    // Equipments Microservice Routes
     {
       "UpstreamPathTemplate": "/gateway/Categories",
       "DownstreamPathTemplate": "/api/Categories",
@@ -157,7 +180,6 @@
         "TtlSeconds": 30
       }
     },
-    //Rental Microservice Routes
     {
       "UpstreamPathTemplate": "/gateway/Rentals/",
       "DownstreamPathTemplate": "/api/Rentals/",

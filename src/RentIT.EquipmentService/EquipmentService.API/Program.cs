@@ -8,30 +8,41 @@ using EquipmentService.Infrastructure;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.HttpClients;
 using EquipmentService.Infrastructure.Seeders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-//Add API Controllers
+// -----------------------------
+// API Controllers
+// -----------------------------
 builder.Services.AddControllers();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-//Add user-defined services
+// -----------------------------
+// Custom Services
+// -----------------------------
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
 
-//Add resilience policies
+// -----------------------------
+// Resilience
+// -----------------------------
 builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
 builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
 builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePolicies>();
 
-//Add OpenAPI support and Swagger
+// -----------------------------
+// Open API and Swagger
+// -----------------------------
+builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
+// -----------------------------
+// Http Clients
+// -----------------------------
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
@@ -52,18 +63,43 @@ builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClie
     return policies.GetCombinedPolicy();
 });
 
+// -----------------------------
+// JWT Bearer Verification
+// -----------------------------
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
+    };
+});
+
+
 var app = builder.Build();
 
-//Add global exception handling middleware
+// ---------------------------------
+// Global Error Handling Middleware
+// --------------------------------
 app.UseGlobalExceptionHandlingMiddleware();
 
-//Https supports
+// -----------------------------
+// HTTPS Support
+// -----------------------------
 app.UseHsts();
 //app.UseHttpsRedirection();
 
 await app.MigrateDatabaseAsync(builder.Services);
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -73,19 +109,32 @@ if (app.Environment.IsDevelopment())
     await AppDbSeeder.Seed(context);
 }
 
-//Use Swagger
+// -----------------------------
+// Use Swagger
+// -----------------------------
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//Use Routing
+
+// -----------------------------
+// Use Routing
+// -----------------------------
 app.UseRouting();
 
 
-//Mapping API controllers 
+// -----------------------------
+// Map Api Controllers
+// -----------------------------
 app.MapControllers();
 
 
-//Authentication && Authorization
+// --------------------------------
+// Authentication && Authorization
+// --------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
+
+// -----------------------------
+// Run App
+// -----------------------------
 app.Run();
