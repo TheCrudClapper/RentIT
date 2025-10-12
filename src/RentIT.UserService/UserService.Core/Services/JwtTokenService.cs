@@ -35,12 +35,12 @@ public class JwtTokenService : IJwtTokenService
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.Email, user.Email!),
             ////append collection insise collection expression
-            //    ..roles.Select(role => new Claim(ClaimTypes.Role, role))
+                //..roles.Select(role => new Claim("role", role))
         ];
 
-        foreach(var claim in roles)
+        foreach (var claim in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Role, claim));
+            claims.Add(new Claim("Roles", claim));
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor

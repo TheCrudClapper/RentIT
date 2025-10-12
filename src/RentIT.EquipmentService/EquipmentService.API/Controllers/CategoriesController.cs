@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EquipmentService.API.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class CategoriesController : ControllerBase
 {
@@ -17,6 +18,7 @@ public class CategoriesController : ControllerBase
 
     //POST: api/Categories
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.AddCategory(request, cancellationToken);
@@ -29,7 +31,6 @@ public class CategoriesController : ControllerBase
 
     //GET :api/Categories/categoryId
     [HttpGet("{categoryId}")]
-    [AllowAnonymous]
     public async Task<ActionResult<CategoryResponse>> GetCategory(Guid categoryId, CancellationToken cancellationToken)
     {
         var result = await _categoryService.GetCategory(categoryId, cancellationToken);
@@ -50,6 +51,7 @@ public class CategoriesController : ControllerBase
 
     //PUT :api/Categories
     [HttpPut("{categoryId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.UpdateCategory(categoryId, request, cancellationToken);
@@ -62,6 +64,7 @@ public class CategoriesController : ControllerBase
 
     //DELETE: api/Categories/categoryId
     [HttpDelete("{categoryId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
     {
         var result = await _categoryService.DeleteCategory(categoryId, cancellationToken);

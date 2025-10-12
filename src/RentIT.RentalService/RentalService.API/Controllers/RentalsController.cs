@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
+using StackExchange.Redis;
 
 namespace RentalService.API.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class RentalsController : ControllerBase
 {
@@ -16,6 +20,7 @@ public class RentalsController : ControllerBase
 
     // GET: api/Rentals
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
     {
         var response = await _rentalService.GetAllRentals(cancellationToken);
@@ -38,6 +43,7 @@ public class RentalsController : ControllerBase
 
     // PUT: api/Rentals/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request, CancellationToken cancellationToken)
     {
         var result = await _rentalService.UpdateRental(id, request, cancellationToken);
@@ -50,6 +56,7 @@ public class RentalsController : ControllerBase
 
     // POST: api/Rentals
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RentalResponse>> PostRental(RentalAddRequest request, CancellationToken cancellationToken)
     {
         var result = await _rentalService.AddRental(request, cancellationToken);
@@ -61,6 +68,7 @@ public class RentalsController : ControllerBase
 
     // DELETE: api/Rentals/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteRental(Guid id, CancellationToken cancellationToken)
     {
         var result = await _rentalService.DeleteRental(id, cancellationToken);
@@ -83,6 +91,7 @@ public class RentalsController : ControllerBase
     }
 
     [HttpPost("mark-equipment-as-returned")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
     {
         var result = await _rentalService.MarkEquipmentAsReturned(request, cancellationToken);

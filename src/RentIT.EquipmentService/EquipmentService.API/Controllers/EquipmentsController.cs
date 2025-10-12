@@ -1,9 +1,11 @@
 ﻿using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.ServiceContracts.Equipment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace EquipmentService.API.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class EquipmentsController : ControllerBase
 {
@@ -36,6 +38,7 @@ public class EquipmentsController : ControllerBase
 
     // PUT: api/Equipments/5
     [HttpPut("{equipmentId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutEquipment(Guid equipmentId, EquipmentUpdateRequest equipment, CancellationToken cancellationToken)
     {
         var result = await _equipmentService.UpdateEquipment(equipmentId, equipment, cancellationToken);
@@ -48,6 +51,7 @@ public class EquipmentsController : ControllerBase
 
     // POST: api/Equipments
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<EquipmentResponse>> PostEquipment(EquipmentAddRequest request, CancellationToken cancellationToken)
     {
         var result = await _equipmentService.AddEquipment(request, cancellationToken);
@@ -60,6 +64,7 @@ public class EquipmentsController : ControllerBase
 
     // DELETE: api/Equipments/5
     [HttpDelete("{equipmentId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
     {
         var result = await _equipmentService.DeleteEquipment(equipmentId, cancellationToken);

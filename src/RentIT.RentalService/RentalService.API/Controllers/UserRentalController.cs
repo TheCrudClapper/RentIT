@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RentalService.API.Extensions;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
 
@@ -9,11 +11,12 @@ namespace RentalService.API.Controllers;
 /// FOR TIME BEING, USING GUID OF USER FROM DB SEEDER CLASS
 /// </summary>
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class UserRentalController : ControllerBase
 {
     private readonly IUserRentalService _userRentalService;
-    public readonly static Guid UserIdPlaceholder = Guid.Parse("D6D7EDCA-E2E0-4F08-A5DD-B4749BD8830A");
+    public Guid CurrentUserId => this.GetLoggedUserId();
     public UserRentalController(IUserRentalService userRentalService)
     {
         _userRentalService = userRentalService;
@@ -23,7 +26,7 @@ public class UserRentalController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
     {
-        var response = await _userRentalService.GetAllRentals(UserIdPlaceholder, cancellationToken);
+        var response = await _userRentalService.GetAllRentals(CurrentUserId, cancellationToken);
         if (response.IsFailure)
             return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
 
@@ -34,7 +37,7 @@ public class UserRentalController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<RentalResponse>> GetRental(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.GetRental(id, UserIdPlaceholder, cancellationToken);
+        var result = await _userRentalService.GetRental(id, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -46,7 +49,7 @@ public class UserRentalController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRental(Guid id, UserRentalUpdateRequest request, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.UpdateRental(id, request, UserIdPlaceholder, cancellationToken);
+        var result = await _userRentalService.UpdateRental(id, request, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -58,7 +61,7 @@ public class UserRentalController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RentalResponse>> PostRental(UserRentalAddRequest request, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.AddRental(request, UserIdPlaceholder, cancellationToken);
+        var result = await _userRentalService.AddRental(request, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -70,7 +73,7 @@ public class UserRentalController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRental(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.DeleteRental(id, UserIdPlaceholder, cancellationToken);
+        var result = await _userRentalService.DeleteRental(id, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -81,7 +84,7 @@ public class UserRentalController : ControllerBase
     [HttpPost("mark-equipment-as-returned/{id}")]
     public async Task<IActionResult> MarkEquipmentAsReturned(Guid id, UserReturnEquipmentRequest request ,CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.MarkEquipmentAsReturned(id, UserIdPlaceholder, request, cancellationToken);
+        var result = await _userRentalService.MarkEquipmentAsReturned(id, CurrentUserId, request, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);

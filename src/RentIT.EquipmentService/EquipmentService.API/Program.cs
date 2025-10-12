@@ -43,6 +43,7 @@ builder.Services.AddEndpointsApiExplorer();
 // -----------------------------
 // Http Clients
 // -----------------------------
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(client =>
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
@@ -71,7 +72,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer("Bearer", options =>
+.AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -80,7 +81,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
         NameClaimType = ClaimTypes.Name,
-        RoleClaimType = ClaimTypes.Role
+        RoleClaimType = "Roles",
     };
 });
 
