@@ -19,7 +19,7 @@ public abstract class BaseRentalValidator : IEntityValidator
         _rentalRepository = rentalRepository;
     }
 
-    public abstract Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken);
+    public abstract Task<Result> ValidateEntity(Rental entity, string accessToken, EquipmentResponse equipmentResponse, CancellationToken cancellationToken);
 
     protected virtual async Task<Result> ValidateRentalPeriod(Rental enitity, CancellationToken cancellationToken)
     {
@@ -31,9 +31,9 @@ public abstract class BaseRentalValidator : IEntityValidator
             : Result.Success();
     }
 
-    protected virtual async Task<Result> ValidateUser(Guid userId, CancellationToken cancellationToken)
+    protected virtual async Task<Result> ValidateUser(Guid userId, string accessToken, CancellationToken cancellationToken)
     {
-        var userResult = await _usersMicroserviceClient.GetUserByUserId(userId, cancellationToken);
+        var userResult = await _usersMicroserviceClient.GetUserByUserId(userId, accessToken, cancellationToken);
         return userResult.IsFailure
             ? Result.Failure(userResult.Error)
             : Result.Success();

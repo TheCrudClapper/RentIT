@@ -13,7 +13,7 @@ public class UserRentalValidator : BaseRentalValidator ,IUserRentalValidator
        IEquipmentMicroserviceClient equipmentMicroserviceClient)
        : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
 
-    public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
+    public async override Task<Result> ValidateEntity(Rental entity, string accessToken, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
     {
         if (equipmentResponse is not null && entity.UserId == equipmentResponse.CreatedByUserId)
             return Result.Failure(RentalErrors.RentalForSelfEquipment);

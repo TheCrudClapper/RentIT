@@ -33,6 +33,7 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
             if (cachedObj.Value != null)
                 return cachedObj.Value;
 
+            
             HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/equipments/{equipmentId}", cancellationToken);
 
             if (!response.IsSuccessStatusCode)

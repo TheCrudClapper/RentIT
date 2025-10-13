@@ -31,6 +31,7 @@ public class CategoriesController : ControllerBase
 
     //GET :api/Categories/categoryId
     [HttpGet("{categoryId}")]
+    [AllowAnonymous]
     public async Task<ActionResult<CategoryResponse>> GetCategory(Guid categoryId, CancellationToken cancellationToken)
     {
         var result = await _categoryService.GetCategory(categoryId, cancellationToken);
@@ -43,6 +44,7 @@ public class CategoriesController : ControllerBase
 
     //GET :api/Categories
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories(CancellationToken cancellationToken)
     {
         var categories = await _categoryService.GetAllCategories(cancellationToken);

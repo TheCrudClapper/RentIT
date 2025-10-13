@@ -13,5 +13,11 @@ namespace RentalService.API.Extensions
 
                 return Guid.Parse(userIdClaim);
         }
+
+        public static string GetAuthorizationToken(this ControllerBase controller)
+        {
+            var token = controller.HttpContext.Request.Headers.Authorization;
+            return token!;
+        }
     }
 }

@@ -13,9 +13,9 @@ public class RentalValidator : BaseRentalValidator, IRentalValidator
         IEquipmentMicroserviceClient equipmentMicroserviceClient) 
         : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
 
-    public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
+    public async override Task<Result> ValidateEntity(Rental entity, string accessToken, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
     {
-        var userValidation = await ValidateUser(entity.UserId, cancellationToken);
+        var userValidation = await ValidateUser(entity.UserId, accessToken, cancellationToken);
         if (userValidation.IsFailure)
             return userValidation;
 

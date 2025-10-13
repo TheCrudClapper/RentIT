@@ -17,6 +17,7 @@ public class EquipmentsController : ControllerBase
 
     // GET: api/Equipments
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems(CancellationToken cancellationToken)
     {
         var equipmentItems = await _equipmentService.GetAllEquipmentItems(cancellationToken);
@@ -25,6 +26,7 @@ public class EquipmentsController : ControllerBase
 
     // GET: api/Equipments/5
     [HttpGet("{equipmentId}")]
+    [AllowAnonymous]
     public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
     {
         //throw new NotImplementedException();
@@ -89,6 +91,7 @@ public class EquipmentsController : ControllerBase
 
     //POST: api/Equipments/byIds
     [HttpPost("byIds")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems([FromBody]IEnumerable<Guid>? equipmentIds, CancellationToken cancellationToken)
     {
         if (equipmentIds == null || !equipmentIds.Any())

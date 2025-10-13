@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentalService.API.Extensions;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
 using StackExchange.Redis;
@@ -13,6 +14,7 @@ namespace RentalService.API.Controllers;
 public class RentalsController : ControllerBase
 {
     private readonly IRentalService _rentalService;
+    private string Token => this.GetAuthorizationToken();
     public RentalsController(IRentalService rentalService)
     {
         _rentalService = rentalService;
@@ -20,7 +22,7 @@ public class RentalsController : ControllerBase
 
     // GET: api/Rentals
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
     {
         var response = await _rentalService.GetAllRentals(cancellationToken);
@@ -32,6 +34,7 @@ public class RentalsController : ControllerBase
 
     // GET: api/Rentals/5
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<RentalResponse>> GetRental(Guid id, CancellationToken cancellationToken)
     {
         var result = await _rentalService.GetRental(id, cancellationToken);
@@ -46,7 +49,7 @@ public class RentalsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request, CancellationToken cancellationToken)
     {
-        var result = await _rentalService.UpdateRental(id, request, cancellationToken);
+        var result = await _rentalService.UpdateRental(id, request, Token, cancellationToken);
 
         if(result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -59,7 +62,7 @@ public class RentalsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RentalResponse>> PostRental(RentalAddRequest request, CancellationToken cancellationToken)
     {
-        var result = await _rentalService.AddRental(request, cancellationToken);
+        var result = await _rentalService.AddRental(request, Token, cancellationToken);
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 

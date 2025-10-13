@@ -11,6 +11,6 @@ namespace RentalService.Core.Domain.HtppClientContracts;
 /// return user data in the form of a <see cref="UserDTO"/>.</remarks>
 public interface IUsersMicroserviceClient
 {
-    Task<Result<UserDTO?>> GetUserByUserId(Guid userId, CancellationToken cancellationToken);
+    Task<Result<UserDTO?>> GetUserByUserId(Guid userId, string accessToken, CancellationToken cancellationToken);
 }
 
