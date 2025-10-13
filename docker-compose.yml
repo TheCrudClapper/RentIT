@@ -141,7 +141,46 @@ services:
     networks:
         - rental-microservice-network
 
-  # Redis Cental Cache
+  # Reviews Microservice
+  reviewmicroservice.api: 
+    image: review-microservice
+    build: 
+        context: .
+        dockerfile: src/RentIT.ReviewsService/ReviewService.API/Dockerfile
+    ports:
+        - "5006:8080"
+        - "5007:8081"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres
+        - DB_NAME=reviews
+        - DB_PORT=5432
+        - DB_HOST=review-microservices-db-postgress
+        - DB_PASSWORD=admin
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379 
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+    networks:
+        - rentit-internal-network
+        - review-microservice-network
+    
+  # Review Microservice Database
+  review-microservices-db-postgress:
+    image: postgres
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=reviews
+    ports:
+        - "5996:5432"
+    networks:
+        - review-microservice-network
+
+  # Redis Central Cache
   redis:
     image: redis:latest
     ports:
@@ -191,6 +230,8 @@ networks:
   rental-microservice-network:
     driver: bridge
   rentit-internal-network:
+    driver: bridge
+  review-microservice-network:
     driver: bridge
 
       

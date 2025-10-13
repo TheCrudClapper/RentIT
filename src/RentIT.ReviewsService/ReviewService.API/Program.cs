@@ -1,10 +1,8 @@
 using ReviewService.Core;
 using ReviewService.Infrastructure;
 using ReviewService.API.Middleware;
-
+using ReviewService.API.Extensions;
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 //Add Core and Infra Layer
 builder.Services.AddCoreLayer(builder.Configuration);
@@ -17,6 +15,9 @@ var app = builder.Build();
 
 //Add Global Exception handling middleware
 app.UseExceptionHandlingMiddleware();
+
+//Migrate Database
+await app.MigrateDatabaseAsync(builder.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

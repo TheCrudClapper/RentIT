@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RentalService.Core.Caching;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
 using RentalService.Infrastructure.Repositories;

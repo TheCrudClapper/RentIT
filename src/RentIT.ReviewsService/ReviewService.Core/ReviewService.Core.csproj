@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\RepositoryContracts\" />
     <Folder Include="DTO\" />
     <Folder Include="Mappings\" />

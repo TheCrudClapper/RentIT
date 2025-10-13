@@ -86,7 +86,6 @@ app.UseHsts();
 //app.UseHttpsRedirection();
 
 await app.MigrateDatabaseAsync(builder.Services);
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

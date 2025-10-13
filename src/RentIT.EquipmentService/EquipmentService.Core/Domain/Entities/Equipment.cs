@@ -27,19 +27,32 @@ public enum RentStatusEnum
 public class Equipment : IBaseEntity, ISoftDelete
 {
     public Guid Id { get; set; }
+
     [MaxLength(50)]
     public string Name { get; set; } = null!;
+
     public Guid CreatedByUserId { get; set; }
     public Guid CategoryId { get; set; }
+
     [MaxLength(50)]
     public string SerialNumber { get; set; } = null!;
+
     [Column(TypeName = "decimal(10, 2)")]
     public decimal RentalPricePerDay { get; set; }
+
     public RentStatusEnum Status { get; set; }
+
     [MaxLength(255)]
     public string? Notes { get; set; }
+
     [ForeignKey("CategoryId")]
     public Category Category { get; set; } = null!;
+
+    public int ReviewCount { get; set; }
+
+    [Column(TypeName = "decimal(3, 2)")]
+    public decimal AverageRating { get; set; }
+
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
     public DateTime DateCreated { get; set; }
