@@ -22,3 +22,17 @@ export async function registerUser(data) {
         alert(e);
     }
 }
+
+export async function loginUser(params) {
+    try{
+        const response = await fetch("http://localhost:5050/gateway/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+    }catch(e){
+
+    }
+}

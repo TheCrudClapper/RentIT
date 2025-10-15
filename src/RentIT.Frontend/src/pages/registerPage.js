@@ -1,65 +1,67 @@
 import { registerUser } from "../services/userService";
 
 export function renderRegisterPage() {
-    const loginPage = document.createElement("div");
-    loginPage.classList.add("container-fluid");
-    const loginPageContent = `
-    <div class="container vh-100">
-        <div class = "row">
-            <div class = "col-md-3 bg-dark vh-100"></div>
-            <div class = "col-md-6 bg-warning vh-100">
-                <h1 class = "fw-bold text-center">Register</h1>
-                <form id="registerForm">
-                    <div class="mb-3">      
-                        <label for="firstNameInput" class="fs-4 fw-bold">First Name</label>         
-                        <div class = "input-group mb-3">
-                            <input id="firstNameInput" type="text" class="form-control" placeholder="John">
-                        </div>
-                    </div>
-                    <div class="mb-3">      
-                        <label for="lastNameInput" class="fs-4 fw-bold">Last Name</label>         
-                        <div class = "input-group mb-3">
-                            <input id="lastNameInput" type="text" class="form-control" placeholder="Doe">
-                        </div>
-                    </div>
-                    <div class="mb-3">      
-                        <label for="emailInput" class="fs-4 fw-bold">Email</label>         
-                        <div class = "input-group mb-3">
-                            <input id="emailInput" type="text" class="form-control" placeholder="johndoe69@domain.com">
-                        </div>
-                    </div>
-                    <div class="mb-3">      
-                        <label for="passwordInput" class="fs-4 fw-bold">Password</label>         
-                        <div class = "input-group mb-3">
-                            <input id="passwordInput" type="password" class="form-control" placeholder="Password123#@">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <input class="btn btn-dark" type=submit >
-                    </div>
-                </form>
-            </div>
-            <div class = "col-md-3 bg-dark vh-100"></div>
-        </div>
+  const registerPage = document.createElement("div");
+  registerPage.classList.add(
+    "container-fluid",
+    "bg-warning",         
+    "vh-100",
+    "d-flex",
+    "justify-content-center",
+    "align-items-center"
+  );
+
+  const registerPageContent = `
+    <div class="card shadow-lg border-0 rounded-2 bg-dark text-white" style="max-width: 480px; width: 100%;">
+      <div class="card-body p-5">
+        <h1 class="fw-bold text-center mb-4">Register</h1>
+
+        <form id="registerForm">
+          <div class="mb-3">
+            <label for="firstNameInput" class="form-label fw-semibold fs-5">First Name</label>
+            <input id="firstNameInput" type="text" class="form-control form-control-lg bg-secondary text-white border-0 rounded-3" placeholder="John" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="lastNameInput" class="form-label fw-semibold fs-5">Last Name</label>
+            <input id="lastNameInput" type="text" class="form-control form-control-lg bg-secondary text-white border-0 rounded-3" placeholder="Doe" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="emailInput" class="form-label fw-semibold fs-5">Email</label>
+            <input id="emailInput" type="email" class="form-control form-control-lg bg-secondary text-white border-0 rounded-3" placeholder="johndoe@example.com" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="passwordInput" class="form-label fw-semibold fs-5">Password</label>
+            <input id="passwordInput" type="password" class="form-control form-control-lg bg-secondary text-white border-0 rounded-3" placeholder="Password123#@" required>
+          </div>
+
+          <div class="d-grid">
+            <button id="registerBtn" type="submit" class="btn btn-warning btn-lg rounded-3 fw-bold text-dark shadow-sm">
+              Create Account
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    `;
+  `;
 
-    loginPage.innerHTML = loginPageContent;
+  registerPage.innerHTML = registerPageContent;
 
-    const submit = loginPage.querySelector("#registerBtn");
-    const form = loginPage.querySelector("#registerForm");
-    
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+  // Obsługa formularza
+  const form = registerPage.querySelector("#registerForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const firstName = loginPage.querySelector("#firstNameInput").value;
-        const lastName = loginPage.querySelector("#lastNameInput").value;
-        const email = loginPage.querySelector("#emailInput").value;
-        const password = loginPage.querySelector("#passwordInput").value;
+    const firstName = registerPage.querySelector("#firstNameInput").value.trim();
+    const lastName = registerPage.querySelector("#lastNameInput").value.trim();
+    const email = registerPage.querySelector("#emailInput").value.trim();
+    const password = registerPage.querySelector("#passwordInput").value.trim();
 
-        const formData =  { firstName, lastName, email, password };
-        await registerUser(formData);
-    });
+    const formData = { firstName, lastName, email, password };
+    await registerUser(formData);
+  });
 
-    return loginPage;
+  return registerPage;
 }

@@ -1,3 +1,6 @@
+import { renderHomepageCards } from "../components/homeCards";
+import { renderHomePageForm } from "../components/homePageForm";
+
 export function renderHome() {
     const container = document.createElement("div");
     container.classList.add("container-fluid", "hero-container", "vh-100");
@@ -6,7 +9,7 @@ export function renderHome() {
     heroSection.classList.add("hero-section");
 
     const heroImg = document.createElement("img");
-    heroImg.src = "../../public/hero.jpg";
+    heroImg.src = "../../public/cpu.jpg";
     heroImg.alt = "Hero background";
     heroImg.classList.add("hero");
 
@@ -36,8 +39,12 @@ export function renderHome() {
     heroOverlay.append(slogan, btnContainer);
     heroOverlay.append(slogan, description, btnContainer);
 
+    const homePageCards = renderHomepageCards();
+    const homePageForm = renderHomePageForm();
+
     heroSection.append(heroImg, heroOverlay);
     container.appendChild(heroSection);
-
+    container.appendChild(homePageCards);
+    container.appendChild(homePageForm);
     return container;
 }
