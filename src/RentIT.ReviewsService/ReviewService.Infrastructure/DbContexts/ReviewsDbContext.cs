@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReviewService.Core.Domain.Entities;
-using ReviewService.Infrastructure.DbContexts.Interceptors;
+using ReviewServices.Core.Domain.Entities;
+using ReviewServices.Infrastructure.DbContexts.Interceptors;
 
-namespace ReviewService.Infrastructure.DbContexts;
+namespace ReviewServices.Infrastructure.DbContexts;
 
 public class ReviewsDbContext : DbContext
 {

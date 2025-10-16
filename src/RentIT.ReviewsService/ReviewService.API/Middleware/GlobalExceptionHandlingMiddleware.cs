@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json;
 
-namespace ReviewService.API.Middleware;
+namespace ReviewServices.API.Middleware;
 
 public class GlobalExceptionHandlingMiddleware
 {

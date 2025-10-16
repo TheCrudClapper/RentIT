@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using ReviewService.Core.Domain.Interfaces;
-namespace ReviewService.Infrastructure.DbContexts.Interceptors;
+using ReviewServices.Core.Domain.Interfaces;
+namespace ReviewServices.Infrastructure.DbContexts.Interceptors;
 
 public class SoftDeleteInterceptor : SaveChangesInterceptor
 {

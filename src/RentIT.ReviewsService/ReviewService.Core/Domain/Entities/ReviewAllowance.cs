@@ -1,7 +1,7 @@
-﻿using ReviewService.Core.Domain.Interfaces;
+﻿using ReviewServices.Core.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace ReviewService.Core.Domain.Entities;
+namespace ReviewServices.Core.Domain.Entities;
 /// <summary>
 /// Entity represents wheter user can write review about certain equipment
 /// </summary>

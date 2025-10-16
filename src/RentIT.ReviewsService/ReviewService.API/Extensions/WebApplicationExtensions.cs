@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Polly;
-using ReviewService.Infrastructure.DbContexts;
+using ReviewServices.Infrastructure.DbContexts;
 
-namespace ReviewService.API.Extensions;
+namespace ReviewServices.API.Extensions;
 
 public static class WebApplicationExtensions
 {

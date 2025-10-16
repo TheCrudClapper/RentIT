@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using ReviewService.Infrastructure.DbContexts;
+using ReviewServices.Infrastructure.DbContexts;
 
 #nullable disable
 
-namespace ReviewService.Infrastructure.Migrations
+namespace ReviewServices.Infrastructure.Migrations
 {
     [DbContext(typeof(ReviewsDbContext))]
     [Migration("20251013180417_IntialMigration")]
@@ -25,7 +25,7 @@ namespace ReviewService.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ReviewService.Core.Domain.Entities.Review", b =>
+            modelBuilder.Entity("ReviewServices.Core.Domain.Entities.Review", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace ReviewService.Infrastructure.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ReviewService.Core.Domain.Entities.ReviewAllowance", b =>
+            modelBuilder.Entity("ReviewServices.Core.Domain.Entities.ReviewAllowance", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

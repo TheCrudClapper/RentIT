@@ -1,4 +1,4 @@
-﻿namespace ReviewService.Core.Domain.Interfaces;
+﻿namespace ReviewServices.Core.Domain.Interfaces;
 
 /// <summary>
 /// Interface that marks item as "soft-deleteable"
