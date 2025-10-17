@@ -1,4 +1,6 @@
-﻿using ReviewServices.Core.DTO;
+﻿using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.ResultTypes;
+using ReviewServices.Core.DTO;
 using ReviewServices.Core.ResultTypes;
 using ReviewServices.Core.ServiceContracts;
 
@@ -6,10 +8,10 @@ namespace ReviewServices.Core.Services;
 
 public class UserReviewService : IUserReviewService
 {
-    private readonly IUserReviewService _userReviewService;
-    public UserReviewService(IUserReviewService userReviewRepository)
+    private readonly IUserReviewRepository _userReviewRepository;
+    public UserReviewService(IUserReviewRepository userReviewRepository)
     {
-        _userReviewService = userReviewRepository;
+        _userReviewRepository = userReviewRepository;
     }
 
     public Task<Result<ReviewResponse>> AddReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken = default)
@@ -22,9 +24,14 @@ public class UserReviewService : IUserReviewService
         throw new NotImplementedException();
     }
 
-    public Task<Result<ReviewResponse>> GetReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
+    public async Task<Result<ReviewResponse>> GetReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var review = await _userReviewRepository.GetUserReviewAsync(reviewId, userId, cancellationToken);
+        if (review is null)
+            return Result.Failure<ReviewResponse>(ReviewErrors.ReviewNotFound);
+
+        //fetch user from microservice, populate field in response and return 
+
     }
 
     public Task<Result<ReviewResponse>> UpdateReview(Guid userId, ReviewUpdateRequest request, CancellationToken cancellationToken = default)

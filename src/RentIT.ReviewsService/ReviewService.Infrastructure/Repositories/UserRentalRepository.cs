@@ -1,4 +1,5 @@
-﻿using ReviewService.Core.Domain.RepositoryContracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewServices.Core.Domain.Entities;
 using ReviewServices.Infrastructure.DbContexts;
 using ReviewServices.Infrastructure.Repositories;
@@ -28,6 +29,12 @@ public class UserRentalRepository : BaseReviewRepository, IUserReviewRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    public async Task<Review?> GetUserReviewAsync(Guid id, Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Reviews
+            .FirstOrDefaultAsync(item => item.Id == id && item.UserId == userId);
     }
 
     public async Task<bool> UpdateReviewAsync(Guid id, Review review, CancellationToken cancellationToken = default)
