@@ -9,11 +9,11 @@ namespace ReviewServices.API.Controllers;
 [ApiController]
 public class ReviewsController : ControllerBase
 {
-    private readonly IUserReviewService _reviewService;
-    private Guid ICurrentUser => this.GetLoggedUserId();
+    private readonly IUserReviewService _userReviewService;
+    private Guid CurrentUser => this.GetLoggedUserId();
     public ReviewsController(IUserReviewService reviewService)
     {
-        _reviewService = reviewService;
+        _userReviewService = reviewService;
     }
 
     // GET: api/<ReviewsController>
@@ -25,9 +25,14 @@ public class ReviewsController : ControllerBase
 
     // GET api/<ReviewsController>/5
     [HttpGet("{reviewId}")]
-    public async Task<ActionResult<ReviewResponse>> GetReview(int reviewId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ReviewResponse>> GetReview(Guid reviewId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var response = await _userReviewService.GetReview(CurrentUser, reviewId, cancellationToken);
+
+        if (response.IsFailure)
+            return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
+
+        return response.Value;
     }
 
     // POST api/<ReviewsController>

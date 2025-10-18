@@ -442,6 +442,44 @@
       ],
       "UpstreamHttpMethod": [ "Get" ],
       "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Reviews/{everything}",
+      "DownstreamPathTemplate": "/api/Reviews/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Reviews",
+      "DownstreamPathTemplate": "/api/Reviews",
+      "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
     }
   ],
 

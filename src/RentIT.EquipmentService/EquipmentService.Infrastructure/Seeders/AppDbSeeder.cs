@@ -57,6 +57,19 @@ namespace EquipmentService.Infrastructure.Seeders
                      RentalPricePerDay = 40,
                      Status = RentStatusEnum.Rented,
                      Notes = "Im renting fully working pc, without drives"
+                 },
+                 new Equipment
+                 {
+                     Id = Guid.Parse("54A58B0B-3BCD-46A5-80AF-101074FE8CDD"),
+                     CategoryId = Guid.Parse("469683FB-9A89-4C1D-9B3E-D35A24157ED8"),
+                     CreatedByUserId = Guid.Parse("D6D7EDCA-E2E0-4F08-A5DD-B4749BD8830A"),
+                     DateCreated = DateTime.UtcNow,
+                     IsActive = true,
+                     Name = "HP Elitebook G7",
+                     SerialNumber = "SN-692137",
+                     RentalPricePerDay = 20,
+                     Status = RentStatusEnum.Rented,
+                     Notes = "Im a test record !"
                  }
                 );
             }

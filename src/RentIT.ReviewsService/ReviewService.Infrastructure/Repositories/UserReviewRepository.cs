@@ -6,9 +6,9 @@ using ReviewServices.Infrastructure.Repositories;
 
 namespace ReviewService.Infrastructure.Repositories;
 
-public class UserRentalRepository : BaseReviewRepository, IUserReviewRepository
+public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
 {
-    public UserRentalRepository(ReviewsDbContext context) : base(context) {}
+    public UserReviewRepository(ReviewsDbContext context) : base(context) {}
 
     public async Task<Review> AddReviewAsync(Review review, CancellationToken cancellationToken = default)
     {

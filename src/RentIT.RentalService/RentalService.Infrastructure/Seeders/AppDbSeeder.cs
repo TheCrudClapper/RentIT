@@ -34,6 +34,18 @@ public static class AppDbSeeder
                    EquipmentId = Guid.Parse("E0CBA656-580D-4C26-8209-0C8093D30DE6"),
                    UserId = Guid.Parse("D8862A46-6E4B-438D-AFB2-BD9498B2E708"),
                    ReturnedDate = null
+               },
+               new Rental
+               {
+                   Id = Guid.Parse("16677793-B8DD-4698-9C5E-AAB6211CFD07"),
+                   IsActive = true,
+                   DateCreated = DateTime.UtcNow,
+                   StartDate = new DateTime(2025, 10, 18, 0, 0, 0, DateTimeKind.Utc),
+                   EndDate = new DateTime(2025, 10, 22, 0, 0, 0, DateTimeKind.Utc),
+                   RentalPrice = 80,
+                   EquipmentId = Guid.Parse("54A58B0B-3BCD-46A5-80AF-101074FE8CDD"),
+                   UserId = Guid.Parse("D8862A46-6E4B-438D-AFB2-BD9498B2E708"),
+                   ReturnedDate = new DateTime(2025, 10, 21, 0, 0, 0, DateTimeKind.Utc),
                }
                );
         }

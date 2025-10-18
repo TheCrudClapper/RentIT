@@ -1,4 +1,6 @@
-﻿using ReviewService.Core.Domain.RepositoryContracts;
+﻿using ReviewService.Core.Domain.HttpClientContracts;
+using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.Mappings;
 using ReviewService.Core.ResultTypes;
 using ReviewServices.Core.DTO;
 using ReviewServices.Core.ResultTypes;
@@ -9,32 +11,38 @@ namespace ReviewServices.Core.Services;
 public class UserReviewService : IUserReviewService
 {
     private readonly IUserReviewRepository _userReviewRepository;
-    public UserReviewService(IUserReviewRepository userReviewRepository)
+    private readonly IUsersMicroserviceClient _usersMicroserviceClient;
+    public UserReviewService(IUserReviewRepository userReviewRepository, IUsersMicroserviceClient usersMicroserviceClient)
     {
         _userReviewRepository = userReviewRepository;
+        _usersMicroserviceClient = usersMicroserviceClient;
     }
 
-    public Task<Result<ReviewResponse>> AddReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken = default)
+    public Task<Result<ReviewResponse>> AddReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result> DeleteReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
+    public Task<Result> DeleteReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Result<ReviewResponse>> GetReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
+    public async Task<Result<ReviewResponse>> GetReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
     {
         var review = await _userReviewRepository.GetUserReviewAsync(reviewId, userId, cancellationToken);
         if (review is null)
             return Result.Failure<ReviewResponse>(ReviewErrors.ReviewNotFound);
 
-        //fetch user from microservice, populate field in response and return 
+        var result = await _usersMicroserviceClient.GetUserByUserIdAsync(userId);
 
+        if (result.IsFailure)
+            return Result.Failure<ReviewResponse>(result.Error);
+
+        return review.ToReviewResponse(result.Value);
     }
 
-    public Task<Result<ReviewResponse>> UpdateReview(Guid userId, ReviewUpdateRequest request, CancellationToken cancellationToken = default)
+    public Task<Result<ReviewResponse>> UpdateReview(Guid userId, ReviewUpdateRequest request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Infrastructure.Repositories;
 using ReviewServices.Core.Domain.RepositoryContracts;
 using ReviewServices.Infrastructure.DbContexts;
 using ReviewServices.Infrastructure.Repositories;
@@ -18,12 +20,11 @@ public static class DependencyInjection
                .Replace("$DB_USER", Environment.GetEnvironmentVariable("DB_USER") ?? "postgres")
                .Replace("$DB_PASSWORD", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "admin")
                .Replace("$DB_HOST", Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"),
-               x => x.MigrationsAssembly("ReviewServices.Infrastructure"));
+               x => x.MigrationsAssembly("ReviewService.Infrastructure"));
         
         });
 
-        services.AddScoped<IBaseReviewRepository, BaseReviewRepository>();
-
+        services.AddScoped<IUserReviewRepository, UserReviewRepository>();
         return services;
     }
 }
