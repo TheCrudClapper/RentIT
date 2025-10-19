@@ -1,4 +1,5 @@
 using EquipmentService.API.Extensions;
+using EquipmentService.API.Handlers;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
 using EquipmentService.Core.Domain.HtppClientContracts;
@@ -25,6 +26,7 @@ builder.Services.AddControllers();
 // -----------------------------
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
+builder.Services.AddTransient<BearerTokenHandler>();
 
 // -----------------------------
 // Resilience
@@ -48,21 +50,13 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 {
     client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 })
-.AddPolicyHandler((serviceProvider, request) =>
-{
-    var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
-    return policies.GetCombinedPolicy();
-});
+    .AddHttpMessageHandler<BearerTokenHandler>()
+    .AddPolicyHandler((serviceProvider, request) =>
+    {
+        var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
+        return policies.GetCombinedPolicy();
+    });
 
-builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(client =>
-{
-    client.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}:{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
-})
-.AddPolicyHandler((serviceProvider, request) =>
-{
-    var policies = serviceProvider.GetRequiredService<IRentalMicroservicePolicies>();
-    return policies.GetCombinedPolicy();
-});
 
 // -----------------------------
 // JWT Bearer Verification

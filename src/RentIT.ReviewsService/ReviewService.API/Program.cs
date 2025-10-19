@@ -64,16 +64,16 @@ var app = builder.Build();
 //Add Global Exception handling middleware
 app.UseExceptionHandlingMiddleware();
 
+//Migrate Database
+await app.MigrateDatabaseAsync(builder.Services);
+
+app.MapOpenApi();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    //Migrate Database
-    await app.MigrateDatabaseAsync(builder.Services);
 
     //Seed Data
     using var scope = app.Services.CreateScope();
