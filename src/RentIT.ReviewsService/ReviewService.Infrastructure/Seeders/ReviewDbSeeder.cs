@@ -7,11 +7,11 @@ public static class ReviewDbSeeder
 {
     public static async Task Seed(ReviewsDbContext context)
     {
-        if(!await context.Reviews.AnyAsync(item => item.Id == Guid.Parse("573DA406-3CF4-47F8-A216-580D780941E5")))
+        if (!await context.Reviews.AnyAsync() && !await context.ReviewsAllowance.AnyAsync())
         {
             await context.Reviews.AddAsync(new Review
             {
-                Id = Guid.Parse("573DA406-3CF4-47F8-A216-580D780941E5"),    
+                Id = Guid.Parse("573DA406-3CF4-47F8-A216-580D780941E5"),
                 DateCreated = DateTime.UtcNow,
                 IsActive = true,
                 UserId = Guid.Parse("D8862A46-6E4B-438D-AFB2-BD9498B2E708"),
@@ -20,10 +20,7 @@ public static class ReviewDbSeeder
                 Description = "Such a nice thing, ill recommend",
                 Rating = 5.0
             });
-        }
 
-        if (!await context.ReviewsAllowance.AnyAsync(item => item.Id == Guid.Parse("B5A65471-8832-4318-B2B6-CD44BAA3F928")))
-        {
             await context.ReviewsAllowance.AddAsync(new ReviewAllowance
             {
                 Id = Guid.Parse("B5A65471-8832-4318-B2B6-CD44BAA3F928"),
@@ -34,8 +31,8 @@ public static class ReviewDbSeeder
                 RentalId = Guid.Parse("16677793-B8DD-4698-9C5E-AAB6211CFD07"),
                 DateDeleted = DateTime.UtcNow + TimeSpan.FromSeconds(1),
             });
-        }
+            await context.SaveChangesAsync();
 
-        await context.SaveChangesAsync();
+        }
     }
 }

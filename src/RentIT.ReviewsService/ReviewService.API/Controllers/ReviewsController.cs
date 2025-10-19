@@ -17,8 +17,8 @@ public class ReviewsController : ControllerBase
     }
 
     // GET: api/<ReviewsController>
-    [HttpGet("/byEquipment{reviewId}")]
-    public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetAllReviewsForEquipment(Guid reviewId, CancellationToken cancellationToken)
+    [HttpGet("/byEquipment{equipmentId}")]
+    public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetAllReviewsForEquipment(Guid equipmentId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
