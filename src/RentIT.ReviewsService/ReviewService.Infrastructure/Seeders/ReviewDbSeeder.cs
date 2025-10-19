@@ -7,7 +7,7 @@ public static class ReviewDbSeeder
 {
     public static async Task Seed(ReviewsDbContext context)
     {
-        if(!await context.Reviews.AnyAsync())
+        if(!await context.Reviews.AnyAsync(item => item.Id == Guid.Parse("573DA406-3CF4-47F8-A216-580D780941E5")))
         {
             await context.Reviews.AddAsync(new Review
             {
@@ -22,7 +22,7 @@ public static class ReviewDbSeeder
             });
         }
 
-        if (!await context.ReviewsAllowance.AnyAsync())
+        if (!await context.ReviewsAllowance.AnyAsync(item => item.Id == Guid.Parse("B5A65471-8832-4318-B2B6-CD44BAA3F928")))
         {
             await context.ReviewsAllowance.AddAsync(new ReviewAllowance
             {

@@ -28,7 +28,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
        
     }
 
-    public async Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, string accessToken, CancellationToken cancellationToken)
+    public async Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken)
     {
         var rental = request.ToRental(userId);
 
@@ -36,7 +36,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         if (equipmentResponse.IsFailure)
             return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-        var validationResult = await _userRentalValidator.ValidateEntity(rental, accessToken, equipmentResponse.Value, cancellationToken);
+        var validationResult = await _userRentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure<RentalResponse>(validationResult.Error);
@@ -122,7 +122,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         return Result.Success();
     }
 
-    public async Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, string accessToken, CancellationToken cancellationToken)
+    public async Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken)
     {
         Rental rental = request.ToRentalEntity();
 
@@ -130,7 +130,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         if (equipmentResponse.IsFailure)
             return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-        var validationResult = await _userRentalValidator.ValidateEntity(rental, accessToken, equipmentResponse.Value, cancellationToken);
+        var validationResult = await _userRentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure(validationResult.Error);

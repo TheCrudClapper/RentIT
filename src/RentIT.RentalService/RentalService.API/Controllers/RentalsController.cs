@@ -14,7 +14,6 @@ namespace RentalService.API.Controllers;
 public class RentalsController : ControllerBase
 {
     private readonly IRentalService _rentalService;
-    private string Token => this.GetAuthorizationToken();
     public RentalsController(IRentalService rentalService)
     {
         _rentalService = rentalService;
@@ -49,7 +48,7 @@ public class RentalsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request, CancellationToken cancellationToken)
     {
-        var result = await _rentalService.UpdateRental(id, request, Token, cancellationToken);
+        var result = await _rentalService.UpdateRental(id, request, cancellationToken);
 
         if(result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -62,7 +61,7 @@ public class RentalsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RentalResponse>> PostRental(RentalAddRequest request, CancellationToken cancellationToken)
     {
-        var result = await _rentalService.AddRental(request, Token, cancellationToken);
+        var result = await _rentalService.AddRental(request, cancellationToken);
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 

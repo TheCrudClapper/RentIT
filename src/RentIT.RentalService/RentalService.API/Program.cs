@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using RentalService.API.Extensions;
+using RentalService.API.Handlers;
 using RentalService.API.Middleware;
 using RentalService.Core;
 using RentalService.Core.Domain.HtppClientContracts;
@@ -15,28 +16,39 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-//Add API Controllers
+// -----------------------------
+// Api Controllers
+// -----------------------------
 builder.Services.AddControllers();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-//Add user-defined services
+// --------------------------------------------
+// Dependency Injection for user def. services
+// --------------------------------------------
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddCoreLayer();
+builder.Services.AddTransient<BearerTokenHandler>();
 
-//Add custom resilience policies
+// -----------------------------
+// Context Accessor
+// -----------------------------
+builder.Services.AddHttpContextAccessor();
+
+// -----------------------------
+// Resilience Policies
+// -----------------------------
 builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
 builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
 builder.Services.AddTransient<IEquipmentMicroservicePolicies, EquipmentMicroservicePolicies>();
 
+// -----------------------------
+// Http Clients
+// -----------------------------
 builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
 {
     options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
 })
+    .AddHttpMessageHandler<BearerTokenHandler>()
     .AddPolicyHandler((serviceProvider, request) =>
     {
         var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
@@ -48,16 +60,23 @@ builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroservi
     options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
         $"{builder.Configuration["EQUIPMENT_MICROSERVICE_PORT"]}");
 })
+    .AddHttpMessageHandler<BearerTokenHandler>()
     .AddPolicyHandler((serviceProvider, request) =>
     {
         var policies = serviceProvider.GetRequiredService<IEquipmentMicroservicePolicies>();
         return policies.GetCombinedPolicy();
     });
 
-//Add OpenAPI support and Swagger
+// -----------------------------
+// OpenAPI && Swagger
+// -----------------------------
+builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
+// -----------------------------
+// Token based auth 
+// -----------------------------
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

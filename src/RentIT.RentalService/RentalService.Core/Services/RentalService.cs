@@ -26,7 +26,7 @@ public class RentalService :BaseRentalService, IRentalService
         _equipmentMicroserviceClient = equipmentMicroserviceClient;
     }
 
-    public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request, string accessToken, CancellationToken cancellationToken)
+    public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request, CancellationToken cancellationToken)
     {
         Rental rental = request.ToRentalEntity();
 
@@ -34,7 +34,7 @@ public class RentalService :BaseRentalService, IRentalService
         if (equipmentResponse.IsFailure)
             return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-        var validationResult = await _rentalValidator.ValidateEntity(rental, accessToken, equipmentResponse.Value, cancellationToken);
+        var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure<RentalResponse>(validationResult.Error);
@@ -94,7 +94,7 @@ public class RentalService :BaseRentalService, IRentalService
         .ToList();
     }
 
-    public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request, string accessToken, CancellationToken cancellationToken)
+    public async Task<Result> UpdateRental(Guid rentalId, RentalUpdateRequest request, CancellationToken cancellationToken)
     {
         Rental rental = request.ToRentalEntity();
 
@@ -102,7 +102,7 @@ public class RentalService :BaseRentalService, IRentalService
         if (equipmentResponse.IsFailure)
             return Result.Failure<RentalResponse>(equipmentResponse.Error);
 
-        var validationResult = await _rentalValidator.ValidateEntity(rental, accessToken, equipmentResponse.Value, cancellationToken);
+        var validationResult = await _rentalValidator.ValidateEntity(rental, equipmentResponse.Value, cancellationToken);
 
         if (validationResult.IsFailure)
             return Result.Failure(validationResult.Error);

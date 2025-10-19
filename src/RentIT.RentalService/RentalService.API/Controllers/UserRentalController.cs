@@ -17,7 +17,6 @@ public class UserRentalController : ControllerBase
 {
     private readonly IUserRentalService _userRentalService;
     private Guid CurrentUserId => this.GetLoggedUserId();
-    private string Token => this.GetAuthorizationToken();
     public UserRentalController(IUserRentalService userRentalService)
     {
         _userRentalService = userRentalService;
@@ -50,7 +49,7 @@ public class UserRentalController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRental(Guid id, UserRentalUpdateRequest request, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.UpdateRental(id, request, CurrentUserId, Token, cancellationToken);
+        var result = await _userRentalService.UpdateRental(id, request, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
@@ -62,7 +61,7 @@ public class UserRentalController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RentalResponse>> PostRental(UserRentalAddRequest request, CancellationToken cancellationToken)
     {
-        var result = await _userRentalService.AddRental(request, CurrentUserId, Token, cancellationToken);
+        var result = await _userRentalService.AddRental(request, CurrentUserId, cancellationToken);
 
         if (result.IsFailure)
             return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);

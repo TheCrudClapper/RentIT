@@ -15,13 +15,10 @@ namespace RentalService.Infrastructure.HttpClients
             _httpClient = httpClient;
         }
 
-        public async Task<Result<UserDTO?>> GetUserByUserId(Guid userId, string accessToken, CancellationToken cancellationToken)
+        public async Task<Result<UserDTO?>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
         {
             try
             {
-                _httpClient.DefaultRequestHeaders.Authorization
-                 = new AuthenticationHeaderValue("Bearer", accessToken);
-
                 HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/users/{userId}", cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
