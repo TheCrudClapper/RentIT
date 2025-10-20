@@ -2,6 +2,7 @@
 using ReviewService.Core.DTO;
 using ReviewServices.Core.ResultTypes;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace ReviewService.Infrastructure.HttpClients;
 
@@ -29,5 +30,19 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
             return Result.Failure<UserResponse>(new Error(500, "Invalid response from Users service"));
 
         return userResponse;
+    }
+
+    public async Task<Result<IEnumerable<UserResponse>>> GetUsersByUsersIdAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/gateway/Users/byIds", userIds, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            string message = await response.Content.ReadAsStringAsync(cancellationToken);
+            return Result.Failure<IEnumerable<UserResponse>>(new Error((int)response.StatusCode, message));
+        }       
+        var userResponse = await response.Content.ReadFromJsonAsync<IEnumerable<UserResponse>>(cancellationToken);
+
+        return Result.Success(userResponse ?? []);
     }
 }

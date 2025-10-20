@@ -34,7 +34,7 @@ public class UserReviewService : IUserReviewService
         if (review is null)
             return Result.Failure<ReviewResponse>(ReviewErrors.ReviewNotFound);
 
-        var result = await _usersMicroserviceClient.GetUserByUserIdAsync(userId);
+        var result = await _usersMicroserviceClient.GetUserByUserIdAsync(userId, cancellationToken);
 
         if (result.IsFailure)
             return Result.Failure<ReviewResponse>(result.Error);

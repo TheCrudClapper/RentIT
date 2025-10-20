@@ -28,6 +28,13 @@ public class UsersController : ControllerBase
         return result.Value;
     }
 
+    [HttpPost("byIds")]
+    public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByIds([FromBody]IEnumerable<Guid> userIds, CancellationToken cancellationToken)
+    {
+        var users = await _userService.GetUsersByUserId(userIds, cancellationToken);
+        return users.ToList();
+    }
+
     //GET :/api/Users
     [HttpGet]
     [Authorize(Roles = "Admin")]

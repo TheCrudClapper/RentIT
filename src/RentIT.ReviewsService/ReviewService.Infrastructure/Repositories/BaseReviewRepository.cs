@@ -31,7 +31,7 @@ public class BaseReviewRepository : IBaseReviewRepository
             .Where(conditionExpression).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Review?>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken = default)
     {
         return await _context.Reviews.Where(item => item.EquipmentId == equipmentId)
             .ToListAsync(cancellationToken);

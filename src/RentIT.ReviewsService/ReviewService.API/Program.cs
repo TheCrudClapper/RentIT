@@ -10,6 +10,7 @@ using ReviewServices.Core;
 using ReviewServices.Infrastructure;
 using ReviewServices.Infrastructure.DbContexts;
 using System.Security.Claims;
+using Microsoft.OpenApi.Models;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,30 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 builder.Services.AddOpenApi();
 
 // Add Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {{
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        },
+        new string[] { }
+        }
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(options =>

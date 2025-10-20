@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using UserService.Core.Domain.Entities;
 using UserService.Core.Domain.RepositoryContracts;
 using UserService.Infrastructure.DbContexts;
@@ -19,10 +20,24 @@ public class UserRepository : IUserRepository
             .AnyAsync(item => item.Id == userId,cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetAllActiveUsersAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _context.Users
             .AsNoTracking()
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(expression);
+    }
+
+    public async Task<IEnumerable<User>> GetUsersByCondition(Expression<Func<User, bool>> expression)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .Where(expression)
+            .ToListAsync();
     }
 }

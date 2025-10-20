@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReviewServices.API.Extensions;
+using ReviewService.Core.ServiceContracts;
 using ReviewServices.Core.DTO;
-using ReviewServices.Core.ServiceContracts;
 
 namespace ReviewServices.API.Controllers;
 
@@ -9,37 +8,34 @@ namespace ReviewServices.API.Controllers;
 [ApiController]
 public class ReviewsController : ControllerBase
 {
-    private readonly IUserReviewService _userReviewService;
-    private Guid CurrentUser => this.GetLoggedUserId();
-    public ReviewsController(IUserReviewService reviewService)
+    private readonly IReviewService _reviewService;
+    public ReviewsController(IReviewService reviewService)
     {
-        _userReviewService = reviewService;
+        _reviewService = reviewService;
     }
 
     // GET: api/<ReviewsController>
-    [HttpGet("/byEquipment{equipmentId}")]
+    [HttpGet("byEquipment/{equipmentId}")]
     public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetAllReviewsForEquipment(Guid equipmentId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var response = await _reviewService.GetReviewsByEquipmentId(equipmentId, cancellationToken);
+
+        if (response.IsFailure)
+            return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
+
+        return Ok(response.Value);
     }
 
     // GET api/<ReviewsController>/5
     [HttpGet("{reviewId}")]
     public async Task<ActionResult<ReviewResponse>> GetReview(Guid reviewId, CancellationToken cancellationToken)
     {
-        var response = await _userReviewService.GetReview(CurrentUser, reviewId, cancellationToken);
+        var response = await _reviewService.GetReview(reviewId, cancellationToken);
 
         if (response.IsFailure)
             return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
 
         return response.Value;
-    }
-
-    // POST api/<ReviewsController>
-    [HttpPost]
-    public async Task<ActionResult<ReviewResponse>> PostReview(ReviewAddRequest request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     // PUT api/<ReviewsController>/5

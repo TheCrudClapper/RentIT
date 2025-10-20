@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using UserService.Core.Domain.Entities;
 using UserService.Core.Domain.RepositoryContracts;
 using UserService.Core.DTO.UserDto;
@@ -20,8 +22,10 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<User> users = await _userRepository.GetAllActiveUsersAsync(cancellationToken);
-        return users.Select(item => item.ToUserResponse());
+        IEnumerable<User> users = await _userRepository.GetAllUsersAsync(cancellationToken);
+
+        return users.Select(item => item.ToUserResponse())
+            .ToList();
     }
 
     public async Task<Result<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
@@ -35,6 +39,21 @@ public class UserService : IUserService
             return Result.Failure<UserDTO>(RoleErrors.UserNotInRole);
 
         return user.ToUserDTO(roles);
+    }
+
+    public async Task<IEnumerable<UserDTO>> GetUsersByUserId(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    {
+        Expression<Func<User, bool>> expression = item => userIds.Contains(item.Id);
+        var users = await  _userRepository.GetUsersByCondition(expression);
+
+        List<UserDTO> results = new();
+        foreach(var user in users)
+        {
+            var role = await _userManager.GetRolesAsync(user);
+            results.Add(user.ToUserDTO(role));
+        }
+
+        return results;
     }
 }
 

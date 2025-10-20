@@ -94,7 +94,7 @@ public class UserEquipmentService : IUserEquipmentService
     public async Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken)
     {
         var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId, cancellationToken);
-        return userEquipments.Select(item => item.ToEquipmentResponse());
+        return userEquipments.Select(item => item.ToEquipmentResponse()).ToList();
     }
 
     public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId, CancellationToken cancellationToken)
