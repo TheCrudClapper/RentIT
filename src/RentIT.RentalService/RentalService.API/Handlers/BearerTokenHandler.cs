@@ -1,4 +1,6 @@
-﻿namespace RentalService.API.Handlers;
+﻿using System.Net.Http.Headers;
+
+namespace RentalService.API.Handlers;
 
 //Http Message handler that attaches Authentication header
 //(if exist in current htpp context) to every outgoing request
@@ -17,7 +19,7 @@ public class BearerTokenHandler : DelegatingHandler
         var token = httpContext?.Request.Headers.Authorization.FirstOrDefault();
 
         if (!string.IsNullOrEmpty(token))
-            request.Headers.Add("Authorization", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return base.SendAsync(request, cancellationToken);
     }

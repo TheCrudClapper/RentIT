@@ -1,4 +1,6 @@
-﻿namespace ReviewService.API.Handlers;
+﻿using System.Net.Http.Headers;
+
+namespace ReviewService.API.Handlers;
 
 /// <summary>
 /// Handler that automatically attaches Bearer Authorization header to outgoing requests
@@ -17,7 +19,7 @@ public class BearerTokenHandler : DelegatingHandler
         var token = httpContext?.Request.Headers.Authorization.FirstOrDefault();
 
         if(!string.IsNullOrEmpty(token))
-            request.Headers.Add("Authorization", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return await base.SendAsync(request, cancellationToken);
     }
