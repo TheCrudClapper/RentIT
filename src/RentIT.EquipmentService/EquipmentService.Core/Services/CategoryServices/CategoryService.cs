@@ -55,7 +55,10 @@ public class CategoryService : ICategoryService
     public async Task<IEnumerable<CategoryResponse>> GetAllCategories(CancellationToken cancellationToken)
     {
         IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync(cancellationToken);
-        return categories.Select(item => item.ToCategoryResponse());
+
+        return categories
+            .Select(item => item.ToCategoryResponse())
+            .ToList();
     }
 
     public async Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken cancellationToken)

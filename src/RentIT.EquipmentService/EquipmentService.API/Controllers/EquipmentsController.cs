@@ -21,7 +21,7 @@ public class EquipmentsController : ControllerBase
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems(CancellationToken cancellationToken)
     {
         var equipmentItems = await _equipmentService.GetAllEquipmentItems(cancellationToken);
-        return equipmentItems.ToList();
+        return Ok(equipmentItems);
     }
 
     // GET: api/Equipments/5

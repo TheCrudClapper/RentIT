@@ -19,11 +19,10 @@ public abstract class BaseRentalService : IBaseRentalService
 
     public decimal CalculateTotalRentalPrice(DateTime startDate, DateTime endDate, DateTime returnedDate, decimal dailyPrice)
     {
-        var daysOverdue = 0;
         var days = (endDate.Date - startDate.Date).Days;
         if (returnedDate > endDate)
         {
-            daysOverdue = (returnedDate.Date - endDate.Date).Days;
+            var daysOverdue = (returnedDate.Date - endDate.Date).Days;
             return (dailyPrice * days) + (daysOverdue * (_daysOverduePriceMultiplier * dailyPrice));
         }
 

@@ -22,7 +22,7 @@ public class UserEquipmentController : ControllerBase
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems(CancellationToken cancellationToken)
     {
         var equipmentItems = await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken);
-        return equipmentItems.ToList();
+        return Ok(equipmentItems);
     }
 
     [HttpGet("{equipmentId}")]

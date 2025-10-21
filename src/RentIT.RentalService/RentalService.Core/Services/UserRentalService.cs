@@ -64,7 +64,10 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
     {
         var rentals = await _userRentalRepository.GetAllRentalsAsync(userId, cancellationToken);
 
-        var equipmentIds = rentals.Select(x => x.EquipmentId).Distinct();
+        var equipmentIds = rentals
+            .Select(x => x.EquipmentId)
+            .Distinct()
+            .ToList();
 
         var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds, cancellationToken);
         if (eqResponse.IsFailure)

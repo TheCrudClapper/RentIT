@@ -13,25 +13,25 @@ public class BaseReviewRepository : IBaseReviewRepository
     {
         _context = context;
     }
-    public async Task<Review?> GetReviewByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken = default)
+    public async Task<Review?> GetReviewByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
     {
         return await _context.Reviews.Where(conditionExpression)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Review?> GetReviewByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Review?> GetReviewByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Reviews
             .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
     {
         return await _context.Reviews
             .Where(conditionExpression).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken)
     {
         return await _context.Reviews.Where(item => item.EquipmentId == equipmentId)
             .ToListAsync(cancellationToken);

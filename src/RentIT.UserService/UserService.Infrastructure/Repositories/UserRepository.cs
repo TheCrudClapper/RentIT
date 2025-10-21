@@ -17,7 +17,7 @@ public class UserRepository : IUserRepository
     public Task<bool> DoesUserExistsAsync(Guid userId, CancellationToken cancellationToken)
     {
         return _context.Users
-            .AnyAsync(item => item.Id == userId,cancellationToken);
+            .AnyAsync(item => item.Id == userId, cancellationToken);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
@@ -27,17 +27,17 @@ public class UserRepository : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression)
+    public async Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.Users
-            .FirstOrDefaultAsync(expression);
+            .FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetUsersByCondition(Expression<Func<User, bool>> expression)
+    public async Task<IEnumerable<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.Users
             .AsNoTracking()
             .Where(expression)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

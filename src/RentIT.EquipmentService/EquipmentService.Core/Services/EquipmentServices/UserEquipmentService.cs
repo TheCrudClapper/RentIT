@@ -17,20 +17,20 @@ public class UserEquipmentService : IUserEquipmentService
     private readonly IUserEquipmentRepository _userEquipmentRepository;
     private readonly IUserEquipmentValidator _userEquipmentValidator;
     private readonly IUsersMicroserviceClient _usersClient;
-    private readonly IRabbitMQPublisher _rabbitMQPublisher;
+    private readonly IRabbitMQPublisher _rabbitMqPublisher;
     private readonly IConfiguration _configuration;
     public UserEquipmentService(
         IUserEquipmentRepository userEquipmentRepository,
         IUserEquipmentValidator userEquipmentValidator,
         IUsersMicroserviceClient usersClient,
-        IRabbitMQPublisher rabbitMQPublisher,
+        IRabbitMQPublisher rabbitMqPublisher,
         IConfiguration configuration
         )
     {
         _userEquipmentRepository = userEquipmentRepository;
         _userEquipmentValidator = userEquipmentValidator;
         _usersClient = usersClient;
-        _rabbitMQPublisher = rabbitMQPublisher;
+        _rabbitMqPublisher = rabbitMqPublisher;
         _configuration = configuration;
     }
 
@@ -51,7 +51,7 @@ public class UserEquipmentService : IUserEquipmentService
         var createdEntity = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
         //Send message that equipment is created
-        _rabbitMQPublisher.Publish<EquipmentResponse>(
+        _rabbitMqPublisher.Publish<EquipmentResponse>(
             "equipment.create",
             createdEntity.ToEquipmentResponse(),
             _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
@@ -73,7 +73,7 @@ public class UserEquipmentService : IUserEquipmentService
         if(updatedEntity == null)
             return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
-        _rabbitMQPublisher.Publish(
+        _rabbitMqPublisher.Publish(
            "equipment.update",
            updatedEntity.ToEquipmentResponse(),
            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
@@ -94,7 +94,9 @@ public class UserEquipmentService : IUserEquipmentService
     public async Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken)
     {
         var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId, cancellationToken);
-        return userEquipments.Select(item => item.ToEquipmentResponse()).ToList();
+        return userEquipments
+            .Select(item => item.ToEquipmentResponse())
+            .ToList();
     }
 
     public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId, CancellationToken cancellationToken)
@@ -106,7 +108,7 @@ public class UserEquipmentService : IUserEquipmentService
         await _userEquipmentRepository.DeleteUserEquipmentAsync(equipment, cancellationToken);
 
         //Publish delete message to exchange
-        _rabbitMQPublisher.Publish("equipment.delete",
+        _rabbitMqPublisher.Publish("equipment.delete",
             new EquipmentDeletedMessage(equipmentId),
             _configuration["equipment.exchange"]!);
 

@@ -24,7 +24,8 @@ public class UserService : IUserService
     {
         IEnumerable<User> users = await _userRepository.GetAllUsersAsync(cancellationToken);
 
-        return users.Select(item => item.ToUserResponse())
+        return users
+            .Select(item => item.ToUserResponse())
             .ToList();
     }
 
@@ -44,7 +45,7 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserDTO>> GetUsersByUserId(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
     {
         Expression<Func<User, bool>> expression = item => userIds.Contains(item.Id);
-        var users = await  _userRepository.GetUsersByCondition(expression);
+        var users = await  _userRepository.GetUsersByCondition(expression, cancellationToken);
 
         List<UserDTO> results = new();
         foreach(var user in users)

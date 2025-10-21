@@ -48,7 +48,7 @@ public class CategoriesController : ControllerBase
     public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories(CancellationToken cancellationToken)
     {
         var categories = await _categoryService.GetAllCategories(cancellationToken);
-        return categories.ToList();
+        return Ok(categories);
     }
 
     //PUT :api/Categories

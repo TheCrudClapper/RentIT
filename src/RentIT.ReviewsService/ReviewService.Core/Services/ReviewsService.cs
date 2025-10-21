@@ -44,7 +44,7 @@ public class ReviewsService : IReviewService
             .Distinct()
             .ToList();
 
-        var response = await _usersMicroserviceClient.GetUsersByUsersIdAsync(userIds);
+        var response = await _usersMicroserviceClient.GetUsersByUsersIdAsync(userIds, cancellationToken);
         if(response.IsFailure)
             return Result.Failure<IEnumerable<ReviewResponse>>(response.Error);
 

@@ -59,7 +59,9 @@ public class EquipmentService : IEquipmentService
     {
         var equipmentItems = await _equipmentRepository.GetAllEquipmentAsync(cancellationToken);
 
-        return equipmentItems.Select(item => item.ToEquipmentResponse());
+        return equipmentItems
+            .Select(item => item.ToEquipmentResponse())
+            .ToList();
     }
 
     public async Task<Result> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)

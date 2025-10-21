@@ -77,16 +77,18 @@ public class RentalService :BaseRentalService, IRentalService
 
         var equipmentIds = rentals
             .Select(x => x.EquipmentId)
-            .Distinct();
+            .Distinct()
+            .ToList();
 
-        if (!equipmentIds.Any())
+        if (equipmentIds.Count == 0)
             return Result.Success(Enumerable.Empty<RentalResponse>());
 
         var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds, cancellationToken);
         if (eqResponse.IsFailure)
             return Result.Failure<IEnumerable<RentalResponse>>(eqResponse.Error);
 
-        var equipmentDict = eqResponse.Value.ToDictionary(x => x.Id, x => x);
+        var equipmentDict = eqResponse.Value
+            .ToDictionary(x => x.Id, x => x);
 
         return rentals
         .Where(r => equipmentDict.ContainsKey(r.EquipmentId))
