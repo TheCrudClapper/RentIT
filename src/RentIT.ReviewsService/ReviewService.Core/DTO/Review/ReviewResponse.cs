@@ -1,4 +1,4 @@
-﻿namespace ReviewServices.Core.DTO;
+﻿namespace ReviewService.Core.DTO.Review;
 
 public record ReviewResponse(
     Guid Id,

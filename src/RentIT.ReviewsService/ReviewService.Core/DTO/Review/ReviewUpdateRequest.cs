@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReviewServices.Core.DTO;
+namespace ReviewService.Core.DTO.Review;
 
 public record ReviewUpdateRequest 
 {

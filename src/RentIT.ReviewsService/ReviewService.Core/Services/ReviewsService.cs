@@ -1,9 +1,9 @@
 ﻿using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.DTO.Review;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ResultTypes;
 using ReviewService.Core.ServiceContracts;
-using ReviewServices.Core.DTO;
 using ReviewServices.Core.ResultTypes;
 using System.Collections.Generic;
 

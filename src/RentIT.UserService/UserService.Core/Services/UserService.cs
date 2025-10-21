@@ -46,7 +46,7 @@ public class UserService : IUserService
     {
         Expression<Func<User, bool>> expression = item => userIds.Contains(item.Id);
         var users = await  _userRepository.GetUsersByCondition(expression, cancellationToken);
-
+        //IN FUTURE JUST DOWNLOAD USERS EMAIL INSTEAD
         List<UserDTO> results = new();
         foreach(var user in users)
         {

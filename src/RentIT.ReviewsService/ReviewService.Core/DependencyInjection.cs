@@ -4,6 +4,7 @@ using ReviewServices.Core.ServiceContracts;
 using ReviewServices.Core.Caching;
 using ReviewServices.Core.Services;
 using ReviewService.Core.ServiceContracts;
+using ReviewService.Core.Services;
 
 namespace ReviewServices.Core;
 
@@ -21,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<ICachingHelper, CachingHelper>();
         services.AddScoped<IUserReviewService, UserReviewService>();
         services.AddScoped<IReviewService, ReviewsService>();
+        services.AddScoped<IReviewAllowanceService, ReviewAllowanceService>();
         return services;    
     }
 }

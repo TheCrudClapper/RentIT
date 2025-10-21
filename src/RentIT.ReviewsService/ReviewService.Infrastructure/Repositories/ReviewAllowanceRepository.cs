@@ -1,0 +1,48 @@
+﻿using Microsoft.EntityFrameworkCore;
+using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewServices.Core.Domain.Entities;
+using ReviewServices.Infrastructure.DbContexts;
+using System.Linq.Expressions;
+
+namespace ReviewService.Infrastructure.Repositories;
+
+public class ReviewAllowanceRepository : IReviewAllowanceRepository
+{
+    private readonly ReviewsDbContext _context;
+    public ReviewAllowanceRepository(ReviewsDbContext context)
+    {
+        _context = context;
+    }
+    public async Task<ReviewAllowance> AddAllowanceAsync(ReviewAllowance allowance, CancellationToken cancellationToken)
+    {
+        allowance.Id = Guid.NewGuid();
+        await _context.ReviewsAllowance.AddAsync(allowance);
+        await _context.SaveChangesAsync();
+
+        return allowance;
+    }
+
+    public async Task<ReviewAllowance?> GetAllowanceByCondition(Expression<Func<ReviewAllowance, bool>> expression, CancellationToken cancellationToken)
+    {
+        return await _context.ReviewsAllowance
+            .Where(expression)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ReviewAllowance?> GetAllowanceById(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.ReviewsAllowance
+            .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+    }
+
+    public async Task<bool> RevokeAllowanceAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var allowance = await GetAllowanceById(id, cancellationToken);
+        if (allowance is null)
+            return false;
+
+        _context.ReviewsAllowance.Remove(allowance);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+}

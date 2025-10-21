@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReviewService.Core.DTO.Review;
 using ReviewService.Core.ServiceContracts;
-using ReviewServices.Core.DTO;
 
 namespace ReviewServices.API.Controllers;
 

@@ -1,4 +1,4 @@
-﻿using ReviewServices.Core.DTO;
+﻿using ReviewService.Core.DTO.Review;
 using ReviewServices.Core.ResultTypes;
 
 namespace ReviewService.Core.ServiceContracts;

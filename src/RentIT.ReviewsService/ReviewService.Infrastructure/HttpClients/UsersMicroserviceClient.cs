@@ -1,5 +1,5 @@
 ﻿using ReviewService.Core.Domain.HttpClientContracts;
-using ReviewService.Core.DTO;
+using ReviewService.Core.DTO.User;
 using ReviewServices.Core.ResultTypes;
 using System.Net.Http.Json;
 using System.Text.Json;

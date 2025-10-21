@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace ReviewServices.Core.DTO;
+namespace ReviewService.Core.DTO.Review;
 
 public record ReviewAddRequest(
     [Required] [MaxLength(1024)] string Description,
