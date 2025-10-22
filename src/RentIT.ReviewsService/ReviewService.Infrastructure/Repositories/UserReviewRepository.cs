@@ -10,7 +10,7 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
 {
     public UserReviewRepository(ReviewsDbContext context) : base(context) {}
 
-    public async Task<Review> AddReviewAsync(Review review, CancellationToken cancellationToken)
+    public async Task<Review> AddUserReviewAsync(Review review, CancellationToken cancellationToken)
     {
         review.Id = Guid.NewGuid();
         await _context.AddAsync(review, cancellationToken);
@@ -19,9 +19,9 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
         return review;
     }
 
-    public async Task<bool> DeleteReviewAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteUserReviewAsync(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
     {
-        var review = await GetReviewByIdAsync(id, cancellationToken);
+        var review = await GetUserReviewAsync(userId, reviewId, cancellationToken);
         if (review is null)
             return false;
 
@@ -31,15 +31,15 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
         return true;
     }
 
-    public async Task<Review?> GetUserReviewAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    public async Task<Review?> GetUserReviewAsync(Guid reviewId, Guid userId, CancellationToken cancellationToken)
     {
         return await _context.Reviews
-            .FirstOrDefaultAsync(item => item.Id == id && item.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(item => item.Id == reviewId && item.UserId == userId, cancellationToken);
     }
 
-    public async Task<bool> UpdateReviewAsync(Guid id, Review review, CancellationToken cancellationToken)
+    public async Task<bool> UpdateUserReviewAsync(Guid reviewId, Review review, CancellationToken cancellationToken)
     {
-        var reviewToUpdate = await GetReviewByIdAsync(id, cancellationToken);
+        var reviewToUpdate = await GetReviewByIdAsync(reviewId, cancellationToken);
         if (reviewToUpdate is null)
             return false;
 
@@ -50,5 +50,19 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    public async Task<Review?> UpdateUserReviewAsync(Guid userId, Guid reviewId, Review review, CancellationToken cancellationToken = default)
+    {
+        var reviewToUpdate = await GetUserReviewAsync(reviewId, userId, cancellationToken);
+        if (reviewToUpdate is null)
+            return null;
+
+        reviewToUpdate.Description = review.Description;
+        reviewToUpdate.DateEdited = DateTime.UtcNow;
+        reviewToUpdate.Rating = review.Rating;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return reviewToUpdate;
     }
 }

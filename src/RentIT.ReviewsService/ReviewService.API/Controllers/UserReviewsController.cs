@@ -1,51 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReviewService.Core.DTO.Review;
-using ReviewServices.API.Extensions;
 using ReviewServices.Core.ServiceContracts;
 
 namespace ReviewService.API.Controllers;
 
-public class UserReviewsController : ControllerBase
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class UserReviewsController : BaseApiController
 {
     private readonly IUserReviewService _userReviewService;
-    private Guid CurrentUser => this.GetLoggedUserId();
     public UserReviewsController(IUserReviewService reviewService)
     {
         _userReviewService = reviewService;
     }
 
-
-    // GET api/<ReviewsController>/5
+    // GET api/UserReviews/5
     [HttpGet("{reviewId}")]
     public async Task<ActionResult<ReviewResponse>> GetReview(Guid reviewId, CancellationToken cancellationToken)
-    {
-        var response = await _userReviewService.GetReview(CurrentUser, reviewId, cancellationToken);
+        => HandleResult(await _userReviewService.GetUserReview(CurrentUserId, reviewId, cancellationToken));
 
-        if (response.IsFailure)
-            return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
-
-        return response.Value;
-    }
-
-    // POST api/<ReviewsController>
+    // POST api/UserReviews
     [HttpPost]
     public async Task<ActionResult<ReviewResponse>> PostReview(ReviewAddRequest request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 
-    // PUT api/<ReviewsController>/5
+    // PUT api/UserReviews/5
     [HttpPut("{reviewId}")]
+    public async Task<ActionResult<UserReviewResponse>> PutReview(Guid reviewId, ReviewUpdateRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _userReviewService.UpdateUserReview(CurrentUserId, reviewId, request, cancellationToken));
 
-    public Task<IActionResult> PutReview(Guid reviewId, ReviewUpdateRequest request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    // DELETE api/<ReviewsController>/5
+    // DELETE api/UserReviews/5
     [HttpDelete("{reviewId}")]
     public async Task<IActionResult> DeleteReview(Guid reviewId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+        => HandleResult(await _userReviewService.DeleteUserReview(CurrentUserId, reviewId, cancellationToken));
 }

@@ -5,8 +5,6 @@ using ReviewService.Core.Mappings;
 using ReviewService.Core.ResultTypes;
 using ReviewService.Core.ServiceContracts;
 using ReviewServices.Core.ResultTypes;
-using System.Collections.Generic;
-
 namespace ReviewServices.Core.Services;
 
 public class ReviewsService : IReviewService
@@ -18,6 +16,16 @@ public class ReviewsService : IReviewService
         _reviewRepository = reviewRepository;
         _usersMicroserviceClient = usersMicroserviceClient;
     }
+
+    public async Task<Result> DeleteReview(Guid reviewId, CancellationToken cancellation = default)
+    {
+        var result = await _reviewRepository.DeleteReviewAsync(reviewId, cancellation);
+
+        return result
+            ? Result.Success()
+            : Result.Failure(Error.DeleteFailed);
+    }
+
     public async Task<Result<ReviewResponse>> GetReview(Guid reviewId, CancellationToken cancellationToken)
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId, cancellationToken);

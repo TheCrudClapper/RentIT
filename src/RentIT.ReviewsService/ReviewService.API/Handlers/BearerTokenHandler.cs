@@ -16,10 +16,11 @@ public class BearerTokenHandler : DelegatingHandler
     {
         var httpContext = _httpContextAccessor.HttpContext;
 
-        var token = httpContext?.Request.Headers.Authorization.FirstOrDefault();
+        var authHeader = httpContext?.Request.Headers.Authorization.FirstOrDefault();
 
-        if(!string.IsNullOrEmpty(token))
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        if (!string.IsNullOrEmpty(authHeader))
+            request.Headers.Authorization = new AuthenticationHeaderValue(authHeader);
 
         return await base.SendAsync(request, cancellationToken);
     }

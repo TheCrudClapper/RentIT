@@ -3,6 +3,7 @@ using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Core.DTO.Review;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ResultTypes;
+using ReviewServices.Core.Domain.Entities;
 using ReviewServices.Core.ResultTypes;
 using ReviewServices.Core.ServiceContracts;
 
@@ -18,32 +19,41 @@ public class UserReviewService : IUserReviewService
         _usersMicroserviceClient = usersMicroserviceClient;
     }
 
-    public Task<Result<ReviewResponse>> AddReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken)
+    public Task<Result<ReviewResponse>> AddUserReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result> DeleteReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var result = await _userReviewRepository.DeleteUserReviewAsync(userId, reviewId, cancellationToken);
+
+        return result 
+            ? Result.Success() 
+            : Result.Failure(Error.NotFound);
     }
 
-    public async Task<Result<ReviewResponse>> GetReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
+    public async Task<Result<ReviewResponse>> GetUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
     {
-        var review = await _userReviewRepository.GetUserReviewAsync(reviewId, userId, cancellationToken);
+        var review = await _userReviewRepository.GetUserReviewAsync(userId, reviewId, cancellationToken);
         if (review is null)
             return Result.Failure<ReviewResponse>(ReviewErrors.ReviewNotFound);
 
         var result = await _usersMicroserviceClient.GetUserByUserIdAsync(userId, cancellationToken);
 
-        if (result.IsFailure)
-            return Result.Failure<ReviewResponse>(result.Error);
-
-        return review.ToReviewResponse(result.Value);
+        return result.IsFailure 
+            ? Result.Failure<ReviewResponse>(result.Error) 
+            : review.ToReviewResponse(result.Value);
     }
 
-    public Task<Result<ReviewResponse>> UpdateReview(Guid userId, ReviewUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<Result<UserReviewResponse>> UpdateUserReview(Guid userId, Guid reviewId, ReviewUpdateRequest request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        Review entity = request.ToUpdateEntity();
+        Review? updatedEntity = await _userReviewRepository.UpdateUserReviewAsync(userId, reviewId, entity, cancellationToken);
+
+        return updatedEntity is null
+            ? Result.Failure<UserReviewResponse>(Error.UpdateFailed)
+            : updatedEntity.ToUserReviewResponse(); 
+
     }
 }

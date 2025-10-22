@@ -10,4 +10,17 @@ public static  class ReviewMappings
     {
         return new ReviewResponse(review.Id, userResponse.Email, review.Description, review.Rating);
     }
+    public static UserReviewResponse ToUserReviewResponse(this Review review)
+    {
+        return new UserReviewResponse(review.Id, review.Description, review.Rating);
+    }
+
+    public static Review ToUpdateEntity(this ReviewUpdateRequest dto)
+    {
+        return new Review
+        {
+            Rating = dto.Rating,
+            Description = dto.Description,
+        };
+    }
 }

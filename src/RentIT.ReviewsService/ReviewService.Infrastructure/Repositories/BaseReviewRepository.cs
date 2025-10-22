@@ -19,10 +19,10 @@ public class BaseReviewRepository : IBaseReviewRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<Review?> GetReviewByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Review?> GetReviewByIdAsync(Guid reviewId, CancellationToken cancellationToken)
     {
         return await _context.Reviews
-            .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(item => item.Id == reviewId, cancellationToken);
     }
 
     public async Task<IEnumerable<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
