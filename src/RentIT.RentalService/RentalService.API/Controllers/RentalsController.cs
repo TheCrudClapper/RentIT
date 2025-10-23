@@ -88,6 +88,7 @@ public class RentalsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("mark-equipment-as-returned")]
     public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
     {

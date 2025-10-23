@@ -27,6 +27,19 @@ public class ReviewAllowanceController : ControllerBase
         return NoContent();
     }
 
+    //Testing only
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<ReviewAllowanceResponse>>> GetAllReviewAllowances (CancellationToken cancellation)
+    {
+        var result = await _reviewAllowanceService.GetAllReviewAllowances(cancellation);
+
+        if(result.IsFailure)
+            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+
+        return Ok(result.Value);
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<ReviewAllowanceResponse>> DeleteReviewAllowance(Guid id, CancellationToken cancellationToken)
     {

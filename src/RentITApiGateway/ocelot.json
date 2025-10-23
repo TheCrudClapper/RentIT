@@ -382,6 +382,25 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/gateway/Rentals/mark-equipment-as-returned",
+      "DownstreamPathTemplate": "/api/Rentals/mark-equipment-as-returned",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/gateway/UserRental",
       "DownstreamPathTemplate": "/api/UserRental",
       "DownstreamHostAndPorts": [

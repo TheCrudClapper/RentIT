@@ -22,6 +22,7 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
         await _context.SaveChangesAsync();
     }
 
+
     public async Task<ReviewAllowance?> GetAllowanceByCondition(Expression<Func<ReviewAllowance, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.ReviewsAllowance
@@ -44,5 +45,19 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
         _context.ReviewsAllowance.Remove(allowance);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<IEnumerable<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
+    {
+        return await _context.ReviewsAllowance
+            .ToListAsync();
+    }
+
+    public async Task<bool> IsAllowanceUnique(ReviewAllowance allowance)
+    {
+        return !await _context.ReviewsAllowance
+            .AnyAsync(item => item.UserId == allowance.UserId
+            && item.RentalId == allowance.RentalId
+            && item.EquipmentId == allowance.EquipmentId);
     }
 }

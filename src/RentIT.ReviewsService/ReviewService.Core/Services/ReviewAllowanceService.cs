@@ -17,6 +17,9 @@ public class ReviewAllowanceService : IReviewAllowanceService
     public async Task AddReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken)
     {
         var allowanceToAdd = request.ToReviewAllowance();
+
+        //var isAllowanceUnique = await _reviewAllowanceRepository.IsAllowanceUnique(allowanceToAdd);
+
         await _reviewAllowanceRepository.AddAllowanceAsync(allowanceToAdd, cancellationToken);
     }
 
@@ -35,5 +38,12 @@ public class ReviewAllowanceService : IReviewAllowanceService
         return result 
             ? Result.Success() 
             : Result.Failure(Error.NotFound);
+    }
+
+    public async Task<Result<IEnumerable<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
+    {
+        var result = await _reviewAllowanceRepository.GetAllReviewAllowances(cancellationToken);
+
+        return Result.Success(result.Select(item => item.ToReviewAllowanceResponse()));
     }
 }

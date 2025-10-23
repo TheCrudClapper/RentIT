@@ -29,7 +29,7 @@ public static class DependencyInjection
 
         //Add RabbitMQ
         services.AddTransient<RabbitMQReviewAllowanceGrantedConsumer>();
-        services.AddSingleton<RabbitMQConsumersHostedService>();
+        services.AddHostedService<RabbitMQConsumersHostedService>();
         return services;    
     }
 }
