@@ -2,6 +2,7 @@
 using RentalService.Core.Caching;
 using RentalService.Core.RabbitMQ.Consumers;
 using RentalService.Core.RabbitMQ.HostedServices;
+using RentalService.Core.RabbitMQ.Publishers;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Services;
 using RentalService.Core.Validators.Contracts;
@@ -31,6 +32,9 @@ public static class DependencyInjection
 
         //Add caching helper
         services.AddScoped<ICachingHelper, CachingHelper>();
+
+        //Add Publisher
+        services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 
         //Add Consumers
         services.AddTransient<RabbitMQEquipmentDeletedConsumer>();

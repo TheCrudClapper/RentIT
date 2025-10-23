@@ -13,13 +13,13 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
     {
         _context = context;
     }
-    public async Task<ReviewAllowance> AddAllowanceAsync(ReviewAllowance allowance, CancellationToken cancellationToken)
+    public async Task AddAllowanceAsync(ReviewAllowance allowance, CancellationToken cancellationToken)
     {
         allowance.Id = Guid.NewGuid();
+        allowance.DateCreated = DateTime.UtcNow;
+        allowance.IsActive = true;
         await _context.ReviewsAllowance.AddAsync(allowance);
         await _context.SaveChangesAsync();
-
-        return allowance;
     }
 
     public async Task<ReviewAllowance?> GetAllowanceByCondition(Expression<Func<ReviewAllowance, bool>> expression, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
             .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<bool> RevokeAllowanceAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAllowanceAsync(Guid id, CancellationToken cancellationToken)
     {
         var allowance = await GetAllowanceById(id, cancellationToken);
         if (allowance is null)

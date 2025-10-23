@@ -28,7 +28,8 @@ public class BaseReviewRepository : IBaseReviewRepository
     public async Task<IEnumerable<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
     {
         return await _context.Reviews
-            .Where(conditionExpression).ToListAsync(cancellationToken);
+            .Where(conditionExpression)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken)

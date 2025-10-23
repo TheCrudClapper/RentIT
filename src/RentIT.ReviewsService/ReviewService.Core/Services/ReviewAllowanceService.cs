@@ -1,7 +1,6 @@
 ﻿using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Core.DTO.ReviewAllowance;
 using ReviewService.Core.Mappings;
-using ReviewService.Core.ResultTypes;
 using ReviewService.Core.ServiceContracts;
 using ReviewServices.Core.ResultTypes;
 
@@ -15,12 +14,13 @@ public class ReviewAllowanceService : IReviewAllowanceService
         _reviewAllowanceRepository = reviewAllowanceRepository;
     }
 
-    public Task<Result<ReviewAllowanceResponse>> AddReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken = default)
+    public async Task AddReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var allowanceToAdd = request.ToReviewAllowance();
+        await _reviewAllowanceRepository.AddAllowanceAsync(allowanceToAdd, cancellationToken);
     }
 
-    public async Task<Result<ReviewAllowanceResponse>> GetReviewAllowance(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<ReviewAllowanceResponse>> GetReviewAllowance(Guid id, CancellationToken cancellationToken)
     {
         var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
 
@@ -29,9 +29,9 @@ public class ReviewAllowanceService : IReviewAllowanceService
             : allowance.ToReviewAllowanceResponse();
     }
 
-    public async Task<Result> RevokeAllowance(Guid id, CancellationToken cancellationToken)
+    public async Task<Result> DeleteAllowance(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _reviewAllowanceRepository.RevokeAllowanceAsync(id, cancellationToken);
+        var result = await _reviewAllowanceRepository.DeleteAllowanceAsync(id, cancellationToken);
         return result 
             ? Result.Success() 
             : Result.Failure(Error.NotFound);

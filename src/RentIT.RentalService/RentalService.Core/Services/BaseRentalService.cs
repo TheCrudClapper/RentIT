@@ -5,7 +5,7 @@ namespace RentalService.Core.Services;
 
 public abstract class BaseRentalService : IBaseRentalService
 {
-    private readonly IConfiguration _configuration;
+    protected readonly IConfiguration _configuration;
 
     //Multiplier in format eg. 1.3, 2.1 etc
     //Default fallback value is 1.4

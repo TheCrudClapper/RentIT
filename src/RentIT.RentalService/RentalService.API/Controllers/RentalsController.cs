@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentalService.API.Extensions;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
-using StackExchange.Redis;
-
 namespace RentalService.API.Controllers;
 
 [Route("api/[controller]")]
@@ -93,7 +89,6 @@ public class RentalsController : ControllerBase
     }
 
     [HttpPost("mark-equipment-as-returned")]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
     {
         var result = await _rentalService.MarkEquipmentAsReturned(request, cancellationToken);

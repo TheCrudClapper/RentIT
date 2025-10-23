@@ -4,6 +4,8 @@ using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Mappings;
+using RentalService.Core.RabbitMQ.Messages;
+using RentalService.Core.RabbitMQ.Publishers;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
@@ -15,15 +17,17 @@ public class RentalService :BaseRentalService, IRentalService
     private readonly IRentalRepository _rentalRepository;
     private readonly IRentalValidator _rentalValidator;
     private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
+    private readonly IRabbitMQPublisher _rabbitMQPublisher;
     public RentalService(IRentalRepository rentalRepository,
         IRentalValidator rentalValidator,
         IEquipmentMicroserviceClient equipmentMicroserviceClient,
-        IConfiguration configuration) 
-            :base(configuration)
+        IConfiguration configuration,
+        IRabbitMQPublisher rabbitMQPublisher) :base(configuration)
     {
         _rentalRepository = rentalRepository;
         _rentalValidator = rentalValidator;
         _equipmentMicroserviceClient = equipmentMicroserviceClient;
+        _rabbitMQPublisher = rabbitMQPublisher;
     }
 
     public async Task<Result<RentalResponse>> AddRental(RentalAddRequest request, CancellationToken cancellationToken)
@@ -79,7 +83,7 @@ public class RentalService :BaseRentalService, IRentalService
             .Select(x => x.EquipmentId)
             .Distinct()
             .ToList();
-
+        
         if (equipmentIds.Count == 0)
             return Result.Success(Enumerable.Empty<RentalResponse>());
 
@@ -156,6 +160,18 @@ public class RentalService :BaseRentalService, IRentalService
         if (calculatedTotalValue != rental.RentalPrice)
             await _rentalRepository.UpdateRentalTotalCost(rental, calculatedTotalValue, cancellationToken);
 
+        var message = new ReviewAllowanceAddRequest
+        {
+            EquipmentId = rental.EquipmentId,
+            RentalId = rental.Id,
+            UserId = rental.UserId,
+        };
+
+        _rabbitMQPublisher.Publish(
+            "review.allowance.create",
+            message,
+            _configuration["RABBITMQ_RENTAL_EXCHANGE"]!);
+        
         return Result.Success();
     }
 }

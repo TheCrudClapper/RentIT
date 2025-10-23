@@ -12,7 +12,7 @@ namespace ReviewService.API.Controllers
         {
             return result.IsFailure
                 ? Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode)
-                : Ok(result);
+                : Ok(result.Value);
         }
 
         protected IActionResult HandleResult(Result result)

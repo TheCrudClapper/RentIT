@@ -110,6 +110,7 @@ services:
         - REDIS_HOST=redis
         - REDIS_PORT=6379 
         - RABBITMQ_USER_NAME=user
+        - RABBITMQ_RENTAL_EXCHANGE=rental.exchange
         - RABBITMQ_HOST_NAME=rabbitmq
         - RABBITMQ_PASSWORD=admin
         - RABBITMQ_PORT=5672
@@ -166,6 +167,7 @@ services:
         - RABBITMQ_PASSWORD=admin
         - RABBITMQ_PORT=5672
         - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - RABBITMQ_RENTAL_EXCHANGE=rental.exchange
         - Jwt__Issuer=http://localhost:5050 
         - Jwt__Audience=http://localhost:5050
         - Jwt__ExpirationInMinutes=2

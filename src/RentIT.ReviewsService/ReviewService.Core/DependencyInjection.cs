@@ -5,6 +5,8 @@ using ReviewServices.Core.Caching;
 using ReviewServices.Core.Services;
 using ReviewService.Core.ServiceContracts;
 using ReviewService.Core.Services;
+using ReviewService.Core.RabbitMQ;
+using ReviewService.Core.RabbitMQ.HostedServices;
 
 namespace ReviewServices.Core;
 
@@ -23,6 +25,11 @@ public static class DependencyInjection
         services.AddScoped<IUserReviewService, UserReviewService>();
         services.AddScoped<IReviewService, ReviewsService>();
         services.AddScoped<IReviewAllowanceService, ReviewAllowanceService>();
+
+
+        //Add RabbitMQ
+        services.AddTransient<RabbitMQReviewAllowanceGrantedConsumer>();
+        services.AddSingleton<RabbitMQConsumersHostedService>();
         return services;    
     }
 }

@@ -51,7 +51,7 @@ public class UserEquipmentService : IUserEquipmentService
         var createdEntity = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
         //Send message that equipment is created
-        _rabbitMqPublisher.Publish<EquipmentResponse>(
+        _rabbitMqPublisher.Publish(
             "equipment.create",
             createdEntity.ToEquipmentResponse(),
             _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);

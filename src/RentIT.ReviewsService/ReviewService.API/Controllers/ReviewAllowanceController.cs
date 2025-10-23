@@ -16,17 +16,6 @@ public class ReviewAllowanceController : ControllerBase
         _reviewAllowanceService = reviewAllowanceService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<ReviewAllowanceResponse>> PostReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _reviewAllowanceService.AddReviewAllowance(request, cancellationToken);
-
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
-
-        return result.Value;
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<ReviewAllowanceResponse>> GetReviewAllowance(Guid id, CancellationToken cancellationToken)
     {

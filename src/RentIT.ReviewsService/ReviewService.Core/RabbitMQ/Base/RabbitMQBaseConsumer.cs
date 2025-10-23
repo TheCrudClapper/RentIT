@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 
-namespace RentalService.Core.RabbitMQ.Consumers.Base;
+namespace ReviewService.Core.RabbitMQ.Consumers.Base;
 
 /// <summary>
 /// Provides a base implementation for a RabbitMQ consumer that manages connection and channel lifecycle, and defines
