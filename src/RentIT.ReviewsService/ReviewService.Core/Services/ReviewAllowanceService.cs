@@ -18,7 +18,9 @@ public class ReviewAllowanceService : IReviewAllowanceService
     {
         var allowanceToAdd = request.ToReviewAllowance();
 
-        //var isAllowanceUnique = await _reviewAllowanceRepository.IsAllowanceUnique(allowanceToAdd);
+        //if allowace already exists, exit early
+        if (!await _reviewAllowanceRepository.IsAllowanceUnique(allowanceToAdd))
+            return;
 
         await _reviewAllowanceRepository.AddAllowanceAsync(allowanceToAdd, cancellationToken);
     }
