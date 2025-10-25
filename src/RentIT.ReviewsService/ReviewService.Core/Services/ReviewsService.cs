@@ -17,6 +17,11 @@ public class ReviewsService : IReviewService
         _usersMicroserviceClient = usersMicroserviceClient;
     }
 
+    public Task<Result<ReviewAddRequest>> AddReview(ReviewAddRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> DeleteReview(Guid reviewId, CancellationToken cancellation = default)
     {
         var result = await _reviewRepository.DeleteReviewAsync(reviewId, cancellation);
