@@ -64,6 +64,7 @@ services:
         - RABBITMQ_PASSWORD=admin
         - RABBITMQ_PORT=5672
         - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - RABBITMQ_REVIEW_EXCHANGE=review.exchange
         - Jwt__Issuer=http://localhost:5050 
         - Jwt__Audience=http://localhost:5050
         - Jwt__ExpirationInMinutes=2
@@ -170,6 +171,7 @@ services:
         - RABBITMQ_PORT=5672
         - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
         - RABBITMQ_RENTAL_EXCHANGE=rental.exchange
+        - RABBITMQ_REVIEW_EXCHANGE=review.exchange
         - Jwt__Issuer=http://localhost:5050 
         - Jwt__Audience=http://localhost:5050
         - Jwt__ExpirationInMinutes=2

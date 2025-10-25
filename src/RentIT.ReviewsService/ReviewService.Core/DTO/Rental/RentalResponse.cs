@@ -8,5 +8,5 @@ namespace ReviewService.Core.DTO.Rental
         Guid RentedByUserId,
         DateTime EndDate,
         decimal TotalRentalPrice,
-        EquipmentResponse equipmentDetails);
+        EquipmentResponse EquipmentDetails);
 }
