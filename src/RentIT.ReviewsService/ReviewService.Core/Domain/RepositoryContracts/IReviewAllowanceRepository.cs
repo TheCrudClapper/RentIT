@@ -10,5 +10,6 @@ public interface IReviewAllowanceRepository
     Task<bool> DeleteAllowanceAsync(Guid id, CancellationToken cancellationToken = default);
     Task<ReviewAllowance?> GetAllowanceById(Guid id, CancellationToken cancellationToken = default);
     Task<ReviewAllowance?> GetAllowanceByCondition(Expression<Func<ReviewAllowance, bool>> expression, CancellationToken cancellationToken = default);
-    Task<bool> IsAllowanceUnique(ReviewAllowance allowance); 
+    Task<bool> IsAllowanceUnique(ReviewAllowance allowance);
+    Task<bool> DoesAllowanceExists(Guid userId, Guid rentalId, Guid equipmentId);
 }

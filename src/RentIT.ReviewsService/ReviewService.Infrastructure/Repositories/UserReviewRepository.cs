@@ -13,6 +13,8 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
     public async Task<Review> AddUserReviewAsync(Review review, CancellationToken cancellationToken)
     {
         review.Id = Guid.NewGuid();
+        review.DateCreated = DateTime.UtcNow;
+        review.IsActive = true;
         await _context.AddAsync(review, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 

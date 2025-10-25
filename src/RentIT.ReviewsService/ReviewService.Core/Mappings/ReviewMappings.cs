@@ -15,10 +15,20 @@ public static  class ReviewMappings
         return new UserReviewResponse(review.Id, review.Description, review.Rating);
     }
 
-    public static Review ToUpdateEntity(this ReviewUpdateRequest dto)
+    public static Review ToEntity(this ReviewUpdateRequest dto)
     {
         return new Review
         {
+            Rating = dto.Rating,
+            Description = dto.Description,
+        };
+    }
+
+    public static Review ToEntity(this ReviewAddRequest dto, Guid userId, Guid equipmentId)
+    {
+        return new Review
+        {
+            RentalId = dto.RentalId,
             Rating = dto.Rating,
             Description = dto.Description,
         };

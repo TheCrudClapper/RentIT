@@ -9,5 +9,4 @@ public interface IReviewAllowanceService
     Task AddReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken = default);
     Task<Result> DeleteAllowance(Guid id, CancellationToken cancellationToken = default);
     Task<Result<ReviewAllowanceResponse>> GetReviewAllowance(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<bool>> DoesAllowanceExist(Guid userId, Guid rentalId, Guid equipmentId);
 }

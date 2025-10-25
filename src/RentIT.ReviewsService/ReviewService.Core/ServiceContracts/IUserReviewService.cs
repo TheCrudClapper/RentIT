@@ -10,8 +10,8 @@ namespace ReviewServices.Core.ServiceContracts;
 /// operations. Methods are asynchronous and support cancellation via the provided token.</remarks>
 public interface IUserReviewService
 {
-    Task<Result<ReviewResponse>> AddUserReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken = default);
+    Task<Result<UserReviewResponse>> AddUserReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken = default);
     Task<Result<UserReviewResponse>> UpdateUserReview(Guid userId, Guid reviewId, ReviewUpdateRequest request, CancellationToken cancellationToken = default);
-    Task<Result<ReviewResponse>> GetUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default);
+    Task<Result<UserReviewResponse>> GetUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default);
     Task<Result> DeleteUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default);
 }

@@ -160,6 +160,8 @@ services:
         - DB_PASSWORD=admin
         - USERS_MICROSERVICE_NAME=api-gateway
         - USERS_MICROSERVICE_PORT=8080
+        - RENTAL_MICROSERVICE_NAME=api-gateway
+        - RENTAL_MICROSERVICE_PORT=8080
         - REDIS_HOST=redis
         - REDIS_PORT=6379 
         - RABBITMQ_USER_NAME=user

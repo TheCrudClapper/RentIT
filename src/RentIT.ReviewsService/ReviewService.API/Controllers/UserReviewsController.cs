@@ -24,7 +24,7 @@ public class UserReviewsController : BaseApiController
     // POST api/UserReviews
     [HttpPost]
     public async Task<ActionResult<ReviewResponse>> PostReview(ReviewAddRequest request, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
+        => HandleResult(await _userReviewService.AddUserReview(CurrentUserId, request, cancellationToken));
 
     // PUT api/UserReviews/5
     [HttpPut("{reviewId}")]

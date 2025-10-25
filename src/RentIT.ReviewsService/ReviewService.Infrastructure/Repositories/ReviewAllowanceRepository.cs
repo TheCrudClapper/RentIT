@@ -60,4 +60,12 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
             && item.RentalId == allowance.RentalId
             && item.EquipmentId == allowance.EquipmentId);
     }
+
+    public async Task<bool> DoesAllowanceExists(Guid userId, Guid rentalId, Guid equipmentId)
+    {
+       return await _context.ReviewsAllowance
+            .AnyAsync(item => item.UserId == userId
+            && item.RentalId == rentalId
+            && item.EquipmentId == equipmentId);
+    }
 }

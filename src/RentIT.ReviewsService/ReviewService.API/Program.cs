@@ -34,6 +34,13 @@ builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient
 })
     .AddHttpMessageHandler<BearerTokenHandler>();
 
+builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(options =>
+{
+    options.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}" +
+        $":{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
+})
+    .AddHttpMessageHandler<BearerTokenHandler>();
+
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

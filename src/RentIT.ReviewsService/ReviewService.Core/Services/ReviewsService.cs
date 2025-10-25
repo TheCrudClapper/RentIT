@@ -10,16 +10,12 @@ namespace ReviewServices.Core.Services;
 public class ReviewsService : IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
-    private readonly IUsersMicroserviceClient _usersMicroserviceClient;
-    public ReviewsService(IReviewRepository reviewRepository, IUsersMicroserviceClient usersMicroserviceClient)
+    private readonly IUsersMicroserviceClient _usersMicroserviceClient; 
+    public ReviewsService(IReviewRepository reviewRepository,
+        IUsersMicroserviceClient usersMicroserviceClient)
     {
         _reviewRepository = reviewRepository;
         _usersMicroserviceClient = usersMicroserviceClient;
-    }
-
-    public Task<Result<ReviewAddRequest>> AddReview(ReviewAddRequest request)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Result> DeleteReview(Guid reviewId, CancellationToken cancellation = default)

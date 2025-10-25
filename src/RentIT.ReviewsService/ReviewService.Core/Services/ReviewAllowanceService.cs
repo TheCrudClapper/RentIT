@@ -48,4 +48,5 @@ public class ReviewAllowanceService : IReviewAllowanceService
 
         return Result.Success(result.Select(item => item.ToReviewAllowanceResponse()));
     }
+
 }
