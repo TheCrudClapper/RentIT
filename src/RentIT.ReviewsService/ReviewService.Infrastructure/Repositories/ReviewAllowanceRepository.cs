@@ -36,21 +36,16 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
             .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<bool> DeleteAllowanceAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAllowanceAsync(ReviewAllowance allowance, CancellationToken cancellationToken)
     {
-        var allowance = await GetAllowanceById(id, cancellationToken);
-        if (allowance is null)
-            return false;
-
         _context.ReviewsAllowance.Remove(allowance);
-        await _context.SaveChangesAsync();
-        return true;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken)
     {
         return await _context.ReviewsAllowance
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> IsAllowanceUnique(ReviewAllowance allowance)
@@ -59,13 +54,5 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
             .AnyAsync(item => item.UserId == allowance.UserId
             && item.RentalId == allowance.RentalId
             && item.EquipmentId == allowance.EquipmentId);
-    }
-
-    public async Task<bool> DoesAllowanceExists(Guid userId, Guid rentalId, Guid equipmentId)
-    {
-       return await _context.ReviewsAllowance
-            .AnyAsync(item => item.UserId == userId
-            && item.RentalId == rentalId
-            && item.EquipmentId == equipmentId);
     }
 }

@@ -36,10 +36,14 @@ public class ReviewAllowanceService : IReviewAllowanceService
 
     public async Task<Result> DeleteAllowance(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _reviewAllowanceRepository.DeleteAllowanceAsync(id, cancellationToken);
-        return result 
-            ? Result.Success() 
-            : Result.Failure(Error.NotFound);
+        var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
+
+        if (allowance is null)
+           return Result.Failure(Error.DeleteFailed);
+
+        await _reviewAllowanceRepository.DeleteAllowanceAsync(allowance, cancellationToken);
+
+        return Result.Success();
     }
 
     public async Task<Result<IEnumerable<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellationToken = default)

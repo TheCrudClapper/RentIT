@@ -20,11 +20,14 @@ public class ReviewsService : IReviewService
 
     public async Task<Result> DeleteReview(Guid reviewId, CancellationToken cancellation = default)
     {
-        var result = await _reviewRepository.DeleteReviewAsync(reviewId, cancellation);
+        var review = await _reviewRepository.GetReviewByIdAsync(reviewId, cancellation);
 
-        return result
-            ? Result.Success()
-            : Result.Failure(Error.DeleteFailed);
+        if(review is null)
+            return Result.Failure(Error.DeleteFailed);
+
+        await _reviewRepository.DeleteReviewAsync(review);
+
+        return Result.Success();
     }
 
     public async Task<Result<ReviewResponse>> GetReview(Guid reviewId, CancellationToken cancellationToken)

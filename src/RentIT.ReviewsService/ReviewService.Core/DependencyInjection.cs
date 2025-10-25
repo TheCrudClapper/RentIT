@@ -7,6 +7,8 @@ using ReviewService.Core.ServiceContracts;
 using ReviewService.Core.Services;
 using ReviewService.Core.RabbitMQ;
 using ReviewService.Core.RabbitMQ.HostedServices;
+using ReviewServices.Core.RabbitMQ.Publishers;
+using ReviewService.Core.RabbitMQ.Publishers;
 
 namespace ReviewServices.Core;
 
@@ -20,7 +22,7 @@ public static class DependencyInjection
             options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
         });
 
-        //Add Caching Helper
+        //Add Services
         services.AddScoped<ICachingHelper, CachingHelper>();
         services.AddScoped<IUserReviewService, UserReviewService>();
         services.AddScoped<IReviewService, ReviewsService>();
@@ -29,6 +31,7 @@ public static class DependencyInjection
 
         //Add RabbitMQ
         services.AddTransient<RabbitMQReviewAllowanceGrantedConsumer>();
+        services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
         services.AddHostedService<RabbitMQConsumersHostedService>();
         return services;    
     }

@@ -5,6 +5,7 @@ using ReviewService.Core.DTO.Review;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ResultTypes;
 using ReviewServices.Core.Domain.Entities;
+using ReviewServices.Core.RabbitMQ.Publishers;
 using ReviewServices.Core.ResultTypes;
 using ReviewServices.Core.ServiceContracts;
 
@@ -13,18 +14,21 @@ namespace ReviewServices.Core.Services;
 public class UserReviewService : IUserReviewService
 {
     private readonly IUserReviewRepository _userReviewRepository;
-    private readonly IUsersMicroserviceClient _usersMicroserviceClient;
+    private readonly IRabbitMQPublisher _rabbitMQPublisher;
     private readonly IReviewAllowanceRepository _reviewAllowanceReposiotry;
+    private readonly IReviewRepository _reviewRepository;
     private readonly IRentalMicroserviceClient _rentalMicroserviceClient;
     public UserReviewService(IUserReviewRepository userReviewRepository,
-        IUsersMicroserviceClient usersMicroserviceClient,
         IReviewAllowanceRepository reviewAllowanceRepository,
-        IRentalMicroserviceClient rentalMicroserviceClient)
+        IRentalMicroserviceClient rentalMicroserviceClient,
+        IRabbitMQPublisher rabbitMQPublisher,
+        IReviewRepository reviewRepository)
     {
+        _reviewRepository = reviewRepository;
         _userReviewRepository = userReviewRepository;
-        _usersMicroserviceClient = usersMicroserviceClient;
         _reviewAllowanceReposiotry = reviewAllowanceRepository;
         _rentalMicroserviceClient = rentalMicroserviceClient;
+        _rabbitMQPublisher = rabbitMQPublisher;
     }
 
     public async Task<Result<UserReviewResponse>> AddUserReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken)
@@ -33,11 +37,12 @@ public class UserReviewService : IUserReviewService
         if (rentalResponse.IsFailure)
             return Result.Failure<UserReviewResponse>(rentalResponse.Error);
 
-        //validate allowance
-        bool allowanceExist = await _reviewAllowanceReposiotry
-            .DoesAllowanceExists(userId, rentalResponse.Value.Id, rentalResponse.Value.equipmentDetails.Id);
+        var allowance = await _reviewAllowanceReposiotry
+            .GetAllowanceByCondition(item => item.UserId == userId
+            && item.RentalId == rentalResponse.Value.Id
+            && item.EquipmentId == rentalResponse.Value.equipmentDetails.Id);
 
-        if (!allowanceExist)
+        if (allowance is null)
             return Result.Failure<UserReviewResponse>(ReviewAllowanceErrors.ReviewAllowanceNotGranted);
 
         var reviewToAdd = request
@@ -45,17 +50,23 @@ public class UserReviewService : IUserReviewService
 
         var reviewFromAdd = await _userReviewRepository.AddUserReviewAsync(reviewToAdd, cancellationToken);
 
-        //produce a message for updation of total score of equipment
+        await _reviewAllowanceReposiotry.DeleteAllowanceAsync(allowance);
+
+        //project message review.created messae 
+
         return reviewFromAdd.ToUserReviewResponse();
     }
 
     public async Task<Result> DeleteUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
     {
-        var result = await _userReviewRepository.DeleteUserReviewAsync(userId, reviewId, cancellationToken);
+        var review = await _userReviewRepository.GetUserReviewAsync(userId, reviewId, cancellationToken);
 
-        return result 
-            ? Result.Success() 
-            : Result.Failure(Error.NotFound);
+        if (review is null)
+            return Result.Failure(Error.DeleteFailed);
+
+        await _reviewRepository.DeleteReviewAsync(review);
+
+        return Result.Success();
     }
 
     public async Task<Result<UserReviewResponse>> GetUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken)
