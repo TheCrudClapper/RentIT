@@ -127,4 +127,28 @@ public class EquipmentService : IEquipmentService
             .Select(equipment => equipment.ToEquipmentResponse())
             .ToList();
     }
+
+    public async Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating, CancellationToken cancellationToken)
+    {
+       var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
+
+        if (equipment is null)
+            return;
+
+        decimal newAverageRating;
+
+        if (oldRating is null)
+        {
+            var oldReviewCount = equipment.ReviewCount;
+            newAverageRating = ((equipment.AverageRating * oldReviewCount) + rating) / (oldReviewCount + 1);
+            await _equipmentRepository.UpdateEquipmentRating(equipment, newAverageRating, 1);
+        }
+        else
+        {
+            newAverageRating = ((equipment.AverageRating * equipment.ReviewCount) - oldRating.Value + rating)
+             / equipment.ReviewCount;
+            await _equipmentRepository.UpdateEquipmentRating(equipment, newAverageRating);
+        }
+
+    }
 }

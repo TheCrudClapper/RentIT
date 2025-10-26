@@ -24,7 +24,7 @@ public class Review : IBaseEntity, ISoftDelete
 
     [Required]
     [Range(1, 5)]
-    public double Rating { get; set; }
+    public decimal Rating { get; set; }
 
     public DateTime DateCreated { get; set; }
     public DateTime? DateEdited { get; set; }

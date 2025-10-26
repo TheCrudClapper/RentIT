@@ -4,4 +4,4 @@ public record ReviewResponse(
     Guid Id,
     string UserEmail,
     string Description,
-    double Rating);
+    decimal Rating);

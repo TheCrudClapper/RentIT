@@ -8,5 +8,6 @@ public interface IEquipmentRepository : IBaseEquipmentRepository
     Task<Equipment?> GetEquipmentByIdAsync(Guid equipmentId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Equipment>> GetAllEquipmentAsync(CancellationToken cancellationToken = default);
     Task DeleteEquipmentAsync(Equipment equipment, CancellationToken cancellationToken = default);
+    Task UpdateEquipmentRating(Equipment equipment, decimal newAverageRating, int reviewCountToAdd = 0);
 }
 

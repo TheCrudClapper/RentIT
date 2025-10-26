@@ -62,4 +62,10 @@ public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
             .Include(item => item.Category)
             .ToListAsync(cancellationToken);
     }
+    public async Task UpdateEquipmentRating(Equipment equipment, decimal newAverageRating, int reviewCountToAdd = 0)
+    {
+        equipment.AverageRating = newAverageRating;
+        equipment.ReviewCount = equipment.ReviewCount + reviewCountToAdd;
+        await _context.SaveChangesAsync();
+    }
 }

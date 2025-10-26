@@ -9,6 +9,6 @@ public record ReviewUpdateRequest
     public string Description { get; set; } = null!;
 
     [Range(1, 5)]
-    public double Rating { get; set; }
+    public decimal Rating { get; set; }
 
 } 

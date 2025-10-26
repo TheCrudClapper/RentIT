@@ -17,7 +17,7 @@ public class ReviewRepository : BaseReviewRepository, IReviewRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<double?> GetReviewScoreAsync(Guid reviewId, CancellationToken cancellationToken)
+    public async Task<decimal?> GetReviewScoreAsync(Guid reviewId, CancellationToken cancellationToken)
     {
         return await _context.Reviews
             .Where(r => r.Id == reviewId)

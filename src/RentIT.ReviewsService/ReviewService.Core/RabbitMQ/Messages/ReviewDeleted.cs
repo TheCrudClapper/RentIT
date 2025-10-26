@@ -1,3 +1,3 @@
 ﻿namespace ReviewService.Core.RabbitMQ.Messages;
 
-public record ReviewDeleted(Guid EquipmentId, double Rating);
+public record ReviewDeleted(Guid EquipmentId, decimal Rating);

@@ -18,7 +18,7 @@ public static class ReviewDbSeeder
                 EquipmentId = Guid.Parse("54A58B0B-3BCD-46A5-80AF-101074FE8CDD"),
                 RentalId = Guid.Parse("16677793-B8DD-4698-9C5E-AAB6211CFD07"),
                 Description = "Such a nice thing, ill recommend",
-                Rating = 5.0
+                Rating = 4.2m
             });
 
             await context.ReviewsAllowance.AddAsync(new ReviewAllowance
