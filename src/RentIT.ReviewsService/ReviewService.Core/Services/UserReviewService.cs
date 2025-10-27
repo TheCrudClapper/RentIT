@@ -47,7 +47,7 @@ public class UserReviewService : IUserReviewService
             && item.RentalId == rentalResponse.Value.Id
             && item.EquipmentId == rentalResponse.Value.EquipmentDetails.Id);
 
-        if (allowance is null)
+        if (allowance is null || !allowance.IsActive)
             return Result.Failure<UserReviewResponse>(ReviewAllowanceErrors.ReviewAllowanceNotGranted);
 
         var reviewToAdd = request
@@ -61,7 +61,7 @@ public class UserReviewService : IUserReviewService
         ReviewCreated reviewCreatedMessage = new(rentalResponse.Value.EquipmentDetails.Id, request.Rating);
 
         _rabbitMQPublisher.Publish(
-            "review.create",
+            "review.created",
             reviewCreatedMessage,
             _configuration["RABBITMQ_REVIEW_EXCHANGE"]!);
 

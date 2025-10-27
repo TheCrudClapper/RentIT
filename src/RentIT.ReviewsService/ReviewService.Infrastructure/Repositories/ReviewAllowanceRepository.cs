@@ -26,6 +26,7 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
     public async Task<ReviewAllowance?> GetAllowanceByCondition(Expression<Func<ReviewAllowance, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.ReviewsAllowance
+            .IgnoreQueryFilters()
             .Where(expression)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -45,6 +46,7 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
     public async Task<IEnumerable<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken)
     {
         return await _context.ReviewsAllowance
+            .IgnoreQueryFilters()
             .ToListAsync(cancellationToken);
     }
 

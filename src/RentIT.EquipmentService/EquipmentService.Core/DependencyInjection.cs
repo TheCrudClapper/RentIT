@@ -1,6 +1,8 @@
 ﻿using EquipmentService.Core.Caching;
 using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
+using EquipmentService.Core.RabbitMQ.Consumers;
+using EquipmentService.Core.RabbitMQ.HostedServices;
 using EquipmentService.Core.RabbitMQ.Publishers;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using EquipmentService.Core.ServiceContracts.Equipment;
@@ -30,6 +32,12 @@ namespace EquipmentService.Core
 
             //Add RabbitMQ Components
             services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
+            services.AddTransient<RabbitMQReviewCreatedConsumer>();
+            services.AddTransient<RabbitMQReviewUpdatedConsumer>();
+            services.AddTransient<RabbitMQReviewDeletedConsumer>();
+
+            //Add Hosted Serivce
+            services.AddHostedService<RabbitMQConsumersHostedService>();
 
             //Add Redis Cache
             services.AddStackExchangeRedisCache(options =>

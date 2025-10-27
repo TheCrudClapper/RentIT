@@ -128,12 +128,11 @@ public class EquipmentService : IEquipmentService
             .ToList();
     }
 
-    public async Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating, CancellationToken cancellationToken)
+    public async Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating = null, CancellationToken cancellationToken = default)
     {
        var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
 
-        if (equipment is null)
-            return;
+        if (equipment is null) return;
 
         decimal newAverageRating;
 
@@ -150,5 +149,21 @@ public class EquipmentService : IEquipmentService
             await _equipmentRepository.UpdateEquipmentRating(equipment, newAverageRating);
         }
 
+    }
+
+    public async Task DeleteEquipmentRating(Guid equipmentId, decimal rating, CancellationToken cancellationToken = default)
+    {
+        var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
+
+        if (equipment is null) return;
+
+        decimal newAverageRating;
+
+        var oldReviewCount = equipment.ReviewCount;
+        
+        //substract value, and evaluate new average
+        newAverageRating = ((equipment.AverageRating * oldReviewCount) - rating) / (oldReviewCount - 1);
+
+        await _equipmentRepository.UpdateEquipmentRating(equipment, newAverageRating, -1);
     }
 }

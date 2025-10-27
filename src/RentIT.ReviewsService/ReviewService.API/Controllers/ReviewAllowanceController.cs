@@ -39,10 +39,4 @@ public class ReviewAllowanceController : ControllerBase
 
         return Ok(result.Value);
     }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<ReviewAllowanceResponse>> DeleteReviewAllowance(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }

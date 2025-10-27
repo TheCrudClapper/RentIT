@@ -21,7 +21,7 @@ public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
         return review;
     }
 
-    public async Task<Review?> GetUserReviewAsync(Guid reviewId, Guid userId, CancellationToken cancellationToken)
+    public async Task<Review?> GetUserReviewAsync(Guid userId, Guid reviewId, CancellationToken cancellationToken)
     {
         return await _context.Reviews
             .FirstOrDefaultAsync(item => item.Id == reviewId && item.UserId == userId, cancellationToken);

@@ -8,5 +8,5 @@ public static class ReviewErrors
         404, "Review of given id doesn't exist");
 
     public static readonly Error ReviewsNotFoundForEquipment = new Error(
-        400, "No reviews found for this equipment");
+        404, "No reviews found for this equipment");
 }

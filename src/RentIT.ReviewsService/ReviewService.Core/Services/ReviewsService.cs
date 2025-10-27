@@ -23,7 +23,7 @@ public class ReviewsService : IReviewService
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId, cancellation);
 
         if(review is null)
-            return Result.Failure(Error.DeleteFailed);
+            return Result.Failure(ReviewErrors.ReviewNotFound);
 
         await _reviewRepository.DeleteReviewAsync(review);
 

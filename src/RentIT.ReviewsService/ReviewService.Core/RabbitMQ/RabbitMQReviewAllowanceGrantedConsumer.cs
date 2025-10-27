@@ -38,6 +38,7 @@ internal class RabbitMQReviewAllowanceGrantedConsumer : RabbitMQBaseConsumer
 
         _channel.QueueDeclare(
             queue: queueName,
+            exclusive: false,
             durable: true,
             autoDelete: false,
             arguments: null);

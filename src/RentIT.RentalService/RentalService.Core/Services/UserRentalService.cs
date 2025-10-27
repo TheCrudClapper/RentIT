@@ -4,6 +4,8 @@ using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Mappings;
+using RentalService.Core.RabbitMQ.Messages;
+using RentalService.Core.RabbitMQ.Publishers;
 using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
@@ -14,17 +16,20 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
 {
     private readonly IUserRentalRepository _userRentalRepository;
     private readonly IUserRentalValidator _userRentalValidator;
+    private readonly IRabbitMQPublisher _rabbitMQPublisher;
     private readonly IEquipmentMicroserviceClient _equipmentMicroserviceClient;
 
     public UserRentalService(IUserRentalRepository userRentalRepository,
         IUserRentalValidator validator,
         IEquipmentMicroserviceClient equipmentMicroserviceClient,
-        IConfiguration configuration) 
+        IConfiguration configuration,
+        IRabbitMQPublisher rabbitMQPublisher) 
             : base(configuration)
     {
         _userRentalRepository = userRentalRepository;
         _userRentalValidator = validator;
         _equipmentMicroserviceClient = equipmentMicroserviceClient;
+        _rabbitMQPublisher = rabbitMQPublisher;
        
     }
 
@@ -121,6 +126,18 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
 
         if(calculatedTotalValue != rental.RentalPrice)
             await _userRentalRepository.UpdateRentalTotalCost(rental, calculatedTotalValue, cancellationToken);
+
+        var message = new ReviewAllowanceAddRequest
+        {
+            EquipmentId = rental.EquipmentId,
+            RentalId = rental.Id,
+            UserId = rental.UserId,
+        };
+
+        _rabbitMQPublisher.Publish(
+          "review.allowance.create",
+          message,
+          _configuration["RABBITMQ_RENTAL_EXCHANGE"]!);
 
         return Result.Success();
     }

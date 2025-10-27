@@ -416,19 +416,7 @@
       "AddHeadersToRequest": {
         "Authorization": "Bearer {Token}"
       },
-      "UpstreamHttpMethod": [ "Post", "Options" ],
-      "UpstreamScheme": "http"
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/UserRental",
-      "DownstreamPathTemplate": "/api/UserRental",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "rentalmicroservice.api",
-          "Port": 8080
-        }
-      ],
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
       "UpstreamScheme": "http"
     },
     {
@@ -447,19 +435,26 @@
       "AddHeadersToRequest": {
         "Authorization": "Bearer {Token}"
       },
-      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/UserRental/{id}",
-      "DownstreamPathTemplate": "/api/UserRental/{id}",
+      "UpstreamPathTemplate": "/gateway/UserRental/mark-equipment-as-returned/{everything}",
+      "DownstreamPathTemplate": "/api/UserRental/mark-equipment-as-returned/{everything}",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
           "Port": 8080
         }
       ],
-      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Post", "Options" ],
       "UpstreamScheme": "http"
     },
     {
