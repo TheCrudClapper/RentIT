@@ -45,7 +45,7 @@ public class UserReviewService : IUserReviewService
         var allowance = await _reviewAllowanceReposiotry
             .GetAllowanceByCondition(item => item.UserId == userId
             && item.RentalId == rentalResponse.Value.Id
-            && item.EquipmentId == rentalResponse.Value.EquipmentDetails.Id);
+            && item.EquipmentId == rentalResponse.Value.EquipmentDetails.Id, cancellationToken);
 
         if (allowance is null || !allowance.IsActive)
             return Result.Failure<UserReviewResponse>(ReviewAllowanceErrors.ReviewAllowanceNotGranted);

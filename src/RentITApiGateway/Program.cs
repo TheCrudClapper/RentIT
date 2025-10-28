@@ -42,11 +42,18 @@ builder.Services.AddCors(options =>
        .AllowAnyMethod()
        .AllowCredentials();
     });
+    options.AddPolicy("AllowAngular", options =>
+    {
+        options.WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
 
 app.UseCors("AllowAll");
+app.UseCors("AllowAngular");
 
 app.UseAuthentication();
 
