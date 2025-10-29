@@ -1,0 +1,53 @@
+<div class="container-fluid bg-war bg-warning vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg border-0 rounded-2 bg-dark text-white" style="max-width: 480px; width: 100%;">
+        <div class="card-body p-5">
+            <h1 class="fw-bold text-center mb-4">Register</h1>
+
+            <form (submit)="register()">
+                <div class="mb-3">
+                    <label for="firstNameInput" class="form-label fw-semibold fs-5">First Name</label>
+                    <input id="firstNameInput" type="text"
+                        class="form-control form-control-lg bg-secondary text-white border-0 rounded-3"
+                        name="firstName"
+                        [(ngModel)]="firstName"
+                        placeholder="John" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastNameInput" class="form-label fw-semibold fs-5">Last Name</label>
+                    <input id="lastNameInput" type="text"
+                        class="form-control form-control-lg bg-secondary text-white border-0 rounded-3"
+                        name="lastName"
+                        [(ngModel)]="lastName"
+                        placeholder="Doe" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label fw-semibold fs-5">Email</label>
+                    <input id="emailInput" type="email"
+                        class="form-control form-control-lg bg-secondary text-white border-0 rounded-3"
+                        name="email"
+                        [(ngModel)]="email"
+                        placeholder="johndoe@example.com" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="passwordInput" class="form-label fw-semibold fs-5">Password</label>
+                    <input id="passwordInput" type="password"
+                        class="form-control form-control-lg bg-secondary text-white border-0 rounded-3"
+                        name="password"
+                        [(ngModel)]="password"
+                        placeholder="Password123#@" required>
+                </div>
+                
+                
+                <div class="d-grid">
+                    <button id="registerBtn"
+                        class="btn btn-warning btn-lg rounded-3 fw-bold text-dark shadow-sm">
+                        Create Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
