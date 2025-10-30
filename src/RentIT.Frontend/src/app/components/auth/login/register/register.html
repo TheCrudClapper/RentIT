@@ -3,7 +3,7 @@
         <div class="card-body p-5">
             <h1 class="fw-bold text-center mb-4">Register</h1>
 
-            <form (submit)="register()">
+            <form (ngSubmit)="register()">
                 <div class="mb-3">
                     <label for="firstNameInput" class="form-label fw-semibold fs-5">First Name</label>
                     <input id="firstNameInput" type="text"
@@ -43,6 +43,7 @@
                 
                 <div class="d-grid">
                     <button id="registerBtn"
+                        type="submit"
                         class="btn btn-warning btn-lg rounded-3 fw-bold text-dark shadow-sm">
                         Create Account
                     </button>
