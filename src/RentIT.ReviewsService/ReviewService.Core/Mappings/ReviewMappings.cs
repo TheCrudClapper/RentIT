@@ -28,6 +28,7 @@ public static  class ReviewMappings
     {
         return new Review
         {
+            EquipmentId = equipmentId,
             UserId = userId,
             RentalId = dto.RentalId,
             Rating = dto.Rating,

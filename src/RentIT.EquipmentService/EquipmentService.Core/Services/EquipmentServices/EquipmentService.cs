@@ -159,8 +159,8 @@ public class EquipmentService : IEquipmentService
 
         decimal newAverageRating;
 
+        //guard not to divide by zero
         var oldReviewCount = equipment.ReviewCount;
-        
         //substract value, and evaluate new average
         newAverageRating = ((equipment.AverageRating * oldReviewCount) - rating) / (oldReviewCount - 1);
 
