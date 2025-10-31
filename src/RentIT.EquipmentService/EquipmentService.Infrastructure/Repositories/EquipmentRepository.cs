@@ -65,7 +65,7 @@ public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
     public async Task UpdateEquipmentRating(Equipment equipment, decimal newAverageRating, int reviewCountToAdd = 0)
     {
         equipment.AverageRating = newAverageRating;
-        equipment.ReviewCount = equipment.ReviewCount + reviewCountToAdd;
+        equipment.ReviewCount = Math.Max(0, equipment.ReviewCount + reviewCountToAdd);
         await _context.SaveChangesAsync();
     }
 }

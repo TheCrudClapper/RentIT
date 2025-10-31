@@ -130,7 +130,7 @@ public class EquipmentService : IEquipmentService
 
     public async Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating = null, CancellationToken cancellationToken = default)
     {
-       var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
+        var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
 
         if (equipment is null) return;
 
@@ -157,13 +157,19 @@ public class EquipmentService : IEquipmentService
 
         if (equipment is null) return;
 
-        decimal newAverageRating;
 
-        //guard not to divide by zero
-        var oldReviewCount = equipment.ReviewCount;
-        //substract value, and evaluate new average
-        newAverageRating = ((equipment.AverageRating * oldReviewCount) - rating) / (oldReviewCount - 1);
+        var oldCount = equipment.ReviewCount;
 
+        if (oldCount <= 0)
+            return;
+
+        if (oldCount == 1)
+        {
+            await _equipmentRepository.UpdateEquipmentRating(equipment, 0, -1);
+            return;
+        }
+
+        var newAverageRating = ((equipment.AverageRating * oldCount) - rating) / (oldCount - 1);
         await _equipmentRepository.UpdateEquipmentRating(equipment, newAverageRating, -1);
     }
 }
