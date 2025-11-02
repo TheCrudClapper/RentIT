@@ -31,3 +31,12 @@ public class BearerTokenHandler : DelegatingHandler
         return await base.SendAsync(request, cancellationToken);
     }
 }
+public static class BearerTokenHandlerExtensions
+{
+    public static IServiceCollection AddAuthHeaderHandler(this IServiceCollection services)
+    {
+        services.AddTransient<BearerTokenHandler>();
+        return services;
+    }
+
+}

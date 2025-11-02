@@ -2,7 +2,6 @@
 using ReviewService.Core.DTO.User;
 using ReviewServices.Core.ResultTypes;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace ReviewService.Infrastructure.HttpClients;
 
@@ -14,34 +13,34 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
         _httpClient = httpClient;
     }
 
-    public async Task<Result<UserResponse>> GetUserByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<UserDTO>> GetUserByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         var response = await _httpClient.GetAsync($"/gateway/users/{userId}", cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
             string message = await response.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<UserResponse>(new Error((int)response.StatusCode, message));
+            return Result.Failure<UserDTO>(new Error((int)response.StatusCode, message));
         }
 
-        UserResponse? userResponse = await response.Content.ReadFromJsonAsync<UserResponse>();
+        UserDTO? userResponse = await response.Content.ReadFromJsonAsync<UserDTO>();
 
         if(userResponse is null)
-            return Result.Failure<UserResponse>(new Error(500, "Invalid response from Users service"));
+            return Result.Failure<UserDTO>(new Error(500, "Invalid response from Users service"));
 
         return userResponse;
     }
 
-    public async Task<Result<IEnumerable<UserResponse>>> GetUsersByUsersIdAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<UserDTO>>> GetUsersByUsersIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
     {
         var response = await _httpClient.PostAsJsonAsync("/gateway/Users/byIds", userIds, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
             string message = await response.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<IEnumerable<UserResponse>>(new Error((int)response.StatusCode, message));
+            return Result.Failure<IEnumerable<UserDTO>>(new Error((int)response.StatusCode, message));
         }       
-        var userResponse = await response.Content.ReadFromJsonAsync<IEnumerable<UserResponse>>(cancellationToken);
+        var userResponse = await response.Content.ReadFromJsonAsync<IEnumerable<UserDTO>>(cancellationToken);
 
         return Result.Success(userResponse ?? []);
     }

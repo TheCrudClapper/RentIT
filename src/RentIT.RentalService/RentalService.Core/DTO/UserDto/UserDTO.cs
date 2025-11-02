@@ -7,5 +7,5 @@
     /// <param name="Id">Id of an User</param>
     /// <param name="Email">Email of User</param>
     /// <param name="Role">Role of User</param>
-    public record UserDTO(Guid Id, string Email, string Role);
+    public record UserDTO(Guid Id, string Email);
 }

@@ -1,122 +1,101 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using ReviewService.API.Extensions;
 using ReviewService.API.Handlers;
-using ReviewService.Core.Domain.HttpClientContracts;
-using ReviewService.Infrastructure.HttpClients;
 using ReviewService.Infrastructure.Seeders;
 using ReviewServices.API.Extensions;
 using ReviewServices.API.Middleware;
 using ReviewServices.Core;
 using ReviewServices.Infrastructure;
 using ReviewServices.Infrastructure.DbContexts;
-using System.Security.Claims;
-using Microsoft.OpenApi.Models;
-using System.Text;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-
-//Add Controllers
+#region Service Registration
+// -----------------------------
+// API Controllers
+// -----------------------------
 builder.Services.AddControllers();
 
-//Add Core and Infra Layer
-builder.Services.AddCoreLayer(builder.Configuration);
-builder.Services.AddInfrastructureLayer(builder.Configuration);
+// -----------------------------
+// Custom Services && Handlers
+// -----------------------------
+builder.Services
+    .AddCoreLayer(builder.Configuration)
+    .AddInfrastructureLayer(builder.Configuration)
+    .AddAuthHeaderHandler();
+
+// -----------------------------
+// Http Context Accessor
+// -----------------------------
 builder.Services.AddHttpContextAccessor();
 
-//Add Http Client Auht Handlers
-builder.Services.AddTransient<BearerTokenHandler>();
+// -----------------------------
+// Http Clients
+// -----------------------------
+builder.Services.AddInfrastructureHttpClients(builder.Configuration);
 
-//Add Http Clients 
-builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
-{
-    options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}" +
-        $":{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
-})
-    .AddHttpMessageHandler<BearerTokenHandler>();
-
-builder.Services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(options =>
-{
-    options.BaseAddress = new Uri($"http://{builder.Configuration["RENTAL_MICROSERVICE_NAME"]}" +
-        $":{builder.Configuration["RENTAL_MICROSERVICE_PORT"]}");
-})
-    .AddHttpMessageHandler<BearerTokenHandler>();
-
-
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// -----------------------------
+// Open API && Swagger
+// -----------------------------
 builder.Services.AddOpenApi();
-
-// Add Swagger
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {{
-        new OpenApiSecurityScheme
-        {
-            Reference = new OpenApiReference
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-            }
-        },
-        new string[] { }
-        }
-    });
-});
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
-            NameClaimType = ClaimTypes.Name,
-            RoleClaimType = "Roles",
-        };
-    });
-
+// -----------------------------
+// JWT Based Token Auth
+// -----------------------------
+builder.Services.AddJwtTokenAuth(builder.Configuration);
+#endregion
+#region Middleware-Pipeline
 var app = builder.Build();
 
-//Add Global Exception handling middleware
-app.UseExceptionHandlingMiddleware();
+// ---------------------------------
+// Global Error Handling Middleware
+// ---------------------------------
+app.UseGlobalExceptionHandlingMiddleware();
 
-//Migrate Database
-await app.MigrateDatabaseAsync(builder.Services);
+// -----------------------------
+// HTTPS Support
+// -----------------------------
+app.UseHttpsRedirection();
 
+// -----------------------------
+// Open API Docs
+// -----------------------------
 app.MapOpenApi();
 
-// Configure the HTTP request pipeline.
+// ---------------------------------
+// Migrations
+// ---------------------------------
+await app.MigrateDatabaseAsync(builder.Services);
+
 if (app.Environment.IsDevelopment())
 {
+    // -----------------------------
+    // Use Swagger
+    // -----------------------------
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    //Seed Data
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<ReviewsDbContext>();
     await ReviewDbSeeder.Seed(context);
 }
+// -----------------------------
+// Use Routing
+// -----------------------------
+app.UseRouting();
 
-app.UseHttpsRedirection();
-
+// --------------------------------
+// Authentication && Authorization
+// --------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
 
+// -----------------------------
+// Map Api Controllers
+// -----------------------------
 app.MapControllers();
 
 app.Run();
+#endregion

@@ -13,13 +13,6 @@ public class UserRepository : IUserRepository
     {
         _context = dbContext;
     }
-
-    public Task<bool> DoesUserExistsAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        return _context.Users
-            .AnyAsync(item => item.Id == userId, cancellationToken);
-    }
-
     public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _context.Users

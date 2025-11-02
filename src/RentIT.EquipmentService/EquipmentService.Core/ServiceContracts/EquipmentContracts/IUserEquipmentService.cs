@@ -14,7 +14,7 @@ public interface IUserEquipmentService
 {
     Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request, CancellationToken cancellationToken);
     Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken);
-    Task<IEnumerable<EquipmentResponse>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken);
+    Task<Result<IEnumerable<EquipmentResponse>>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken);
     Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId, CancellationToken cancellationToken);
     Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken cancellationToken);
 }

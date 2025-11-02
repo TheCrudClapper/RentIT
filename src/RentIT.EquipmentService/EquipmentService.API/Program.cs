@@ -2,34 +2,31 @@ using EquipmentService.API.Extensions;
 using EquipmentService.API.Handlers;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
-using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
 using EquipmentService.Infrastructure;
 using EquipmentService.Infrastructure.DbContexts;
-using EquipmentService.Infrastructure.HttpClients;
 using EquipmentService.Infrastructure.Seeders;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Service Registration
 // -----------------------------
 // API Controllers
 // -----------------------------
 builder.Services.AddControllers();
 
 // -----------------------------
-// Custom Services
+// Custom Services & Handlers
 // -----------------------------
-builder.Services.AddInfrastructureLayer(builder.Configuration);
-builder.Services.AddCoreLayer();
-builder.Services.AddTransient<BearerTokenHandler>();
+builder.Services
+    .AddInfrastructureLayer(builder.Configuration)
+    .AddCoreLayer()
+    .AddAuthHeaderHandler();
 
 // -----------------------------
-// Resilience
+// Resilience Policies
 // -----------------------------
 builder.Services.AddTransient<IPollyPolicies, PollyPolicies>();
 builder.Services.AddTransient<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
@@ -39,52 +36,30 @@ builder.Services.AddTransient<IRentalMicroservicePolicies, RentalMicroservicePol
 // Open API and Swagger
 // -----------------------------
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// -----------------------------
+// Http Context Accessor
+// -----------------------------
+builder.Services.AddHttpContextAccessor();
 
 // -----------------------------
 // Http Clients
 // -----------------------------
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(client =>
-{
-    client.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
-})
-    .AddHttpMessageHandler<BearerTokenHandler>()
-    .AddPolicyHandler((serviceProvider, request) =>
-    {
-        var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
-        return policies.GetCombinedPolicy();
-    });
-
+builder.Services.AddInfrastructureHttpClients(builder.Configuration);
 
 // -----------------------------
-// JWT Bearer Verification
+// JWT Based Token Auth
 // -----------------------------
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
-        NameClaimType = ClaimTypes.Name,
-        RoleClaimType = "Roles",
-    };
-});
-
-
+builder.Services.AddJwtTokenAuth(builder.Configuration);
+#endregion
+#region Middleware-Pipeline
 var app = builder.Build();
 
 // ---------------------------------
 // Global Error Handling Middleware
-// --------------------------------
+// ---------------------------------
 app.UseGlobalExceptionHandlingMiddleware();
 
 // -----------------------------
@@ -93,35 +68,30 @@ app.UseGlobalExceptionHandlingMiddleware();
 app.UseHsts();
 //app.UseHttpsRedirection();
 
+
+// -----------------------------
+// Open API Docs
+// -----------------------------
+app.MapOpenApi();
+
 await app.MigrateDatabaseAsync(builder.Services);
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // -----------------------------
+    // Use Swagger
+    // -----------------------------
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<EquipmentContext>();
     await AppDbSeeder.Seed(context);
 }
-
-// -----------------------------
-// Use Swagger
-// -----------------------------
-app.UseSwagger();
-app.UseSwaggerUI();
-
-
 // -----------------------------
 // Use Routing
 // -----------------------------
 app.UseRouting();
-
-
-// -----------------------------
-// Map Api Controllers
-// -----------------------------
-app.MapControllers();
-
 
 // --------------------------------
 // Authentication && Authorization
@@ -130,6 +100,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // -----------------------------
+// Map Api Controllers
+// -----------------------------
+app.MapControllers();
+
+// -----------------------------
 // Run App
 // -----------------------------
 app.Run();
+#endregion

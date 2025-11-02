@@ -5,6 +5,6 @@ namespace ReviewService.Core.Domain.HttpClientContracts;
 
 public interface IUsersMicroserviceClient
 {
-    public Task<Result<UserResponse>> GetUserByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
-    public Task<Result<IEnumerable<UserResponse>>> GetUsersByUsersIdAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
+    public Task<Result<UserDTO>> GetUserByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    public Task<Result<IEnumerable<UserDTO>>> GetUsersByUsersIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
 }

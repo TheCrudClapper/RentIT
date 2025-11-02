@@ -35,39 +35,19 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowAngular", policy =>
     {
-        builder.WithOrigins("http://localhost:5173")
-       .AllowAnyHeader()
-       .AllowAnyMethod()
-       .AllowCredentials();
-    });
-    options.AddPolicy("AllowAngular", options =>
-    {
-        options.WithOrigins("http://localhost:4200")
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
-
 var app = builder.Build();
 
-app.UseCors("AllowAll");
 app.UseCors("AllowAngular");
 
 app.UseAuthentication();
-
-app.Use(async (context, next) =>
-{
-    if (context.User?.Identity?.IsAuthenticated == true)
-    {
-        Console.WriteLine("=== CLAIMS ===");
-        foreach (var c in context.User.Claims)
-            Console.WriteLine($"{c.Type}: {c.Value}");
-    }
-    await next();
-});
-
 app.UseAuthorization();
 
 await app.UseOcelot();

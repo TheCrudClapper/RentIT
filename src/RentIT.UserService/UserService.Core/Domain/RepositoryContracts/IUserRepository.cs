@@ -7,5 +7,4 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default);
     Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default);
-    Task<bool> DoesUserExistsAsync(Guid userId, CancellationToken cancellationToken = default);
 }

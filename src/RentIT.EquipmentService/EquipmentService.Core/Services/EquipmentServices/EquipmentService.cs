@@ -55,7 +55,7 @@ public class EquipmentService : IEquipmentService
         return equipment.ToEquipmentResponse();
     }
 
-    public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentItems(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<EquipmentResponse>>> GetAllEquipmentItems(CancellationToken cancellationToken)
     {
         var equipmentItems = await _equipmentRepository.GetAllEquipmentAsync(cancellationToken);
 
@@ -118,7 +118,7 @@ public class EquipmentService : IEquipmentService
         return exists;
     }
 
-    public async Task<IEnumerable<EquipmentResponse>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<EquipmentResponse>>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
     {
         var equipmentsByCondition = await _equipmentRepository
             .GetEquipmentsByCondition(item => equipmentIds.Contains(item.Id), cancellationToken);

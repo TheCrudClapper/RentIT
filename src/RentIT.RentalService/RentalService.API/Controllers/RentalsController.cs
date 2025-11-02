@@ -7,7 +7,7 @@ namespace RentalService.API.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class RentalsController : ControllerBase
+public class RentalsController : BaseApiController
 {
     private readonly IRentalService _rentalService;
     public RentalsController(IRentalService rentalService)
@@ -19,84 +19,44 @@ public class RentalsController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
-    {
-        var response = await _rentalService.GetAllRentals(cancellationToken);
-        if(response.IsFailure)
-            return Problem(detail: response.Error.Description, statusCode: response.Error.StatusCode);
-
-        return Ok(response.Value);
-    }
+        => HandleResult(await _rentalService.GetAllRentals(cancellationToken));
 
     // GET: api/Rentals/5
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<ActionResult<RentalResponse>> GetRental(Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.GetRental(id, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+        => HandleResult(await _rentalService.GetRental(id, cancellationToken));
 
-        return result.Value;
-    }
 
     // PUT: api/Rentals/5
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.UpdateRental(id, request, cancellationToken);
-
-        if(result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
-
-        return NoContent();
-    }
+        => HandleResult(await _rentalService.UpdateRental(id, request, cancellationToken));
 
     // POST: api/Rentals
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RentalResponse>> PostRental(RentalAddRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.AddRental(request, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+        => HandleResult(await _rentalService.AddRental(request, cancellationToken));
 
-        return result.Value;    
-    }
 
     // DELETE: api/Rentals/5
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteRental(Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.DeleteRental(id, cancellationToken);
+        => HandleResult(await _rentalService.DeleteRental(id, cancellationToken));
 
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
-        return NoContent();
-    }
-
+    // DELETE: api/Rentals/by-equipment-id/{id}
     [HttpDelete("by-equipment-id/{id}")]
     public async Task<IActionResult> DeleteRentalsByEquipmentId(Guid id, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.DeleteRentalByEquipmentId(id, cancellationToken);
+        => HandleResult(await _rentalService.DeleteRentalByEquipmentId(id, cancellationToken));
 
-        if(result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
 
-        return NoContent();
-    }
-
-    [Authorize(Roles = "Admin")]
+    // POST: api/Rentals/mark-equipment-as-returned
     [HttpPost("mark-equipment-as-returned")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _rentalService.MarkEquipmentAsReturned(request, cancellationToken);
-
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
-
-        return NoContent();
-    }
+        => HandleResult(await _rentalService.MarkEquipmentAsReturned(request, cancellationToken));
 }

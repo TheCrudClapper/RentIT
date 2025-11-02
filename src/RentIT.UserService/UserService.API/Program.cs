@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Writers;
-using System.Security.Claims;
-using System.Text;
 using UserService.API.Extensions;
 using UserService.API.Middleware;
 using UserService.Core;
@@ -15,60 +9,66 @@ using UserService.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Add API Controllers
+#region Service Registration
+// -----------------------------
+// API Controllers
+// -----------------------------
 builder.Services.AddControllers();
 
-//Add user-defined services
-builder.Services.AddInfrastructureLayer(builder.Configuration);
-builder.Services.AddCoreLayer();
+// -----------------------------
+// Custom Services & Handlers
+// -----------------------------
+builder.Services
+    .AddInfrastructureLayer(builder.Configuration)
+    .AddCoreLayer();
 
-//Add Identity with it's own stores
-builder.Services.AddIdentity<User, Role>(options =>
-{
-    options.Password.RequiredLength = 8;
-    options.Password.RequireUppercase = true;
-})
-.AddEntityFrameworkStores<UsersDbContext>()
-.AddDefaultTokenProviders()
-.AddUserStore<UserStore<User, Role, UsersDbContext, Guid>>()
-.AddRoleStore<RoleStore<Role, UsersDbContext, Guid>>();
+// -----------------------------
+// Identity Config
+// ------------------------- ---
+builder.Services.ConfigureIdentity();
 
-//Add OpenAPI support and Swagger
+// -----------------------------
+// Open API and Swagger
+// -----------------------------
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Configure JWT Bearer Auth
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
-        NameClaimType = ClaimTypes.Name,
-        RoleClaimType = "Roles",
-    };
-});
 
+// -----------------------------
+// JWT Based Token Auth
+// -----------------------------
+builder.Services.AddJwtTokenAuth(builder.Configuration);
+#endregion
+#region Middleware-Pipeline
 var app = builder.Build();
 
-// Global exception handling
+// ---------------------------------
+// Global Error Handling Middleware
+// ---------------------------------
 app.UseGlobalExceptionHandlingMiddleware();
 
-//Automatic migrations for docker
+// -----------------------------
+// HTTPS Support
+// -----------------------------
+app.UseHsts();
+//app.UseHttpsRedirection();
+
+app.MapOpenApi();
+
+// ---------------------------------
+// Migrations
+// ---------------------------------
 await app.MigrateDatabaseAsync(builder.Services);
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    
+    // -----------------------------
+    // Use Swagger
+    // -----------------------------
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
     using var scope = app.Services.CreateScope();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
@@ -77,21 +77,21 @@ if (app.Environment.IsDevelopment())
     await AppDbSeeder.Seed(context, userManager, roleManager);
 }
 
-// Security middlewares
-app.UseHsts();
-//app.UseHttpsRedirection();
-
-// Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
-
-// Routing
+// -----------------------------
+// Use Routing
+// -----------------------------
 app.UseRouting();
 
-// Authentication & Authorization
+// --------------------------------
+// Authentication && Authorization
+// --------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
 
+// -----------------------------
+// Map Api Controllers
+// -----------------------------
 app.MapControllers();
 
 app.Run();
+#endregion

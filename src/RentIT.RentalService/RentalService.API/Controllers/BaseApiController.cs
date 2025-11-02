@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReviewServices.API.Extensions;
-using ReviewServices.Core.ResultTypes;
-using System.Security.Claims;
+using RentalService.API.Extensions;
+using RentalService.Core.ResultTypes;
 
-namespace ReviewService.API.Controllers
+namespace RentalService.API.Controllers
 {
     public class BaseApiController : ControllerBase
     {

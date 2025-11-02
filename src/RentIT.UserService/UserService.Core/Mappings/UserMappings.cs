@@ -1,6 +1,5 @@
 ﻿using UserService.Core.Domain.Entities;
 using UserService.Core.DTO.UserDto;
-using UserService.Core.Enums;
 
 namespace UserService.Core.Mappings;
 /// <summary>
@@ -22,20 +21,15 @@ public static class UserMappings
             DateCreated = DateTime.UtcNow,
         };
     }
-    public static UserResponse ToUserResponse(this User user)
-    {
-        //Email is always added
+    public static UserResponse ToUserResponse(this User user, IList<string> role)
+    { 
         return new UserResponse(
-            user.Id, user.FirstName, user.LastName, user.Email!);
+            user.Id, user.FirstName, user.LastName, user.Email!, role);
     }
 
-    public static UserDTO ToUserDTO(this User user, IList<string> roles)
+    public static UserDTO ToUserDTO(this User user)
     {
-        string role = roles.Contains(UserRoleOption.Admin.ToString())
-            ? UserRoleOption.Admin.ToString()
-            : UserRoleOption.User.ToString();
-
-        return new UserDTO(user.Id, user.Email!,role);
+        return new UserDTO(user.Id, user.Email!);
     }
 }
 

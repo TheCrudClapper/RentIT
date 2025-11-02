@@ -2,7 +2,13 @@
 using RentalService.Core.ResultTypes;
 
 namespace RentalService.Core.ServiceContracts;
-
+/// <summary>
+/// Defines the contract for managing equipment rental operations, including creating, retrieving, updating, and
+/// deleting rental records, as well as marking equipment as returned.
+/// </summary>
+/// <remarks>Implementations of this interface should ensure thread safety if accessed concurrently. All methods
+/// are asynchronous and support cancellation via the provided cancellation token. The interface abstracts rental
+/// management functionality, allowing for different underlying data stores or business logic implementations.</remarks>
 public interface IRentalService
 {
     Task<Result> DeleteRentalByEquipmentId(Guid equipmentId, CancellationToken cancellationToken = default);

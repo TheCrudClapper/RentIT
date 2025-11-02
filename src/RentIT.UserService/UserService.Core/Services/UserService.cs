@@ -20,13 +20,21 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
+
+    //TEST METHOD - NOT USED IN PROD
     public async Task<IEnumerable<UserResponse>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
+        //I know it slow, just for testign
         IEnumerable<User> users = await _userRepository.GetAllUsersAsync(cancellationToken);
 
-        return users
-            .Select(item => item.ToUserResponse())
-            .ToList();
+        IList<UserResponse> dtos = [];
+        foreach (var user in users) 
+        {
+            var roleString = await _userManager.GetRolesAsync(user);
+            dtos.Add(user.ToUserResponse(await _userManager.GetRolesAsync(user)));
+        }
+
+        return dtos;
     }
 
     public async Task<Result<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
@@ -35,26 +43,16 @@ public class UserService : IUserService
         if (user == null)
             return Result.Failure<UserDTO>(UserErrors.UserDoesNotExist);
 
-        var roles = await _userManager.GetRolesAsync(user);
-        if(!roles.Any())
-            return Result.Failure<UserDTO>(RoleErrors.UserNotInRole);
-
-        return user.ToUserDTO(roles);
+        return user.ToUserDTO();
     }
 
-    public async Task<IEnumerable<UserDTO>> GetUsersByUserId(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<UserDTO>> GetUsersByUserId(IEnumerable<Guid> userIds, CancellationToken cancellationToken)
     {
         Expression<Func<User, bool>> expression = item => userIds.Contains(item.Id);
         var users = await  _userRepository.GetUsersByCondition(expression, cancellationToken);
-        //IN FUTURE JUST DOWNLOAD USERS EMAIL INSTEAD
-        List<UserDTO> results = new();
-        foreach(var user in users)
-        {
-            var role = await _userManager.GetRolesAsync(user);
-            results.Add(user.ToUserDTO(role));
-        }
-
-        return results;
+        return users.Select(u => u.ToUserDTO());
     }
+
+
 }
 

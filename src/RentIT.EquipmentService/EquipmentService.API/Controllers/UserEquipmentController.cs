@@ -9,59 +9,36 @@ namespace EquipmentService.API.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class UserEquipmentController : ControllerBase
+public class UserEquipmentController : BaseApiController
 {
     private readonly IUserEquipmentService _userEquipmentService;
     public Guid CurrentUserId => this.GetLoggedUserId();
+
     public UserEquipmentController(IUserEquipmentService userEquipmentService)
-    {
-        _userEquipmentService = userEquipmentService;
-    }
+        => _userEquipmentService = userEquipmentService;
 
+    // GET: api/UserEquipment
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentItems(CancellationToken cancellationToken)
-    {
-        var equipmentItems = await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken);
-        return Ok(equipmentItems);
-    }
+    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetAllUserEquipments(CancellationToken cancellationToken)
+        => HandleResult(await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken));
 
+    // GET: api/UserEquipment/{equipmentId}
     [HttpGet("{equipmentId}")]
-    public async Task<ActionResult<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
-    {
-        var result = await _userEquipmentService.GetUserEquipmentById(CurrentUserId, equipmentId, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+    public async Task<ActionResult<EquipmentResponse>> GetUserEquipment(Guid equipmentId, CancellationToken cancellationToken)
+        => HandleResult(await _userEquipmentService.GetUserEquipmentById(CurrentUserId, equipmentId, cancellationToken));
 
-        return result.Value;
-    }
-
+    // POST: api/UserEquipment
     [HttpPost]
-    public async Task<ActionResult<EquipmentResponse>> PostEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+    public async Task<ActionResult<EquipmentResponse>> PostUserEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken));
 
-        return result.Value;
-    }
-
+    // PUT: api/UserEquipment/{equipmentId}
     [HttpPut("{equipmentId}")]
-    public async Task<IActionResult> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
-    {
-        var result = await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
+    public async Task<IActionResult> PutUserEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request, cancellationToken));
 
-        return NoContent();
-    }
-
+    // DELETE: api/UserEquipment/{equipmentId}
     [HttpDelete("{equipmentId}")]
-    public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
-    {
-        var result = await _userEquipmentService.DeleteUserEquipment(CurrentUserId, equipmentId, cancellationToken);
-        if (result.IsFailure)
-            return Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode);
-
-        return NoContent();
-    }
+    public async Task<IActionResult> DeleteUserEquipment(Guid equipmentId, CancellationToken cancellationToken)
+        => HandleResult(await _userEquipmentService.DeleteUserEquipment(CurrentUserId, equipmentId, cancellationToken));
 }

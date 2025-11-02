@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ReviewServices.API.Extensions;
-using ReviewServices.Core.ResultTypes;
-using System.Security.Claims;
+﻿using EquipmentService.API.Extensions;
+using EquipmentService.Core.ResultTypes;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ReviewService.API.Controllers
+namespace EquipmentService.API.Controllers
 {
     public class BaseApiController : ControllerBase
     {

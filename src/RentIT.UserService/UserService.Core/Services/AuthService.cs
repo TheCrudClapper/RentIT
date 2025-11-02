@@ -61,7 +61,7 @@ namespace UserService.Core.Services
                 return Result.Failure<UserAuthResponse>(UserErrors.UserDoesNotExist);
 
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
-                return Result.Failure<UserAuthResponse>(UserErrors.WrongPassword);
+                return Result.Failure<UserAuthResponse>(UserErrors.LoginFailed);
 
             IList<string> roles = await _userManager.GetRolesAsync(user);
 

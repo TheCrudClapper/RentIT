@@ -63,7 +63,7 @@ public class GlobalExceptionHandlingMiddleware
 // Extension method used to add the middleware to the HTTP request pipeline.
 public static class ExceptionHandlingMiddlewareExtensions
 {
-    public static IApplicationBuilder UseExceptionHandlingMiddleware(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseGlobalExceptionHandlingMiddleware(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<GlobalExceptionHandlingMiddleware>();
     }

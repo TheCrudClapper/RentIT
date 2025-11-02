@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using RentalService.API.Extensions;
 using RentalService.API.Handlers;
 using RentalService.API.Middleware;
@@ -11,25 +9,26 @@ using RentalService.Infrastructure;
 using RentalService.Infrastructure.DbContexts;
 using RentalService.Infrastructure.HttpClients;
 using RentalService.Infrastructure.Seeders;
-using System.Security.Claims;
-using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Service Registration
 // -----------------------------
 // Api Controllers
 // -----------------------------
 builder.Services.AddControllers();
 
-// --------------------------------------------
-// Dependency Injection for user def. services
-// --------------------------------------------
-builder.Services.AddInfrastructureLayer(builder.Configuration);
-builder.Services.AddCoreLayer();
-builder.Services.AddTransient<BearerTokenHandler>();
+// -----------------------------
+// Custom Services & Handlers
+// -----------------------------
+builder.Services
+    .AddCoreLayer()
+    .AddInfrastructureLayer(builder.Configuration)
+    .AddAuthHeaderHandler();
 
 // -----------------------------
-// Context Accessor
+// Http Context Accessor
 // -----------------------------
 builder.Services.AddHttpContextAccessor();
 
@@ -43,90 +42,73 @@ builder.Services.AddTransient<IEquipmentMicroservicePolicies, EquipmentMicroserv
 // -----------------------------
 // Http Clients
 // -----------------------------
-builder.Services.AddHttpClient<IUsersMicroserviceClient, UsersMicroserviceClient>(options =>
-{
-    options.BaseAddress = new Uri($"http://{builder.Configuration["USERS_MICROSERVICE_NAME"]}:" +
-        $"{builder.Configuration["USERS_MICROSERVICE_PORT"]}");
-})
-    .AddHttpMessageHandler<BearerTokenHandler>()
-    .AddPolicyHandler((serviceProvider, request) =>
-    {
-        var policies = serviceProvider.GetRequiredService<IUsersMicroservicePolicies>();
-        return policies.GetCombinedPolicy();
-    });
-
-builder.Services.AddHttpClient<IEquipmentMicroserviceClient, EquipmentMicroserviceClient>(options =>
-{
-    options.BaseAddress = new Uri($"http://{builder.Configuration["EQUIPMENT_MICROSERVICE_NAME"]}:" +
-        $"{builder.Configuration["EQUIPMENT_MICROSERVICE_PORT"]}");
-})
-    .AddHttpMessageHandler<BearerTokenHandler>()
-    .AddPolicyHandler((serviceProvider, request) =>
-    {
-        var policies = serviceProvider.GetRequiredService<IEquipmentMicroservicePolicies>();
-        return policies.GetCombinedPolicy();
-    });
+builder.Services.AddInfrastructureHttpClients(builder.Configuration);
 
 // -----------------------------
 // OpenAPI && Swagger
 // -----------------------------
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // -----------------------------
-// Token based auth 
+// JWT Based Token Auth
 // -----------------------------
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
-        NameClaimType = ClaimTypes.Name,
-        RoleClaimType = "Roles",
-    };
-});
-
+builder.Services.AddJwtTokenAuth(builder.Configuration);
+#endregion
+#region Middleware-Pipeline
 var app = builder.Build();
 
-//Add global exception handling middleware
+// ---------------------------------
+// Global Error Handling Middleware
+// ---------------------------------
 app.UseGlobalExceptionHandlingMiddleware();
 
-//Https supports
+// -----------------------------
+// HTTPS Support
+// -----------------------------
 app.UseHsts();
 //app.UseHttpsRedirection();
 
+// -----------------------------
+// Open API Docs
+// -----------------------------
+app.MapOpenApi();
+
+// ---------------------------------
+// Migrations
+// ---------------------------------
 await app.MigrateDatabaseAsync(builder.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // -----------------------------
+    // Use Swagger
+    // -----------------------------
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<RentalDbContext>();
     await AppDbSeeder.Seed(context);
 }
 
-//Use Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
-
-//Use Routing
+// -----------------------------
+// Use Routing
+// -----------------------------
 app.UseRouting();
 
-//Mapping API controllers 
-app.MapControllers();
-
-//Authentication && Authorization
+// --------------------------------
+// Authentication && Authorization
+// --------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
 
+// -----------------------------
+// Map Api Controllers
+// -----------------------------
+app.MapControllers();
+
 app.Run();
+#endregion
