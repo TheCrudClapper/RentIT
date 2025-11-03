@@ -32,6 +32,25 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/gateway/Users/query",
+      "DownstreamPathTemplate": "/api/Users/query",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/gateway/Users/{everything}",
       "DownstreamPathTemplate": "/api/Users/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
@@ -163,8 +182,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Equipments/byIds",
-      "DownstreamPathTemplate": "/api/Equipments/byIds",
+      "UpstreamPathTemplate": "/gateway/Equipments/query",
+      "DownstreamPathTemplate": "/api/Equipments/query",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -356,34 +375,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/byEquipmentId/{id}",
-      "DownstreamPathTemplate": "/api/Rentals/byEquipmentId/{id}",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "rentalmicroservice.api",
-          "Port": 8080
-        }
-      ],
-      "UpstreamHttpMethod": [ "Delete", "Options" ],
-      "UpstreamScheme": "http",
-      "AuthenticationOptions": {
-        "AllowedScopes": [],
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "AddHeadersToRequest": {
-        "Authorization": "Bearer {Token}"
-      },
-      "RateLimitOptions": {
-        "Limit": 5,
-        "Period": "1m",
-        "HttpStatusCode": 429,
-        "EnableRateLimiting": true,
-        "PeriodTimespan": 30
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/Rentals/mark-equipment-as-returned",
-      "DownstreamPathTemplate": "/api/Rentals/mark-equipment-as-returned",
+      "UpstreamPathTemplate": "/gateway/Rentals/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/Rentals/{rentalId}/return",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -439,8 +432,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/UserRental/mark-equipment-as-returned/{everything}",
-      "DownstreamPathTemplate": "/api/UserRental/mark-equipment-as-returned/{everything}",
+      "UpstreamPathTemplate": "/gateway/UserRental/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/UserRental/{rentalId}/return",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -480,25 +473,6 @@
       "UpstreamPathTemplate": "/gateway/Reviews",
       "DownstreamPathTemplate": "/api/Reviews",
       "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
-      "DownstreamScheme": "http",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "AddHeadersToRequest": {
-        "Authorization": "Bearer {Token}"
-      },
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "reviewmicroservice.api",
-          "Port": 8080
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/Reviews/byEquipment/{equipmentId}",
-      "DownstreamPathTemplate": "/api/Reviews/byEquipment/{equipmentId}",
-      "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",

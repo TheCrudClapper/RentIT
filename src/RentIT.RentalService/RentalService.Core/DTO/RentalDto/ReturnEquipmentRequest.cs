@@ -1,5 +1,3 @@
 ﻿namespace RentalService.Core.DTO.RentalDto;
 
-public record ReturnEquipmentRequest(
-    Guid RentalId,
-    DateTime ReturnedDate);
+public record ReturnEquipmentRequest(DateTime ReturnedDate);

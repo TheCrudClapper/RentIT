@@ -22,14 +22,14 @@ public class RentalsController : BaseApiController
         => HandleResult(await _rentalService.GetAllRentals(cancellationToken));
 
     // GET: api/Rentals/5
-    [HttpGet("{id}")]
+    [HttpGet("{equipmentId}")]
     [AllowAnonymous]
     public async Task<ActionResult<RentalResponse>> GetRental(Guid id, CancellationToken cancellationToken)
         => HandleResult(await _rentalService.GetRental(id, cancellationToken));
 
 
     // PUT: api/Rentals/5
-    [HttpPut("{id}")]
+    [HttpPut("{equipmentId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> PutRental(Guid id, RentalUpdateRequest request, CancellationToken cancellationToken)
         => HandleResult(await _rentalService.UpdateRental(id, request, cancellationToken));
@@ -42,21 +42,14 @@ public class RentalsController : BaseApiController
 
 
     // DELETE: api/Rentals/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{equipmentId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteRental(Guid id, CancellationToken cancellationToken)
         => HandleResult(await _rentalService.DeleteRental(id, cancellationToken));
 
-
-    // DELETE: api/Rentals/by-equipment-id/{id}
-    [HttpDelete("by-equipment-id/{id}")]
-    public async Task<IActionResult> DeleteRentalsByEquipmentId(Guid id, CancellationToken cancellationToken)
-        => HandleResult(await _rentalService.DeleteRentalByEquipmentId(id, cancellationToken));
-
-
-    // POST: api/Rentals/mark-equipment-as-returned
-    [HttpPost("mark-equipment-as-returned")]
+    // POST: api/Rentals/{rentalId}/return
+    [HttpPost("{rentalId}/return")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _rentalService.MarkEquipmentAsReturned(request, cancellationToken));
+    public async Task<IActionResult> MarkEquipmentAsReturned(Guid rentalId, ReturnEquipmentRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _rentalService.MarkEquipmentAsReturned(rentalId, request, cancellationToken));
 }

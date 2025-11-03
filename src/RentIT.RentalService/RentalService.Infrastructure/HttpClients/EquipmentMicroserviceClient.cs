@@ -71,7 +71,7 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         context["equipmentIds"] = equipmentIds;
 
         HttpResponseMessage response = await fallbackPolicy.ExecuteAsync(
-          async (ctx, token) => await _httpClient.PostAsJsonAsync("gateway/equipments/byIds", equipmentIds), context, cancellationToken
+          async (ctx, token) => await _httpClient.PostAsJsonAsync("gateway/equipments/query", equipmentIds), context, cancellationToken
         );
 
         if (!response.IsSuccessStatusCode)

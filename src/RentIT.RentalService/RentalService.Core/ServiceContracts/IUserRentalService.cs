@@ -17,5 +17,5 @@ public interface IUserRentalService
     Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken = default);
     Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken = default);
     Task<Result> DeleteRental(Guid rentalId, Guid userId, CancellationToken cancellationToken = default);
-    Task<Result> MarkEquipmentAsReturned(Guid rentalId, Guid userId, UserReturnEquipmentRequest request, CancellationToken cancellationToken = default);
+    Task<Result> MarkEquipmentAsReturned(Guid rentalId, Guid userId, ReturnEquipmentRequest request, CancellationToken cancellationToken = default);
 }

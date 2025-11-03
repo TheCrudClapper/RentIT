@@ -45,14 +45,8 @@ public class EquipmentsController : BaseApiController
     public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
         => HandleResult(await _equipmentService.DeleteEquipment(equipmentId, cancellationToken));
 
-    // GET: api/Equipments/exists/{equipmentId}
-    [HttpGet("exists/{equipmentId}")]
-    [AllowAnonymous]
-    public async Task<ActionResult> DoesEquipmentExist(Guid equipmentId, CancellationToken cancellationToken)
-        => HandleResult(await _equipmentService.DoesEquipmentExist(equipmentId, cancellationToken));
-
     // POST: api/Equipments/byIds
-    [HttpPost("byIds")]
+    [HttpPost("query")]
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds([FromBody] IEnumerable<Guid>? equipmentIds, CancellationToken cancellationToken)
     {

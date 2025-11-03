@@ -17,9 +17,9 @@ public class ReviewsController : BaseApiController
         _reviewService = reviewService;
     }
 
-    // GET: api/Reviews
-    [HttpGet("byEquipment/{equipmentId}")]
-    public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetAllReviewsForEquipment(Guid equipmentId, CancellationToken cancellationToken)
+    // GET: api/reviews?equipmentId={id}
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetAllReviewsForEquipment([FromQuery]Guid equipmentId, CancellationToken cancellationToken)
         => HandleResult(await _reviewService.GetReviewsByEquipmentId(equipmentId, cancellationToken));
 
     // GET api/Reviews/5

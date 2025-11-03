@@ -1,5 +1,4 @@
-﻿using EquipmentService.API.Extensions;
-using EquipmentService.Core.DTO.EquipmentDto;
+﻿using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +11,6 @@ namespace EquipmentService.API.Controllers;
 public class UserEquipmentController : BaseApiController
 {
     private readonly IUserEquipmentService _userEquipmentService;
-    public Guid CurrentUserId => this.GetLoggedUserId();
-
     public UserEquipmentController(IUserEquipmentService userEquipmentService)
         => _userEquipmentService = userEquipmentService;
 

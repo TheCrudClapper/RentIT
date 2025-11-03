@@ -28,7 +28,7 @@ public class UsersController : ControllerBase
         return result.Value;
     }
 
-    [HttpPost("byIds")]
+    [HttpPost("query")]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByIds([FromBody]IEnumerable<Guid> userIds, CancellationToken cancellationToken)
     {
         var users = await _userService.GetUsersByUserId(userIds, cancellationToken);

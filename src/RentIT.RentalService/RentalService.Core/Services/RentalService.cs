@@ -135,9 +135,9 @@ public class RentalService :BaseRentalService, IRentalService
         return Result.Success();
     }
 
-    public async Task<Result> MarkEquipmentAsReturned(ReturnEquipmentRequest request, CancellationToken cancellationToken)
+    public async Task<Result> MarkEquipmentAsReturned(Guid rentalId, ReturnEquipmentRequest request, CancellationToken cancellationToken)
     {
-        Rental? rental = await _rentalRepository.GetRentalByIdAsync(request.RentalId, cancellationToken);
+        Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId, cancellationToken);
 
         if (rental is null)
             return Result.Failure(RentalErrors.RentalNotFound);

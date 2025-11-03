@@ -33,7 +33,7 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
 
     public async Task<Result<IEnumerable<UserDTO>>> GetUsersByUsersIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("/gateway/Users/byIds", userIds, cancellationToken);
+        var response = await _httpClient.PostAsJsonAsync("/gateway/Users/query", userIds, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
