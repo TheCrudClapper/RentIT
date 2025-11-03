@@ -1,55 +1,51 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Polly;
-using System.Security.Claims;
-using System.Text;
+using RentIT.ApiGateway.Extensions;
 
+#region Service Registration
 var builder = WebApplication.CreateBuilder(args);
 
+// -----------------------------
+// Ocelot Config File
+// -----------------------------
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
+// -----------------------------
+// Services & Handlers
+// -----------------------------
 builder.Services
     .AddOcelot()
     .AddPolly();
 
-//Configure JWT Bearer Auth
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
-        NameClaimType = ClaimTypes.Name,
-        RoleClaimType = "Roles",
-    };
-});
+// -----------------------------
+// JWT Based Token Auth
+// -----------------------------
+builder.Services.AddJwtTokenAuth(builder.Configuration);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngular", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
+// -----------------------------
+// CORS Rules && Policies
+// -----------------------------
+builder.Services.ConfigureCors();
+#endregion
+#region Middleware Pipeline
 var app = builder.Build();
 
+// --------------------------------
+// Cors
+// --------------------------------
 app.UseCors("AllowAngular");
 
+// --------------------------------
+// Authentication && Authorization
+// --------------------------------
 app.UseAuthentication();
 app.UseAuthorization();
 
+// --------------------------------
+// Using Ocelot
+// --------------------------------
 await app.UseOcelot();
 
 app.Run();
+#endregion

@@ -1,12 +1,9 @@
 using ReviewService.API.Extensions;
 using ReviewService.API.Handlers;
-using ReviewService.Infrastructure.Seeders;
 using ReviewServices.API.Extensions;
 using ReviewServices.API.Middleware;
 using ReviewServices.Core;
 using ReviewServices.Infrastructure;
-using ReviewServices.Infrastructure.DbContexts;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,9 +74,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ReviewsDbContext>();
-    await ReviewDbSeeder.Seed(context);
+    // -----------------------------
+    // Seed Db with dummy data
+    // -----------------------------
+    await app.SeedDatabase();
 }
 // -----------------------------
 // Use Routing

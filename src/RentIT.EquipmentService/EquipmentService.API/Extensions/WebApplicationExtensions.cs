@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Infrastructure.DbContexts;
+using EquipmentService.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Polly;
 
@@ -19,5 +20,13 @@ namespace EquipmentService.API.Extensions
                 await db.Database.MigrateAsync();
             });            
         }
+
+        public static async Task SeedDatabase(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<EquipmentContext>();
+            await AppDbSeeder.Seed(context);
+        }
     }
+
 }

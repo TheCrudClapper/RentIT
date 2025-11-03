@@ -69,12 +69,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    using var scope = app.Services.CreateScope();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-    var context = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-
-    await AppDbSeeder.Seed(context, userManager, roleManager);
+    // -----------------------------
+    // Seed Db with dummy data
+    // -----------------------------
+    await app.SeedDatabase();
 }
 
 // -----------------------------

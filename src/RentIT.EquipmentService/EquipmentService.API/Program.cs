@@ -5,9 +5,6 @@ using EquipmentService.Core;
 using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
 using EquipmentService.Infrastructure;
-using EquipmentService.Infrastructure.DbContexts;
-using EquipmentService.Infrastructure.Seeders;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,10 +81,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<EquipmentContext>();
-    await AppDbSeeder.Seed(context);
+    // -----------------------------
+    // Seed Db with dummy data
+    // -----------------------------
+    await app.SeedDatabase();
 }
+
 // -----------------------------
 // Use Routing
 // -----------------------------

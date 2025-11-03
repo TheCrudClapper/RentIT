@@ -89,9 +89,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<RentalDbContext>();
-    await AppDbSeeder.Seed(context);
+    // -----------------------------
+    // Seed Db with dummy data
+    // -----------------------------
+    await app.SeedDatabase();
 }
 
 // -----------------------------

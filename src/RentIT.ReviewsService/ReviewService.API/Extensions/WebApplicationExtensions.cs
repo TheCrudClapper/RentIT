@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Polly;
+using ReviewService.Infrastructure.Seeders;
 using ReviewServices.Infrastructure.DbContexts;
 
 namespace ReviewServices.API.Extensions;
@@ -18,5 +19,12 @@ public static class WebApplicationExtensions
         {
             await db.Database.MigrateAsync();
         });            
+    }
+
+    public static async Task SeedDatabase(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ReviewsDbContext>();
+        await ReviewDbSeeder.Seed(context);
     }
 }
