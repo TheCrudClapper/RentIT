@@ -1,9 +1,11 @@
-# RentIT
+# 🎯 RentIT
 
-**RentIT** is a modern equipment rental platform built using microservices architecture. The system enables users to browse available equipment, create rentals, and manage rental history, while services communicate through an event-driven architecture. The platform focuses on scalability, reliability, and maintainability using Clean Architecture principles.
+**RentIT** is a modern equipment rental platform built using microservices architecture. The system enables users to browse available equipment, create rentals, and manage rental history, while services communicate through an event-driven architecture (RabbitMQ). 
 
-# Features
-### Platform (User-Facing API)
+The platform focuses on <b> scalability, reliability, and maintainability </b> using Clean Architecture principles.
+
+## ✨ Features
+### 🌐 Platform (User-Facing API)
 - User registration & authentication (JWT)
 - Browse available equipment
 - Create and manage rentals
@@ -14,42 +16,42 @@
 - Distributed caching for faster rental queries
 - RESTful API structure
 
-## Microservices
+## 🧩 Microservices Overview
 
-### User Service
+### 👤 User Service
 - User registration & login
 - JWT token generation
 - Identity management with ASP.NET Core Identity
 - Role-based authorization
 
-### Equipment Service
+### 🏗️ Equipment Service
 - Equipment catalog management
 - CRUD operations for equipment
 - Availability tracking
 - Integration with Rental Service
 - Event publishing to message broker
 
-### Rental Service
+### 📦 Rental Service
 - Rental lifecycle management
 - Reservation validation
 - Overdue tracking with penalty calculation
 - Redis caching for performance
 - Integration with Equipment and User services
 
-### Review Service
+### 📝 Review Service
 - Equipment reviews and ratings
 - Review aggregation
 - Feedback management
 - Event-based communication with other services
 
-### API Gateway
+### 🌐 API Gateway
 - Single entry point for all requests
 - Request routing to microservices
 - JWT validation
 - Centralized authentication
 - Aggregation of responses from multiple services
 
-# Technologies
+## 🧰 Technologies
 ### Backend
 - ASP.NET Core 9
 - Entity Framework Core 9
@@ -59,12 +61,12 @@
 - Redis
 - Polly (Retry & Circuit Breaker policies)
 
-### DevOps & Infrastructure
+###  DevOps & Infrastructure
 - Docker
 - Docker Compose
 - Visual Studio Container Tools
 
-# Architecture
+## 🏗️ Architecture
 RentIT is designed as a distributed microservices system where each service is responsible for a specific business domain.
 
 Services communicate synchronously via HTTP and asynchronously using RabbitMQ events, ensuring loose coupling and high scalability.
@@ -87,17 +89,18 @@ Main services:
 - RabbitMQ (message broker)
 - Redis (cache)
 
-# Quick Start
+## 🚀 Quick Start
 1. Clone repository `git clone https://github.com/TheCrudClapper/RentIT.git` then `cd RentIT`
-2. Run containers via `docker-compose up -d`
-3. Verify services
+2. Make sure that docker is up and running
+3. Run containers via `docker-compose up -d`
+4. Verify services
    - API Gateway: `http://localhost:5050`
    - User Service: `http://localhost:5000/swagger`
    - Equipment Service: `http://localhost:5002/swagger`
    - Rental Service: `http://localhost:5004/swagger`
    - Review Service: `http://localhost:5006/swagger`
 
-# Useful Links
+## 🔗 Useful Links
 
 - [ASP.NET Core Documentation](https://learn.microsoft.com/aspnet/core)
 - [Entity Framework Core Documentation](https://learn.microsoft.com/ef/core)
