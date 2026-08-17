@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ReviewService.Core.DTO.ReviewAllowance;
+using ReviewService.Core.DTO.ReviewAllowances;
 using ReviewService.Core.RabbitMQ.Consumers.Base;
 using ReviewService.Core.ServiceContracts;
 using System.Text;

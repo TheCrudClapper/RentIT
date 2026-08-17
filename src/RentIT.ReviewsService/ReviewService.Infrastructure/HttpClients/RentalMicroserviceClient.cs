@@ -1,6 +1,6 @@
 ﻿using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Rental;
+using ReviewService.Core.DTO.Rentals;
 using System.Net.Http.Json;
 
 namespace ReviewService.Infrastructure.HttpClients;

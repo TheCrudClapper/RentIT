@@ -35,7 +35,7 @@ public class CategoryRepository : ICategoryRepository
         return true;
     }
 
-    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken)
     {
         return await _context.Categories
             .ToListAsync(cancellationToken);

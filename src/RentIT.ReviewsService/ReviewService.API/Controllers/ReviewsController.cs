@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReviewService.API.Controllers;
-using ReviewService.Core.DTO.Review;
+using ReviewService.Core.DTO.Reviews;
 using ReviewService.Core.ServiceContracts;
 
 namespace ReviewServices.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/reviews")]
 [ApiController]
 [Authorize]
 public class ReviewsController : BaseApiController

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UserService.Infrastructure.DbContexts;
 
+
 #nullable disable
 
 namespace UserService.Infrastructure.Migrations

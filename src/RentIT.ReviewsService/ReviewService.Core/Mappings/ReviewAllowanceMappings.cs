@@ -1,5 +1,5 @@
 ﻿using ReviewService.Core.Domain.Entities.ReviewAllowance;
-using ReviewService.Core.DTO.ReviewAllowance;
+using ReviewService.Core.DTO.ReviewAllowances;
 
 namespace ReviewService.Core.Mappings;
 

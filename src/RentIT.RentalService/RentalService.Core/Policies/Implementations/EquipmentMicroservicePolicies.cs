@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
-using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.DTO.Rentals;
 using RentalService.Core.Policies.Contracts;
 using System.Net;
 using System.Text;

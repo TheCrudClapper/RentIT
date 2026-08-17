@@ -3,7 +3,7 @@ using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.EquipmentDto;
+using EquipmentService.Core.DTO.Equipments;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.RabbitMQ.Publishers;

@@ -8,7 +8,7 @@ public interface ICategoryRepository
     Task<Category> AddCategoryAsync(Category category, CancellationToken cancellationToken);
     Task<bool> UpdateCategoryAsync(Guid categoryId, Category category, CancellationToken cancellationToken);
     Task<bool> DeleteCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
-    Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken);
     Task<bool> IsCategoryUnique(Category dbObject, CancellationToken cancellationToken, Guid? excludeId = null);
     Task<bool> DoesCategoryExist(Guid categoryId, CancellationToken cancellationToken);
 }

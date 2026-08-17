@@ -1,5 +1,5 @@
 ﻿using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.DTO.Rentals;
 
 namespace RentalService.Core.ServiceContracts;
 /// <summary>

@@ -5,7 +5,7 @@ using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.DTO.Rentals;
 using RentalService.Core.Mappings;
 using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.RabbitMQ.Publishers;

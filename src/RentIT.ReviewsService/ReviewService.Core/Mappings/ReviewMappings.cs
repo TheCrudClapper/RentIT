@@ -1,6 +1,6 @@
 ﻿using ReviewService.Core.Domain.Entities.Review;
-using ReviewService.Core.DTO.Review;
-using ReviewService.Core.DTO.User;
+using ReviewService.Core.DTO.Reviews;
+using ReviewService.Core.DTO.Users;
 
 namespace ReviewService.Core.Mappings;
 

@@ -1,6 +1,6 @@
 ﻿using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.UserDto;
+using EquipmentService.Core.DTO.Users;
 using Polly.CircuitBreaker;
 using System.Net.Http.Json;
 

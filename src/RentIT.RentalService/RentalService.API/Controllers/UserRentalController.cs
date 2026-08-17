@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.DTO.Rentals;
 using RentalService.Core.ServiceContracts;
 
 namespace RentalService.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/user/rentals")]
 [Authorize]
 [ApiController]
 public class UserRentalController : BaseApiController

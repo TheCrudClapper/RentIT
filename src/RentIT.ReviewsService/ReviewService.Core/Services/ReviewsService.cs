@@ -2,7 +2,7 @@
 using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Review;
+using ReviewService.Core.DTO.Reviews;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ServiceContracts;
 namespace ReviewServices.Core.Services;

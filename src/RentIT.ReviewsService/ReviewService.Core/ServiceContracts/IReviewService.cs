@@ -1,5 +1,5 @@
 ﻿using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Review;
+using ReviewService.Core.DTO.Reviews;
 
 namespace ReviewService.Core.ServiceContracts;
 

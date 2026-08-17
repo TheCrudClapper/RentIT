@@ -1,5 +1,5 @@
 ﻿using RentalService.Core.Domain.Entities;
-using RentalService.Core.DTO.RentalDto;
+using RentalService.Core.DTO.Rentals;
 
 namespace RentalService.Core.Mappings
 {

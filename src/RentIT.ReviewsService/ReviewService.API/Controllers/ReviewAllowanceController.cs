@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReviewService.Core.DTO.ReviewAllowance;
+using ReviewService.Core.DTO.ReviewAllowances;
 using ReviewService.Core.ServiceContracts;
 
 namespace ReviewService.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/review-allowance")]
 [ApiController]
 [Authorize]
 public class ReviewAllowanceController : BaseApiController

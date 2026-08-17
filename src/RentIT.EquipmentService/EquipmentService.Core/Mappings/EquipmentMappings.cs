@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.EquipmentDto;
+using EquipmentService.Core.DTO.Equipments;
 
 namespace EquipmentService.Core.Mappings;
 
