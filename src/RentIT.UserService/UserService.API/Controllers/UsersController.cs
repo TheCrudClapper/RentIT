@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Core.DTO.Shared;
+using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.ServiceContracts;
 
@@ -23,4 +25,9 @@ public class UsersController : BaseApiController
     [HttpPost("query")]
     public async Task<ActionResult<IReadOnlyCollection<UserDTO>>> GetUsersByIds([FromBody] IEnumerable<Guid> userIds, CancellationToken cancellationToken)
         => HandleResult(await _userService.GetUsersByUserIds(userIds, cancellationToken));
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<CreatedResponse>> PostUser(UserAddRequest request)
+        => HandleResult(await _userService.CreateUser(request));
 }

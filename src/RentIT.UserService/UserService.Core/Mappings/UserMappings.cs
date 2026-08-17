@@ -1,4 +1,6 @@
 ﻿using UserService.Core.Domain.Entities.User;
+using UserService.Core.DTO.Shared;
+using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
 
 namespace UserService.Core.Mappings;
@@ -20,6 +22,26 @@ public static class UserMappings
             IsActive = true,
             DateCreated = DateTime.UtcNow,
         };
+    }
+
+    public static User ToUserEntity(this UserAddRequest request)
+    {
+        return new User
+        {
+            //Email is used as user's username
+            Id = new Guid(),
+            UserName = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            IsActive = true,
+            DateCreated = DateTime.UtcNow,
+        };
+    }
+
+    public static CreatedResponse ToCreatedResponse(this User user)
+    {
+        return new CreatedResponse(user.Id, user.DateCreated);
     }
 
     public static UserResponse ToUserResponse(this User user, IList<string> role)

@@ -12,6 +12,6 @@ namespace UserService.Core.ServiceContracts;
 
 public interface IAuthService
 {
-    Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken);
+    Task<Result> RegisterUserAsync(RegisterRequest request, CancellationToken cancellationToken);
     Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken);
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using UserService.Core.Domain.Entities.Role;
+using UserService.Core.Domain.Entities.Role.Errors;
 using UserService.Core.Domain.Entities.User;
 using UserService.Core.Domain.Entities.User.Errors;
 using UserService.Core.Domain.RepositoryContracts;
@@ -7,6 +8,7 @@ using UserService.Core.Domain.ResultTypes;
 using UserService.Core.DTO.Shared;
 using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
+using UserService.Core.Extensions;
 using UserService.Core.Mappings;
 using UserService.Core.ServiceContracts;
 
@@ -40,13 +42,24 @@ public class UserService : IUserService
 
     public async Task<Result<CreatedResponse>> CreateUser(UserAddRequest request)
     {
-        //if (await _userManager.FindByEmailAsync(request.Email) is not null)
-        //    return Result.Failure<CreatedResponse>(UserErrors.UserAlreadyExists);
+        if (await _userManager.FindByEmailAsync(request.Email) is not null)
+            return Result.Failure<CreatedResponse>(UserErrors.AlreadyExists);
 
-        //if (!await _roleManager.RoleExistsAsync(request.UserRoleType.ToString()))
-        //    return Result.Failure<CreatedResponse>(RoleErrors.RoleDoesNotExist);
+        string requestRole = request.UserRoleType.ToString();
+        if (!await _roleManager.RoleExistsAsync(requestRole))
+            return Result.Failure<CreatedResponse>(RoleErrors.NotFound);
 
-        throw new NotImplementedException();
+        User user = request.ToUserEntity();
+
+        IdentityResult userResult = await _userManager.CreateAsync(user);
+        if (!userResult.Succeeded)
+            return userResult.ToResult<CreatedResponse>();
+
+        IdentityResult roleResult = await _userManager.AddToRoleAsync(user, requestRole);
+        if(!roleResult.Succeeded)
+            return roleResult.ToResult<CreatedResponse>();
+
+        return user.ToCreatedResponse();
     }
 }
 

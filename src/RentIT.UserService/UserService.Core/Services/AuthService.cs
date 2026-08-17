@@ -5,6 +5,7 @@ using UserService.Core.Domain.Entities.User;
 using UserService.Core.Domain.Entities.User.Errors;
 using UserService.Core.Domain.ResultTypes;
 using UserService.Core.DTO.UserDto;
+using UserService.Core.Enums;
 using UserService.Core.Extensions;
 using UserService.Core.Mappings;
 using UserService.Core.ServiceContracts;
@@ -25,12 +26,12 @@ namespace UserService.Core.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
+        public async Task<Result> RegisterUserAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
             if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return Result.Failure(UserErrors.UserAlreadyExists);
+                return Result.Failure(UserErrors.AlreadyExists);
 
-            string userRole = request.UserRoleType.ToString();
+            string userRole = UserRoles.User.ToString();
             if (!await _roleManager.RoleExistsAsync(userRole))
                 return Result.Failure(RoleErrors.NotFound);
 

@@ -5,7 +5,7 @@ namespace UserService.Core.Mappings;
 
 public static class RoleMappings
 {
-    public static Role ToRoleEntity(this UserRoleOption roleOption)
+    public static Role ToRoleEntity(this UserRoles roleOption)
     {
         return new Role
         {

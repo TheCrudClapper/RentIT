@@ -14,5 +14,4 @@ public class RegisterRequest
     public string Email { get; init; } = null!;
     [StringLength(50), Required, PasswordPropertyText]
     public string Password { get; init; } = null!;
-    public UserRoleOption UserRoleType { get; set; } = UserRoleOption.User;
 }

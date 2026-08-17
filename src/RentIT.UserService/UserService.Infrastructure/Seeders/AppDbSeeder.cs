@@ -13,11 +13,11 @@ namespace UserService.Infrastructure.Seeders
         public static async Task Seed(UsersDbContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             //Check wheter roles exist if not add them
-            if (!await roleManager.RoleExistsAsync(UserRoleOption.Admin.ToString()))
-                await roleManager.CreateAsync(UserRoleOption.Admin.ToRoleEntity());
+            if (!await roleManager.RoleExistsAsync(UserRoles.Admin.ToString()))
+                await roleManager.CreateAsync(UserRoles.Admin.ToRoleEntity());
 
-            if (!await roleManager.RoleExistsAsync(UserRoleOption.User.ToString()))
-                await roleManager.CreateAsync(UserRoleOption.User.ToRoleEntity());
+            if (!await roleManager.RoleExistsAsync(UserRoles.User.ToString()))
+                await roleManager.CreateAsync(UserRoles.User.ToRoleEntity());
 
             //Add sample users
             if (!await context.Users.AnyAsync())
@@ -50,8 +50,8 @@ namespace UserService.Infrastructure.Seeders
                 await userManager.CreateAsync(user2,
                    "Test123#");
 
-                await userManager.AddToRoleAsync(user1, UserRoleOption.Admin.ToString());
-                await userManager.AddToRoleAsync(user2, UserRoleOption.User.ToString());
+                await userManager.AddToRoleAsync(user1, UserRoles.Admin.ToString());
+                await userManager.AddToRoleAsync(user2, UserRoles.User.ToString());
             }
         }
 

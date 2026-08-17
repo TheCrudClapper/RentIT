@@ -13,7 +13,7 @@ public class AuthController : BaseApiController
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _authService.RegisterAsync(request, cancellationToken));
+        => HandleResult(await _authService.RegisterUserAsync(request, cancellationToken));
 
     [HttpPost("login")]
     public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)

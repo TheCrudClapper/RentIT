@@ -3,7 +3,7 @@
 /// <summary>
 /// Enum defining Roles in Application
 /// </summary>
-public enum UserRoleOption
+public enum UserRoles
 {
     User, Admin
 }

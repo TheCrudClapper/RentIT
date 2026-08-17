@@ -9,4 +9,4 @@ public record UserAddRequest(
     [StringLength(50), Required] string LastName,
     [StringLength(50), Required, EmailAddress] string Email,
     [StringLength(50), Required, PasswordPropertyText] string Password,
-    UserRoleOption UserRoleType);
+    UserRoles UserRoleType);
