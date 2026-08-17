@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using UserService.Core.Domain.Entities;
 using UserService.Core.DTO.UserDto;
+using UserService.Core.Extensions;
 using UserService.Core.Mappings;
 using UserService.Core.ResultTypes;
 using UserService.Core.ServiceContracts;
@@ -21,28 +22,28 @@ namespace UserService.Core.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(RegisterRequest request, CancellationToken cancellationToken)
+        public async Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
             if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return IdentityResult.Failed(new IdentityError { Code = "AccountExists", Description = UserErrors.UserAlreadyExists.Description });
+                return Result.Failure(UserErrors.UserAlreadyExists);
 
             string userRole = request.UserRoleType.ToString();
             if (!await _roleManager.RoleExistsAsync(userRole))
-                return IdentityResult.Failed(new IdentityError { Code = "RoleNotExists", Description = "Role does not exists." });
+                return Result.Failure(RoleErrors.RoleDoesNotExist);
 
             User user = request.ToUserEntity();
 
             IdentityResult userCreationResult = await _userManager.CreateAsync(user, request.Password);
 
             if (!userCreationResult.Succeeded)
-                return userCreationResult;
+                return userCreationResult.ToResult();
 
             var roleAssignResult = await _userManager.AddToRoleAsync(user, userRole);
 
             if (!roleAssignResult.Succeeded)
-                return roleAssignResult;
+                return roleAssignResult.ToResult();
 
-            return IdentityResult.Success;
+            return Result.Success();
         }
 
         public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
