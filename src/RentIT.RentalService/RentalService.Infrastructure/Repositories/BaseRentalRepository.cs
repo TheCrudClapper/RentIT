@@ -40,6 +40,6 @@ public abstract class BaseRentalRepository : IBaseRentalRepository
     public async Task UpdateRentalTotalCost(Rental rental, decimal totalCost, CancellationToken cancellationToken)
     {
         rental.RentalPrice = totalCost;
-        await _context.SaveChangesAsync(cancellationToken);  
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

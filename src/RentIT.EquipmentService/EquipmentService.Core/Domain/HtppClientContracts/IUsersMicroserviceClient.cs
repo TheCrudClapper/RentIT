@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.DTO.UserDto;
-using EquipmentService.Core.ResultTypes;
+﻿using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.DTO.UserDto;
 namespace EquipmentService.Core.Domain.HtppClientContracts;
 
 /// <summary>

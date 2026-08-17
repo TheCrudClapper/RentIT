@@ -49,7 +49,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
             exchange: exchangeName,
             type: ExchangeType.Direct,
             durable: true,
-            autoDelete: false 
+            autoDelete: false
             );
 
         //Publish Message

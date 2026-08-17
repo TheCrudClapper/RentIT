@@ -1,6 +1,6 @@
 ﻿using ReviewService.Core.Domain.HttpClientContracts;
+using ReviewService.Core.Domain.ResultTypes;
 using ReviewService.Core.DTO.User;
-using ReviewServices.Core.ResultTypes;
 using System.Net.Http.Json;
 
 namespace ReviewService.Infrastructure.HttpClients;
@@ -20,13 +20,13 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
         if (!response.IsSuccessStatusCode)
         {
             string message = await response.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<UserDTO>(new Error((int)response.StatusCode, message));
+            return Result.Failure<UserDTO>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
         }
 
-        UserDTO? userResponse = await response.Content.ReadFromJsonAsync<UserDTO>();
+        UserDTO? userResponse = await response.Content.ReadFromJsonAsync<UserDTO>(cancellationToken);
 
-        if(userResponse is null)
-            return Result.Failure<UserDTO>(new Error(500, "Invalid response from Users service"));
+        if (userResponse is null)
+            return Result.Failure<UserDTO>(Error.Create(ErrorType.Unexpected, "500", "Invalid response from Users service"));
 
         return userResponse;
     }
@@ -38,10 +38,10 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
         if (!response.IsSuccessStatusCode)
         {
             string message = await response.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<IEnumerable<UserDTO>>(new Error((int)response.StatusCode, message));
-        }       
+            return Result.Failure<IEnumerable<UserDTO>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
+        }
         var userResponse = await response.Content.ReadFromJsonAsync<IEnumerable<UserDTO>>(cancellationToken);
 
-        return Result.Success(userResponse ?? []);
+        return Result.Success(userResponse ?? Enumerable.Empty<UserDTO>());
     }
 }

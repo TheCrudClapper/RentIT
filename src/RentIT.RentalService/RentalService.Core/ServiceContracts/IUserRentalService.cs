@@ -1,5 +1,5 @@
-﻿using RentalService.Core.DTO.RentalDto;
-using RentalService.Core.ResultTypes;
+﻿using RentalService.Core.Domain.ResultTypes;
+using RentalService.Core.DTO.RentalDto;
 
 namespace RentalService.Core.ServiceContracts;
 /// <summary>
@@ -13,7 +13,7 @@ namespace RentalService.Core.ServiceContracts;
 public interface IUserRentalService
 {
     Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(Guid userId, CancellationToken cancellationToken = default);
-    Task<Result<RentalResponse>> GetRental(Guid rentalId, Guid userId, CancellationToken cancellationToken = default );
+    Task<Result<RentalResponse>> GetRental(Guid rentalId, Guid userId, CancellationToken cancellationToken = default);
     Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken = default);
     Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken = default);
     Task<Result> DeleteRental(Guid rentalId, Guid userId, CancellationToken cancellationToken = default);

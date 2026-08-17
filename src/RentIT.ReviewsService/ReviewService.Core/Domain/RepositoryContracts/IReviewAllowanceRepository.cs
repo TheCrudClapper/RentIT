@@ -1,4 +1,4 @@
-﻿using ReviewServices.Core.Domain.Entities;
+﻿using ReviewService.Core.Domain.Entities.ReviewAllowance;
 using System.Linq.Expressions;
 
 namespace ReviewService.Core.Domain.RepositoryContracts;

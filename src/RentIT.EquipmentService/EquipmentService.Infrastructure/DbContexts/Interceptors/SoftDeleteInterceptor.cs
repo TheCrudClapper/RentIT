@@ -9,7 +9,7 @@ public class SoftDeleteInterceptor : SaveChangesInterceptor
     {
         if (eventData.Context is null) return result;
 
-        foreach(var entry in eventData.Context.ChangeTracker.Entries())
+        foreach (var entry in eventData.Context.ChangeTracker.Entries())
         {
             if (entry is not { State: EntityState.Deleted, Entity: ISoftDelete delete })
                 continue;

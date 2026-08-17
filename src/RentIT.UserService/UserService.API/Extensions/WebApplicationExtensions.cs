@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Polly;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.Role;
+using UserService.Core.Domain.Entities.User;
 using UserService.Infrastructure.DbContexts;
 using UserService.Infrastructure.Seeders;
 
@@ -20,7 +21,7 @@ namespace UserService.API.Extensions
             await policy.ExecuteAsync(async () =>
             {
                 await db.Database.MigrateAsync();
-            });            
+            });
         }
 
         public static async Task SeedDatabase(this WebApplication app)

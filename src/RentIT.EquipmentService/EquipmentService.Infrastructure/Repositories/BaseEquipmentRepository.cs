@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ public abstract class BaseEquipmentRepository : IBaseEquipmentRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async  Task<bool> IsEquipmentUnique(Equipment equipment, CancellationToken cancellationToken, Guid? excludeId = null)
+    public async Task<bool> IsEquipmentUnique(Equipment equipment, CancellationToken cancellationToken, Guid? excludeId = null)
     {
         return !await _context.EquipmentItems
             .AnyAsync(item => (item.Name == equipment.Name || item.SerialNumber == equipment.SerialNumber

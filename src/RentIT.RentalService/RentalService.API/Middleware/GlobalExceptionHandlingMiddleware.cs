@@ -30,9 +30,9 @@ namespace RentalService.API.Middleware
             {
                 await _next(httpContext);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
                 if (ex is TaskCanceledException or OperationCanceledException)
                 {
                     _logger.LogInformation("Request canceled by user");
@@ -58,7 +58,7 @@ namespace RentalService.API.Middleware
                     Title = "Servcer Error",
                     Detail = "An internal server error has occured",
                 };
-               
+
                 string json = JsonSerializer.Serialize(details);
 
                 httpContext.Response.ContentType = "application/json";

@@ -8,7 +8,6 @@ using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.ServiceContracts;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 
 namespace RentalService.Core.RabbitMQ.Consumers;
 

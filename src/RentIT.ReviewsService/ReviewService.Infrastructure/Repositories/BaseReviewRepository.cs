@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReviewServices.Core.Domain.Entities;
+using ReviewService.Core.Domain.Entities.Review;
 using ReviewServices.Core.Domain.RepositoryContracts;
 using ReviewServices.Infrastructure.DbContexts;
 using System.Linq.Expressions;

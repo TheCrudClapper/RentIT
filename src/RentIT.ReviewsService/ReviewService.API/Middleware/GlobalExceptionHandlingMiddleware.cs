@@ -24,7 +24,7 @@ public class GlobalExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            if(ex is TaskCanceledException or OperationCanceledException)
+            if (ex is TaskCanceledException or OperationCanceledException)
             {
                 _logger.LogInformation("Request canceled by user");
                 httpContext.Response.StatusCode = 499;
@@ -50,9 +50,9 @@ public class GlobalExceptionHandlingMiddleware
                 Type = "Server Error",
                 Detail = "An internal server error has occured",
             };
-            
+
             var json = JsonSerializer.Serialize(problemDetails);
-            
+
             httpContext.Response.ContentType = "application/json";
 
             await httpContext.Response.WriteAsync(json);

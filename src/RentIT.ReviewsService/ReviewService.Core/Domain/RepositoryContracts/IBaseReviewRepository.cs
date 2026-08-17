@@ -1,4 +1,4 @@
-﻿using ReviewServices.Core.Domain.Entities;
+﻿using ReviewService.Core.Domain.Entities.Review;
 using System.Linq.Expressions;
 namespace ReviewServices.Core.Domain.RepositoryContracts;
 

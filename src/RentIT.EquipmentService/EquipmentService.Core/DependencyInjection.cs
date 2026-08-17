@@ -1,6 +1,4 @@
 ﻿using EquipmentService.Core.Caching;
-using EquipmentService.Core.Policies.Contracts;
-using EquipmentService.Core.Policies.Implementations;
 using EquipmentService.Core.RabbitMQ.Consumers;
 using EquipmentService.Core.RabbitMQ.HostedServices;
 using EquipmentService.Core.RabbitMQ.Publishers;
@@ -8,8 +6,8 @@ using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
+using EquipmentService.Core.Validators.Contracts;
 using EquipmentService.Core.Validators.Implementations;
-using EquipmentService.Core.Validators.ValidatorContracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EquipmentService.Core
@@ -17,7 +15,7 @@ namespace EquipmentService.Core
     /// <summary>
     /// Class to register services related to core layer
     /// </summary>
-    public static  class DependencyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddCoreLayer(this IServiceCollection services)
         {

@@ -8,7 +8,7 @@ namespace UserService.API.Controllers;
 [Route("api/users")]
 [Authorize]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController : BaseApiController
 {
     private readonly IUserService _userService;
     public UsersController(IUserService userService)
@@ -18,19 +18,9 @@ public class UsersController : ControllerBase
 
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
-    {
-        var result = await _userService.GetUserByUserId(userId, cancellationToken);
-
-        if (result.IsFailure)
-            return NotFound(result.Error.Description);
-
-        return result.Value;
-    }
+        => HandleResult(await _userService.GetUserByUserId(userId, cancellationToken));
 
     [HttpPost("query")]
-    public async Task<ActionResult<IReadOnlyCollection<UserDTO>>> GetUsersByIds([FromBody]IEnumerable<Guid> userIds, CancellationToken cancellationToken)
-    {
-        var users = await _userService.GetUsersByUserIds(userIds, cancellationToken);
-        return users.ToList();
-    }
+    public async Task<ActionResult<IReadOnlyCollection<UserDTO>>> GetUsersByIds([FromBody] IEnumerable<Guid> userIds, CancellationToken cancellationToken)
+        => HandleResult(await _userService.GetUsersByUserIds(userIds, cancellationToken));
 }

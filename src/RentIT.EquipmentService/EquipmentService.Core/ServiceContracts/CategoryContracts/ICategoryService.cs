@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.DTO.CategoryDto;
-using EquipmentService.Core.ResultTypes;
+﻿using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.DTO.CategoryDto;
 
 namespace EquipmentService.Core.ServiceContracts.CategoryContracts;
 

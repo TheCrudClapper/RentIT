@@ -9,7 +9,7 @@ public class RabbitMQConsumersHostedService : IHostedService
     private readonly IServiceScopeFactory _scopeFactory;
     private RabbitMQReviewCreatedConsumer? _reviewCreatedConsumer;
     private RabbitMQReviewDeletedConsumer? _reviewDeletedConsumer;
-    private RabbitMQReviewUpdatedConsumer? _reviewUpdatedConsumer;   
+    private RabbitMQReviewUpdatedConsumer? _reviewUpdatedConsumer;
     public RabbitMQConsumersHostedService(
         IServiceScopeFactory serviceScopeFactory)
     {
@@ -19,7 +19,7 @@ public class RabbitMQConsumersHostedService : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var scope = _scopeFactory.CreateScope();
-        
+
         _reviewCreatedConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQReviewCreatedConsumer>();
         _reviewDeletedConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQReviewDeletedConsumer>();
         _reviewUpdatedConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQReviewUpdatedConsumer>();

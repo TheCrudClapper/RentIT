@@ -15,12 +15,12 @@ public static class HttpClientsExtension
         })
             .AddHttpMessageHandler<BearerTokenHandler>();
 
-                services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(options =>
-                {
-                    options.BaseAddress = new Uri($"http://{configuration["RENTAL_MICROSERVICE_NAME"]}" +
-                        $":{configuration["RENTAL_MICROSERVICE_PORT"]}");
-                })
-                    .AddHttpMessageHandler<BearerTokenHandler>();
+        services.AddHttpClient<IRentalMicroserviceClient, RentalMicroserviceClient>(options =>
+        {
+            options.BaseAddress = new Uri($"http://{configuration["RENTAL_MICROSERVICE_NAME"]}" +
+                $":{configuration["RENTAL_MICROSERVICE_PORT"]}");
+        })
+            .AddHttpMessageHandler<BearerTokenHandler>();
         return services;
     }
 }

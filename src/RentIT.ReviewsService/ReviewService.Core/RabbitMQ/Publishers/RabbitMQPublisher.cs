@@ -29,7 +29,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
             Port = Convert.ToInt32(port),
         };
 
-        _connection =  connectionFactory.CreateConnection();
+        _connection = connectionFactory.CreateConnection();
 
         _channel = _connection.CreateModel();
     }

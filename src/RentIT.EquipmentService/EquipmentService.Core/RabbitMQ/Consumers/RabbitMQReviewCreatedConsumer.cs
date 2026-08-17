@@ -59,8 +59,8 @@ public class RabbitMQReviewCreatedConsumer : RabbitMQBaseConsumer
             {
                 ReviewCreated? obj = JsonSerializer.Deserialize<ReviewCreated>(message);
 
-                if(obj is not null)
-                 await Handle(obj!, cancellationToken);
+                if (obj is not null)
+                    await Handle(obj!, cancellationToken);
             }
         };
 

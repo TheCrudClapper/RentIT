@@ -8,7 +8,7 @@ public class CachingHelper : ICachingHelper
 {
     private readonly IDistributedCache _distributedCache;
     private readonly ILogger<CachingHelper> _logger;
-    
+
     public CachingHelper(IDistributedCache distributedCache, ILogger<CachingHelper> logger)
     {
         _distributedCache = distributedCache;
@@ -45,7 +45,7 @@ public class CachingHelper : ICachingHelper
             await _distributedCache.SetAsync(cacheKey, objSerialized, options, cancellationToken);
             _logger.LogInformation($"Successfully saved key: {cacheKey} object to cache");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogWarning(ex, $"Caching for object of key: {cacheKey} failed.");
         }

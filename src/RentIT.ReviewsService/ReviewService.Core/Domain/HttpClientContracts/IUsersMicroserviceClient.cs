@@ -1,5 +1,5 @@
-﻿using ReviewService.Core.DTO.User;
-using ReviewServices.Core.ResultTypes;
+﻿using ReviewService.Core.Domain.ResultTypes;
+using ReviewService.Core.DTO.User;
 
 namespace ReviewService.Core.Domain.HttpClientContracts;
 

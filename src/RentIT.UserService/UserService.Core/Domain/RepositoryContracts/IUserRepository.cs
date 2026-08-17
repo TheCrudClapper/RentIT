@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.User;
 namespace UserService.Core.Domain.RepositoryContracts;
 
 public interface IUserRepository

@@ -1,5 +1,5 @@
-﻿using Polly;
-using EquipmentService.Core.Policies.Contracts;
+﻿using EquipmentService.Core.Policies.Contracts;
+using Polly;
 
 namespace EquipmentService.Core.Policies.Implementations
 {

@@ -1,4 +1,4 @@
-﻿using UserService.Core.Domain.Entities;
+﻿using UserService.Core.Domain.Entities.User;
 
 namespace UserService.Core.ServiceContracts;
 /// <summary>

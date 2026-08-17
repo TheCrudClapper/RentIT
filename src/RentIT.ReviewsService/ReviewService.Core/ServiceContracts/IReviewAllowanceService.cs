@@ -1,5 +1,5 @@
-﻿using ReviewService.Core.DTO.ReviewAllowance;
-using ReviewServices.Core.ResultTypes;
+﻿using ReviewService.Core.Domain.ResultTypes;
+using ReviewService.Core.DTO.ReviewAllowance;
 
 namespace ReviewService.Core.ServiceContracts;
 

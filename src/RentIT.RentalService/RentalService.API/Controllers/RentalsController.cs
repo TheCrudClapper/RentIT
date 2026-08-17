@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
+
 namespace RentalService.API.Controllers;
 
 [Route("api/[controller]")]

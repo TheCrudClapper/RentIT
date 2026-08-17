@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.User;
 using UserService.Core.Domain.RepositoryContracts;
 using UserService.Infrastructure.DbContexts;
 

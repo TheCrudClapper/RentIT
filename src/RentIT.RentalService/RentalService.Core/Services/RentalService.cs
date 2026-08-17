@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Mappings;
 using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.RabbitMQ.Publishers;
-using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Services;
 
-public class RentalService :BaseRentalService, IRentalService
+public class RentalService : BaseRentalService, IRentalService
 {
     private readonly IRentalRepository _rentalRepository;
     private readonly IRentalValidator _rentalValidator;
@@ -22,7 +23,7 @@ public class RentalService :BaseRentalService, IRentalService
         IRentalValidator rentalValidator,
         IEquipmentMicroserviceClient equipmentMicroserviceClient,
         IConfiguration configuration,
-        IRabbitMQPublisher rabbitMQPublisher) :base(configuration)
+        IRabbitMQPublisher rabbitMQPublisher) : base(configuration)
     {
         _rentalRepository = rentalRepository;
         _rentalValidator = rentalValidator;
@@ -48,7 +49,7 @@ public class RentalService :BaseRentalService, IRentalService
             rental.EndDate,
             equipmentResponse.Value.RentalPricePerDay);
 
-        Rental newRental = await _rentalRepository.AddRentalAsync(rental, cancellationToken);            
+        Rental newRental = await _rentalRepository.AddRentalAsync(rental, cancellationToken);
         return newRental.ToRentalResponse(equipmentResponse.Value);
     }
 
@@ -57,7 +58,7 @@ public class RentalService :BaseRentalService, IRentalService
         bool isSuccess = await _rentalRepository.DeleteRentalAsync(rentalId, cancellationToken);
 
         if (!isSuccess)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         return Result.Success();
     }
@@ -66,7 +67,7 @@ public class RentalService :BaseRentalService, IRentalService
     {
         Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId, cancellationToken);
         if (rental == null)
-            return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
+            return Result.Failure<RentalResponse>(RentalErrors.NotFound);
 
         var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId, cancellationToken);
         if (equipmentResponse.IsFailure)
@@ -83,7 +84,7 @@ public class RentalService :BaseRentalService, IRentalService
             .Select(x => x.EquipmentId)
             .Distinct()
             .ToList();
-        
+
         if (equipmentIds.Count == 0)
             return Result.Success(Enumerable.Empty<RentalResponse>());
 
@@ -120,7 +121,7 @@ public class RentalService :BaseRentalService, IRentalService
         bool isSuccess = await _rentalRepository.UpdateRentalAsync(rentalId, rental, cancellationToken);
 
         if (!isSuccess)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         return Result.Success();
     }
@@ -140,7 +141,7 @@ public class RentalService :BaseRentalService, IRentalService
         Rental? rental = await _rentalRepository.GetRentalByIdAsync(rentalId, cancellationToken);
 
         if (rental is null)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         var equipmentResponse = await _equipmentMicroserviceClient
             .GetEquipment(rental.EquipmentId, cancellationToken);
@@ -171,7 +172,7 @@ public class RentalService :BaseRentalService, IRentalService
             "review.allowance.create",
             message,
             _configuration["RABBITMQ_RENTAL_EXCHANGE"]!);
-        
+
         return Result.Success();
     }
 }

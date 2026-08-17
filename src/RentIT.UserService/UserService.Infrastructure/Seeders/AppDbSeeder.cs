@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.Role;
+using UserService.Core.Domain.Entities.User;
 using UserService.Core.Enums;
 using UserService.Core.Mappings;
 using UserService.Infrastructure.DbContexts;
@@ -15,7 +16,7 @@ namespace UserService.Infrastructure.Seeders
             if (!await roleManager.RoleExistsAsync(UserRoleOption.Admin.ToString()))
                 await roleManager.CreateAsync(UserRoleOption.Admin.ToRoleEntity());
 
-            if(!await roleManager.RoleExistsAsync(UserRoleOption.User.ToString()))
+            if (!await roleManager.RoleExistsAsync(UserRoleOption.User.ToString()))
                 await roleManager.CreateAsync(UserRoleOption.User.ToRoleEntity());
 
             //Add sample users

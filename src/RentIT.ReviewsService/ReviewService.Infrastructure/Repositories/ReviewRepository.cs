@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReviewService.Core.Domain.Entities.Review;
 using ReviewService.Core.Domain.RepositoryContracts;
-using ReviewServices.Core.Domain.Entities;
 using ReviewServices.Infrastructure.DbContexts;
 using ReviewServices.Infrastructure.Repositories;
 

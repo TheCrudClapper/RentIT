@@ -1,8 +1,9 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
-using EquipmentService.Core.ResultTypes;
-using EquipmentService.Core.Validators.ValidatorContracts;
+using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.Validators.Contracts;
 
 namespace EquipmentService.Core.Validators.Implementations;
 
@@ -11,7 +12,7 @@ public class EquipmentValidator : BaseEquipmentValidator, IEquipmentValidator
     private readonly IEquipmentRepository _equipmentRepository;
     public EquipmentValidator(IEquipmentRepository equipmentRepository,
         ICategoryRepository categoryRepository,
-        IUsersMicroserviceClient usersMicroserviceClient) :base(categoryRepository, usersMicroserviceClient)
+        IUsersMicroserviceClient usersMicroserviceClient) : base(categoryRepository, usersMicroserviceClient)
     {
         _equipmentRepository = equipmentRepository;
     }
@@ -23,7 +24,7 @@ public class EquipmentValidator : BaseEquipmentValidator, IEquipmentValidator
             return Result.Failure(categoryValidationResult.Error);
 
         var userValidationResult = await ValidateUser(entity.CreatedByUserId, cancellationToken);
-        if(userValidationResult.IsFailure)
+        if (userValidationResult.IsFailure)
             return Result.Failure(userValidationResult.Error);
 
         bool isValid = await _equipmentRepository.IsEquipmentUnique(entity, cancellationToken, entityId);

@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
 
     public async Task<Equipment?> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken)
     {
-        Equipment? equipmentToUpdate = await GetUserEquipmentByIdAsync(equipment.CreatedByUserId ,equipmentId, cancellationToken);
+        Equipment? equipmentToUpdate = await GetUserEquipmentByIdAsync(equipment.CreatedByUserId, equipmentId, cancellationToken);
 
         if (equipmentToUpdate == null)
             return null;

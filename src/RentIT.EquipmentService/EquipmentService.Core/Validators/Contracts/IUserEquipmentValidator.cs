@@ -1,5 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
+namespace EquipmentService.Core.Validators.Contracts;
 
-namespace EquipmentService.Core.Validators.ValidatorContracts;
-
-public interface IUserEquipmentValidator : IEntityValidator<Equipment>{ }
+public interface IUserEquipmentValidator : IEntityValidator<Equipment> { }

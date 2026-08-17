@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Categories;
 using EquipmentService.Core.DTO.CategoryDto;
 
 namespace EquipmentService.Core.Mappings;

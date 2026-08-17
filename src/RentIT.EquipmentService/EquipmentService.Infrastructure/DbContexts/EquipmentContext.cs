@@ -1,4 +1,5 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Categories;
+using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Infrastructure.DbContexts.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +10,9 @@ namespace EquipmentService.Infrastructure.DbContexts
         public virtual DbSet<Equipment> EquipmentItems { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
 
-        public EquipmentContext(DbContextOptions options) : base(options){}
+        public EquipmentContext(DbContextOptions options) : base(options) { }
 
-        public EquipmentContext(){}
+        public EquipmentContext() { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

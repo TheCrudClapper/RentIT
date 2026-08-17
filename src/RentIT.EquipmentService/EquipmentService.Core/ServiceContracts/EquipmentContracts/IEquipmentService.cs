@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.DTO.EquipmentDto;
-using EquipmentService.Core.ResultTypes;
+﻿using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.DTO.EquipmentDto;
 
 namespace EquipmentService.Core.ServiceContracts.Equipment;
 /// <summary>
@@ -12,9 +12,9 @@ namespace EquipmentService.Core.ServiceContracts.Equipment;
 /// specific implementation.</remarks>
 public interface IEquipmentService
 {
-    Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating = null,  CancellationToken cancellationToken = default);
+    Task UpdateEquipmentRating(Guid equipmentId, decimal rating, decimal? oldRating = null, CancellationToken cancellationToken = default);
     Task DeleteEquipmentRating(Guid equipmentId, decimal rating, CancellationToken cancellationToken = default);
-    Task<Result> UpdateEquipment(Guid equipmentId,EquipmentUpdateRequest request, CancellationToken cancellationToken = default);
+    Task<Result> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken = default);
     Task<Result<EquipmentResponse>> AddEquipment(EquipmentAddRequest request, CancellationToken cancellationToken = default);
     Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken = default);
     Task<Result<IEnumerable<EquipmentResponse>>> GetAllEquipmentItems(CancellationToken cancellationToken = default);

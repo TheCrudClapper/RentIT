@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReviewServices.Core.Domain.Entities;
+using ReviewService.Core.Domain.Entities.Review;
+using ReviewService.Core.Domain.Entities.ReviewAllowance;
 using ReviewServices.Infrastructure.DbContexts;
 namespace ReviewService.Infrastructure.Seeders;
 

@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.DTO.EquipmentDto;
-using EquipmentService.Core.ResultTypes;
+﻿using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.DTO.EquipmentDto;
 
 namespace EquipmentService.Core.ServiceContracts.Equipment;
 

@@ -1,8 +1,9 @@
-﻿using ReviewService.Core.Domain.RepositoryContracts;
+﻿using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
+using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.Domain.ResultTypes;
 using ReviewService.Core.DTO.ReviewAllowance;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ServiceContracts;
-using ReviewServices.Core.ResultTypes;
 
 namespace ReviewService.Core.Services;
 
@@ -29,8 +30,8 @@ public class ReviewAllowanceService : IReviewAllowanceService
     {
         var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
 
-        return allowance is null 
-            ? Result.Failure<ReviewAllowanceResponse>(Error.NotFound) 
+        return allowance is null
+            ? Result.Failure<ReviewAllowanceResponse>(ReviewAllowanceErrors.NotFound)
             : allowance.ToReviewAllowanceResponse();
     }
 
@@ -39,7 +40,7 @@ public class ReviewAllowanceService : IReviewAllowanceService
         var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
 
         if (allowance is null)
-           return Result.Failure(Error.DeleteFailed);
+            return Result.Failure(ReviewAllowanceErrors.NotFound);
 
         await _reviewAllowanceRepository.DeleteAllowanceAsync(allowance, cancellationToken);
 

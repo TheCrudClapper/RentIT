@@ -1,5 +1,5 @@
-﻿using RentalService.Core.DTO.RentalDto;
-using RentalService.Core.ResultTypes;
+﻿using RentalService.Core.Domain.ResultTypes;
+using RentalService.Core.DTO.RentalDto;
 
 namespace RentalService.Core.Domain.HtppClientContracts;
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
-using Polly;
-
-namespace RentIT.ApiGateway.Extensions;
+﻿namespace RentIT.ApiGateway.Extensions;
 
 public static class CorsConfigurationExtensions
 {

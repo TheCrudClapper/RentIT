@@ -1,12 +1,13 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
+using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.RabbitMQ.Publishers;
-using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
-using EquipmentService.Core.Validators.ValidatorContracts;
+using EquipmentService.Core.Validators.Contracts;
 using Microsoft.Extensions.Configuration;
 
 namespace EquipmentService.Core.Services.EquipmentServices;
@@ -49,8 +50,8 @@ public class EquipmentService : IEquipmentService
     {
         var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
 
-        return equipment is null 
-            ? Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound) 
+        return equipment is null
+            ? Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound)
             : equipment.ToEquipmentResponse();
     }
 

@@ -8,4 +8,4 @@ public record EquipmentResponse(
     string SerialNumber,
     string CategoryName,
     string Status,
-    string? Notes); 
+    string? Notes);

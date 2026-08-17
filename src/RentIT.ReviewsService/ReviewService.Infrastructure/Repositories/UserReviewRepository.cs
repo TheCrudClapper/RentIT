@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReviewService.Core.Domain.Entities.Review;
 using ReviewService.Core.Domain.RepositoryContracts;
-using ReviewServices.Core.Domain.Entities;
 using ReviewServices.Infrastructure.DbContexts;
 using ReviewServices.Infrastructure.Repositories;
 
@@ -8,7 +8,7 @@ namespace ReviewService.Infrastructure.Repositories;
 
 public class UserReviewRepository : BaseReviewRepository, IUserReviewRepository
 {
-    public UserReviewRepository(ReviewsDbContext context) : base(context) {}
+    public UserReviewRepository(ReviewsDbContext context) : base(context) { }
 
     public async Task<Review> AddUserReviewAsync(Review review, CancellationToken cancellationToken)
     {

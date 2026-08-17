@@ -1,6 +1,6 @@
 ﻿using EquipmentService.Core.Domain.HtppClientContracts;
+using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.UserDto;
-using EquipmentService.Core.ResultTypes;
 using Polly.CircuitBreaker;
 using System.Net.Http.Json;
 
@@ -23,20 +23,20 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
             if (!response.IsSuccessStatusCode)
             {
                 string message = await response.Content.ReadAsStringAsync(cancellationToken);
-                return Result.Failure<UserDTO?>(new Error((int)response.StatusCode, message));
+                return Result.Failure<UserDTO?>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
             }
 
             UserDTO? user = await response.Content.ReadFromJsonAsync<UserDTO>(cancellationToken);
 
             if (user == null)
-                return Result.Failure<UserDTO?>(new Error(500, "Invalid response from Users service"));
+                return Result.Failure<UserDTO?>(Error.Create(ErrorType.Unexpected, "500", "Invalid response from Users service"));
 
             return Result.Success<UserDTO?>(user);
 
         }
         catch (BrokenCircuitException)
         {
-            return Result.Failure<UserDTO?>(new Error(503, "Service unavaliable, try again later"));
+            return Result.Failure<UserDTO?>(Error.Create(ErrorType.Unexpected, "503", "Service unavaliable, try again later"));
         }
     }
 }

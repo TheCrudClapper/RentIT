@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
+using ReviewService.Core.Domain.Entities.Review;
+using ReviewService.Core.Domain.Entities.Review.Errors;
+using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
 using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
-using ReviewService.Core.DTO.Rental;
+using ReviewService.Core.Domain.ResultTypes;
 using ReviewService.Core.DTO.Review;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.RabbitMQ.Messages;
-using ReviewService.Core.ResultTypes;
-using ReviewServices.Core.Domain.Entities;
 using ReviewServices.Core.RabbitMQ.Publishers;
-using ReviewServices.Core.ResultTypes;
 using ReviewServices.Core.ServiceContracts;
 
 namespace ReviewServices.Core.Services;
@@ -73,7 +73,7 @@ public class UserReviewService : IUserReviewService
         var review = await _userReviewRepository.GetUserReviewAsync(userId, reviewId, cancellationToken);
 
         if (review is null)
-            return Result.Failure(ReviewErrors.ReviewNotFound);
+            return Result.Failure(ReviewErrors.NotFound);
 
         await _reviewRepository.DeleteReviewAsync(review);
 
@@ -92,7 +92,7 @@ public class UserReviewService : IUserReviewService
         var review = await _userReviewRepository.GetUserReviewAsync(userId, reviewId, cancellationToken);
 
         return review is null
-            ? Result.Failure<UserReviewResponse>(ReviewErrors.ReviewNotFound)
+            ? Result.Failure<UserReviewResponse>(ReviewErrors.NotFound)
             : review.ToUserReviewResponse();
     }
 
@@ -107,8 +107,8 @@ public class UserReviewService : IUserReviewService
         var oldRating = await _reviewRepository.GetReviewScoreAsync(reviewId, cancellationToken);
         Review? updatedEntity = await _userReviewRepository.UpdateUserReviewAsync(userId, reviewId, entity, cancellationToken);
 
-        if (updatedEntity is null || oldRating is null )
-            return Result.Failure<UserReviewResponse>(ReviewErrors.ReviewNotFound);
+        if (updatedEntity is null || oldRating is null)
+            return Result.Failure<UserReviewResponse>(ReviewErrors.NotFound);
 
         //update message
         ReviewUpdated reviewUpdatedMessage = new(updatedEntity.EquipmentId, updatedEntity.Rating, oldRating.Value);

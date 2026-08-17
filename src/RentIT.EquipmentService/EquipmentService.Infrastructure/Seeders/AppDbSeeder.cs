@@ -1,4 +1,5 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Categories;
+using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 

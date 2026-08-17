@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.Role;
+using UserService.Core.Domain.Entities.Role.Errors;
+using UserService.Core.Domain.Entities.User;
+using UserService.Core.Domain.Entities.User.Errors;
+using UserService.Core.Domain.ResultTypes;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.Extensions;
 using UserService.Core.Mappings;
-using UserService.Core.ResultTypes;
 using UserService.Core.ServiceContracts;
 
 namespace UserService.Core.Services
@@ -29,7 +32,7 @@ namespace UserService.Core.Services
 
             string userRole = request.UserRoleType.ToString();
             if (!await _roleManager.RoleExistsAsync(userRole))
-                return Result.Failure(RoleErrors.RoleDoesNotExist);
+                return Result.Failure(RoleErrors.NotFound);
 
             User user = request.ToUserEntity();
 

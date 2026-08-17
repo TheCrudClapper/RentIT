@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UserService.Core.ResultTypes;
+using UserService.Core.Domain.ResultTypes;
 
 namespace UserService.Core.Extensions;
 
@@ -10,7 +10,7 @@ public static class IdentityResultExtensions
         if (identityResult.Succeeded)
             return Result.Success();
 
-        return Result.Failure(new Error(400, JoinErrorDescriptions(identityResult)));
+        return Result.Failure(Error.Create(ErrorType.Validation, "Identity.Errors", JoinErrorDescriptions(identityResult)));
     }
 
     public static Result<T> ToResult<T>(this IdentityResult identityResult)
@@ -18,7 +18,7 @@ public static class IdentityResultExtensions
         if (identityResult.Succeeded)
             throw new InvalidOperationException("Cannot create Result<T> without a value on success.");
 
-        return Result.Failure<T>(new Error(400, JoinErrorDescriptions(identityResult)));
+        return Result.Failure<T>(Error.Create(ErrorType.Validation, "Identity.Errors", JoinErrorDescriptions(identityResult)));
     }
 
     private static string JoinErrorDescriptions(IdentityResult identityResult)

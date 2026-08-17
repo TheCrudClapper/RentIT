@@ -2,9 +2,9 @@
 using Polly.CircuitBreaker;
 using RentalService.Core.Caching;
 using RentalService.Core.Domain.HtppClientContracts;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Policies.Contracts;
-using RentalService.Core.ResultTypes;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -33,19 +33,19 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
             if (cachedObj.Value != null)
                 return cachedObj.Value;
 
-            
+
             HttpResponseMessage response = await _httpClient.GetAsync($"/gateway/equipments/{equipmentId}", cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
                 string message = await response.Content.ReadAsStringAsync(cancellationToken);
-                return Result.Failure<EquipmentResponse>(new Error((int)response.StatusCode, message));
+                return Result.Failure<EquipmentResponse>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
             }
 
             EquipmentResponse? details = await response.Content.ReadFromJsonAsync<EquipmentResponse>(cancellationToken);
 
             if (details == null)
-                return Result.Failure<EquipmentResponse>(new Error(500, "Invalid response from Equipment service"));
+                return Result.Failure<EquipmentResponse>(Error.Create(ErrorType.Unexpected, "500", "Invalid response from Equipment service"));
 
             await _cachingHelper.CacheObject(details, cacheKey, CachingProfiles.ShortTTLCacheOption, cancellationToken);
 
@@ -54,7 +54,7 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         }
         catch (BrokenCircuitException)
         {
-            return Result.Failure<EquipmentResponse>(new Error(503, "Service unavaliable, try again later"));
+            return Result.Failure<EquipmentResponse>(Error.Create(ErrorType.Unexpected, "503", "Service unavaliable, try again later"));
         }
     }
 
@@ -84,7 +84,7 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
             }
 
             string message = await response.Content.ReadAsStringAsync();
-            return Result.Failure<IEnumerable<EquipmentResponse>>(new Error((int)response.StatusCode, message));
+            return Result.Failure<IEnumerable<EquipmentResponse>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
         }
 
         IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>(cancellationToken);

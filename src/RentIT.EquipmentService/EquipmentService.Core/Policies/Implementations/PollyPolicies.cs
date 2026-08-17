@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using EquipmentService.Core.Policies.Contracts;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
-using EquipmentService.Core.Policies.Contracts;
 
 namespace EquipmentService.Core.Policies.Implementations;
 

@@ -2,13 +2,9 @@ using RentalService.API.Extensions;
 using RentalService.API.Handlers;
 using RentalService.API.Middleware;
 using RentalService.Core;
-using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Policies.Contracts;
 using RentalService.Core.Policies.Implementations;
 using RentalService.Infrastructure;
-using RentalService.Infrastructure.DbContexts;
-using RentalService.Infrastructure.HttpClients;
-using RentalService.Infrastructure.Seeders;
 
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,9 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Categories.Errors;
+using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Entities.User.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
-using EquipmentService.Core.ResultTypes;
+using EquipmentService.Core.Domain.ResultTypes;
 
 namespace EquipmentService.Core.Validators.Implementations;
 

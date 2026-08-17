@@ -1,6 +1,6 @@
 ﻿using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
-using RentalService.Core.ResultTypes;
 
 namespace EquipmentService.Core.Validators.ValidatorContracts;
 

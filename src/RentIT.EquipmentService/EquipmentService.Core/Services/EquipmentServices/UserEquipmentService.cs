@@ -1,14 +1,16 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
+using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.EquipmentDto;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.RabbitMQ.Publishers;
-using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.Equipment;
-using EquipmentService.Core.Validators.ValidatorContracts;
+using EquipmentService.Core.Validators.Contracts;
 using Microsoft.Extensions.Configuration;
+
 
 namespace EquipmentService.Core.Services.EquipmentServices;
 
@@ -70,7 +72,7 @@ public class UserEquipmentService : IUserEquipmentService
             return Result.Failure(validationResult.Error);
 
         var updatedEntity = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate, cancellationToken);
-        if(updatedEntity == null)
+        if (updatedEntity == null)
             return Result.Failure(EquipmentErrors.EquipmentNotFound);
 
         _rabbitMqPublisher.Publish(
@@ -78,7 +80,7 @@ public class UserEquipmentService : IUserEquipmentService
            updatedEntity.ToEquipmentResponse(),
            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
-        return Result.Success();            
+        return Result.Success();
     }
 
     public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken cancellationToken)

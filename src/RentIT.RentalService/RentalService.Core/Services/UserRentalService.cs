@@ -1,18 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.Entities.Equipment.Errors;
+using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.Mappings;
 using RentalService.Core.RabbitMQ.Messages;
 using RentalService.Core.RabbitMQ.Publishers;
-using RentalService.Core.ResultTypes;
 using RentalService.Core.ServiceContracts;
 using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Services;
 
-public class UserRentalService : BaseRentalService,  IUserRentalService
+public class UserRentalService : BaseRentalService, IUserRentalService
 {
     private readonly IUserRentalRepository _userRentalRepository;
     private readonly IUserRentalValidator _userRentalValidator;
@@ -23,14 +25,14 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         IUserRentalValidator validator,
         IEquipmentMicroserviceClient equipmentMicroserviceClient,
         IConfiguration configuration,
-        IRabbitMQPublisher rabbitMQPublisher) 
+        IRabbitMQPublisher rabbitMQPublisher)
             : base(configuration)
     {
         _userRentalRepository = userRentalRepository;
         _userRentalValidator = validator;
         _equipmentMicroserviceClient = equipmentMicroserviceClient;
         _rabbitMQPublisher = rabbitMQPublisher;
-       
+
     }
 
     public async Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken)
@@ -60,7 +62,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         bool isSuccess = await _userRentalRepository.DeleteRentalAsync(rentalId, userId, cancellationToken);
 
         if (!isSuccess)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         return Result.Success();
     }
@@ -90,7 +92,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
     {
         Rental? rental = await _userRentalRepository.GetRentalByIdAsync(rentalId, userId, cancellationToken);
         if (rental == null)
-            return Result.Failure<RentalResponse>(RentalErrors.RentalNotFound);
+            return Result.Failure<RentalResponse>(RentalErrors.NotFound);
 
         var equipmentResponse = await _equipmentMicroserviceClient.GetEquipment(rental.EquipmentId, cancellationToken);
         if (equipmentResponse.IsFailure)
@@ -104,7 +106,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         Rental? rental = await _userRentalRepository.GetRentalByIdAsync(rentalId, userId, cancellationToken);
 
         if (rental is null)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         var equipmentResponse = await _equipmentMicroserviceClient
             .GetEquipment(rental.EquipmentId, cancellationToken);
@@ -114,9 +116,9 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
 
         if (equipmentResponse.Value.CreatedByUserId != userId)
             return Result.Failure(EquipmentErrors.NotOwnerOfEquipment);
-        
-        var dateDiff = request.ReturnedDate.Date -  rental.StartDate.Date;
-        if(dateDiff.TotalDays < 1)
+
+        var dateDiff = request.ReturnedDate.Date - rental.StartDate.Date;
+        if (dateDiff.TotalDays < 1)
             return Result.Failure(RentalErrors.InvalidReturnedDate);
 
         await _userRentalRepository.MarkEquipmentAsReturned(rental, request.ReturnedDate, cancellationToken);
@@ -124,7 +126,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         var calculatedTotalValue = CalculateTotalRentalPrice
             (rental.StartDate, rental.EndDate, request.ReturnedDate, equipmentResponse.Value.RentalPricePerDay);
 
-        if(calculatedTotalValue != rental.RentalPrice)
+        if (calculatedTotalValue != rental.RentalPrice)
             await _userRentalRepository.UpdateRentalTotalCost(rental, calculatedTotalValue, cancellationToken);
 
         var message = new ReviewAllowanceAddRequest
@@ -162,7 +164,7 @@ public class UserRentalService : BaseRentalService,  IUserRentalService
         bool isSuccess = await _userRentalRepository.UpdateRentalAsync(rentalId, rental, userId, cancellationToken);
 
         if (!isSuccess)
-            return Result.Failure(RentalErrors.RentalNotFound);
+            return Result.Failure(RentalErrors.NotFound);
 
         return Result.Success();
     }

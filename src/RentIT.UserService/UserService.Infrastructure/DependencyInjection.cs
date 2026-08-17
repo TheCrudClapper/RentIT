@@ -21,7 +21,7 @@ namespace UserService.Infrastructure
                     .Replace("$DB_PORT", Environment.GetEnvironmentVariable("DB_PORT") ?? "5432")
                     .Replace("$DB_USER", Environment.GetEnvironmentVariable("DB_USER") ?? "postgres")
                     .Replace("$DB_PASSWORD", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "admin")
-                    .Replace("$DB_HOST",Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"),
+                    .Replace("$DB_HOST", Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"),
                     x => x.MigrationsAssembly("UserService.Infrastructure"));
             });
             services.AddScoped<IUserRepository, UserRepository>();

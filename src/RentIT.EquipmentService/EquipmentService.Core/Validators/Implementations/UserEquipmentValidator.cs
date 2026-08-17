@@ -1,8 +1,9 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
-using EquipmentService.Core.ResultTypes;
-using EquipmentService.Core.Validators.ValidatorContracts;
+using EquipmentService.Core.Domain.ResultTypes;
+using EquipmentService.Core.Validators.Contracts;
 
 namespace EquipmentService.Core.Validators.Implementations;
 
@@ -11,7 +12,7 @@ public class UserEquipmentValidator : BaseEquipmentValidator, IUserEquipmentVali
     private readonly IUserEquipmentRepository _userEquipmentRepository;
     public UserEquipmentValidator(IUserEquipmentRepository userEquipmentRepository,
         ICategoryRepository categoryRepository,
-        IUsersMicroserviceClient usersMicroserviceClient) :base(categoryRepository, usersMicroserviceClient)
+        IUsersMicroserviceClient usersMicroserviceClient) : base(categoryRepository, usersMicroserviceClient)
     {
         _userEquipmentRepository = userEquipmentRepository;
     }
@@ -28,4 +29,5 @@ public class UserEquipmentValidator : BaseEquipmentValidator, IUserEquipmentVali
 
         return Result.Success();
     }
+
 }

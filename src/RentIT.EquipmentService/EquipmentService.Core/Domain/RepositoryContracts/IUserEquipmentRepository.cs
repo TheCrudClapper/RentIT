@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 
 namespace EquipmentService.Core.Domain.RepositoryContracts;
 

@@ -10,12 +10,12 @@ namespace RentalService.Infrastructure.DbContexts
 
         public RentalDbContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
         public RentalDbContext()
         {
-            
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

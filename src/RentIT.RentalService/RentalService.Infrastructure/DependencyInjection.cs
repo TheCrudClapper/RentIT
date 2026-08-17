@@ -10,7 +10,7 @@ namespace RentalService.Infrastructure;
 /// <summary>
 /// Class to register services related to infrastructure layer
 /// </summary>
-public static  class DependencyInjection
+public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
@@ -27,7 +27,7 @@ public static  class DependencyInjection
         services.AddScoped<IRentalRepository, RentalRepository>();
         services.AddScoped<IUserRentalRepository, UserRentalRepository>();
 
-     
+
         return services;
     }
 }

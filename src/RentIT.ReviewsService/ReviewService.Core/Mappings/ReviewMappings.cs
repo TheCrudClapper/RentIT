@@ -1,10 +1,10 @@
-﻿using ReviewService.Core.DTO.Review;
+﻿using ReviewService.Core.Domain.Entities.Review;
+using ReviewService.Core.DTO.Review;
 using ReviewService.Core.DTO.User;
-using ReviewServices.Core.Domain.Entities;
 
 namespace ReviewService.Core.Mappings;
 
-public static  class ReviewMappings
+public static class ReviewMappings
 {
     public static ReviewResponse ToReviewResponse(this Review review, UserDTO userResponse)
     {

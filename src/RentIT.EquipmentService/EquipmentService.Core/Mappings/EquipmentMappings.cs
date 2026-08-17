@@ -1,6 +1,5 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.DTO.EquipmentDto;
-using EquipmentService.Core.DTO.UserDto;
 
 namespace EquipmentService.Core.Mappings;
 

@@ -1,8 +1,9 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Categories;
+using EquipmentService.Core.Domain.Entities.Categories.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
+using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.Mappings;
-using EquipmentService.Core.ResultTypes;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 
 namespace EquipmentService.Core.Services.CategoryServices;

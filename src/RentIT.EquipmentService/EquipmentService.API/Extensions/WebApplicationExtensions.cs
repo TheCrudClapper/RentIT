@@ -18,7 +18,7 @@ namespace EquipmentService.API.Extensions
             await policy.ExecuteAsync(async () =>
             {
                 await db.Database.MigrateAsync();
-            });            
+            });
         }
 
         public static async Task SeedDatabase(this WebApplication app)

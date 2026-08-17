@@ -1,11 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using UserService.API.Extensions;
 using UserService.API.Middleware;
 using UserService.Core;
-using UserService.Core.Domain.Entities;
 using UserService.Infrastructure;
-using UserService.Infrastructure.DbContexts;
-using UserService.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 

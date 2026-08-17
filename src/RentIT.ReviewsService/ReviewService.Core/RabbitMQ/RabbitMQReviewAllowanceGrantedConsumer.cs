@@ -17,11 +17,11 @@ internal class RabbitMQReviewAllowanceGrantedConsumer : RabbitMQBaseConsumer
         _reviewAllowanceService = reviewAllowanceService;
     }
 
-    private async Task Handle(ReviewAllowanceAddRequest? obj, CancellationToken cancellationToken) 
+    private async Task Handle(ReviewAllowanceAddRequest? obj, CancellationToken cancellationToken)
     {
         await _reviewAllowanceService.AddReviewAllowance(obj!, cancellationToken);
     }
-     
+
     public override void Consume(CancellationToken cancellationToken)
     {
         string routingKey = "review.allowance.create";

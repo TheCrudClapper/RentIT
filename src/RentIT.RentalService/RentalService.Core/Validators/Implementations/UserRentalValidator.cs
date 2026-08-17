@@ -1,13 +1,14 @@
 ﻿using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
-using RentalService.Core.ResultTypes;
 using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Validators.Implementations;
 
-public class UserRentalValidator : BaseRentalValidator ,IUserRentalValidator
+public class UserRentalValidator : BaseRentalValidator, IUserRentalValidator
 {
     public UserRentalValidator(IUsersMicroserviceClient usersMicroserviceClient, IRentalRepository rentalRepository,
        IEquipmentMicroserviceClient equipmentMicroserviceClient)

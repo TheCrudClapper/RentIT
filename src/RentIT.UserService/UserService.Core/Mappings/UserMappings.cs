@@ -1,4 +1,4 @@
-﻿using UserService.Core.Domain.Entities;
+﻿using UserService.Core.Domain.Entities.User;
 using UserService.Core.DTO.UserDto;
 
 namespace UserService.Core.Mappings;
@@ -23,7 +23,7 @@ public static class UserMappings
     }
 
     public static UserResponse ToUserResponse(this User user, IList<string> role)
-    { 
+    {
         return new UserResponse(
             user.Id, user.FirstName, user.LastName, user.Email!, role);
     }

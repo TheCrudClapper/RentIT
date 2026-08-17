@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.CustomValidators;
-using EquipmentService.Core.Domain.Entities;
+using EquipmentService.Core.Domain.Entities.Equipments;
 using System.ComponentModel.DataAnnotations;
 namespace EquipmentService.Core.DTO.EquipmentDto
 {

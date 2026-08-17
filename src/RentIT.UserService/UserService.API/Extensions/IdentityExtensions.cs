@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using UserService.Core.Domain.Entities;
+using UserService.Core.Domain.Entities.Role;
+using UserService.Core.Domain.Entities.User;
 using UserService.Infrastructure.DbContexts;
 
 namespace UserService.API.Extensions;

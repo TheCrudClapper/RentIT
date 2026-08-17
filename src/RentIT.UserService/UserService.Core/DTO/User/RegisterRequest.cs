@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using UserService.Core.Enums;
 
 namespace UserService.Core.DTO.UserDto;
+
 public class RegisterRequest
 {
     [StringLength(50), Required]

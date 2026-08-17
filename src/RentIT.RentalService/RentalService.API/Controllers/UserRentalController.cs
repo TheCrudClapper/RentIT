@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentalService.API.Extensions;
 using RentalService.Core.DTO.RentalDto;
 using RentalService.Core.ServiceContracts;
 

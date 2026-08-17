@@ -1,6 +1,6 @@
 ﻿using ReviewService.Core.Domain.HttpClientContracts;
+using ReviewService.Core.Domain.ResultTypes;
 using ReviewService.Core.DTO.Rental;
-using ReviewServices.Core.ResultTypes;
 using System.Net.Http.Json;
 
 namespace ReviewService.Infrastructure.HttpClients;
@@ -19,12 +19,12 @@ public class RentalMicroserviceClient : IRentalMicroserviceClient
         if (!rentalResponse.IsSuccessStatusCode)
         {
             string message = await rentalResponse.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<RentalResponse>(new Error((int)rentalResponse.StatusCode,  message));
+            return Result.Failure<RentalResponse>(Error.Create(ErrorType.Unexpected, ((int)rentalResponse.StatusCode).ToString(), message));
         }
 
         RentalResponse? obj = await rentalResponse.Content.ReadFromJsonAsync<RentalResponse>(cancellationToken);
-        if(obj is null)
-            return Result.Failure<RentalResponse>(new Error(500, "Invalid response from underlying microservice"));
+        if (obj is null)
+            return Result.Failure<RentalResponse>(Error.Create(ErrorType.Unexpected, "500", "Invalid response from underlying microservice"));
 
         return obj;
     }

@@ -25,7 +25,7 @@ namespace EquipmentService.Infrastructure
                     x => x.MigrationsAssembly("EquipmentService.Infrastructure"));
             });
 
-            
+
             //Add Repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();

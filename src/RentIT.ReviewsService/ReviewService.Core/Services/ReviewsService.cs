@@ -1,16 +1,16 @@
-﻿using ReviewService.Core.Domain.HttpClientContracts;
+﻿using ReviewService.Core.Domain.Entities.Review.Errors;
+using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.Domain.ResultTypes;
 using ReviewService.Core.DTO.Review;
 using ReviewService.Core.Mappings;
-using ReviewService.Core.ResultTypes;
 using ReviewService.Core.ServiceContracts;
-using ReviewServices.Core.ResultTypes;
 namespace ReviewServices.Core.Services;
 
 public class ReviewsService : IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
-    private readonly IUsersMicroserviceClient _usersMicroserviceClient; 
+    private readonly IUsersMicroserviceClient _usersMicroserviceClient;
     public ReviewsService(IReviewRepository reviewRepository,
         IUsersMicroserviceClient usersMicroserviceClient)
     {
@@ -22,8 +22,8 @@ public class ReviewsService : IReviewService
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId, cancellation);
 
-        if(review is null)
-            return Result.Failure(ReviewErrors.ReviewNotFound);
+        if (review is null)
+            return Result.Failure(ReviewErrors.NotFound);
 
         await _reviewRepository.DeleteReviewAsync(review);
 
@@ -34,7 +34,7 @@ public class ReviewsService : IReviewService
     {
         var review = await _reviewRepository.GetReviewByIdAsync(reviewId, cancellationToken);
         if (review is null)
-            return Result.Failure<ReviewResponse>(ReviewErrors.ReviewNotFound);
+            return Result.Failure<ReviewResponse>(ReviewErrors.NotFound);
 
         var result = await _usersMicroserviceClient.GetUserByUserIdAsync(review.UserId, cancellationToken);
 
@@ -44,12 +44,12 @@ public class ReviewsService : IReviewService
         return review.ToReviewResponse(result.Value);
     }
 
-    public async Task<Result<IEnumerable<ReviewResponse>>> GetReviewsByEquipmentId(Guid equipmentId, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<ReviewResponse>>> GetReviewsByEquipmentId(Guid equipmentId, CancellationToken cancellationToken)
     {
         var reviews = await _reviewRepository.GetReviewsByEquipmentIdAsync(equipmentId, cancellationToken);
 
-        if(!reviews.Any())
-            return Result.Failure<IEnumerable<ReviewResponse>>(ReviewErrors.ReviewsNotFoundForEquipment);
+        if (!reviews.Any())
+            return new List<ReviewResponse>();
 
         var userIds = reviews
             .Select(item => item.UserId)
@@ -57,8 +57,8 @@ public class ReviewsService : IReviewService
             .ToList();
 
         var response = await _usersMicroserviceClient.GetUsersByUsersIdsAsync(userIds, cancellationToken);
-        if(response.IsFailure)
-            return Result.Failure<IEnumerable<ReviewResponse>>(response.Error);
+        if (response.IsFailure)
+            return Result.Failure<IReadOnlyCollection<ReviewResponse>>(response.Error);
 
         var userDictionary = response.Value.ToDictionary(u => u.Id);
 

@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ namespace EquipmentService.Infrastructure.Repositories;
 
 public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
 {
-    public EquipmentRepository(EquipmentContext context) : base(context){ }
+    public EquipmentRepository(EquipmentContext context) : base(context) { }
 
     public async Task DeleteEquipmentAsync(Equipment equipment, CancellationToken cancellationToken)
     {
@@ -32,7 +32,7 @@ public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
         await _context.Entry(equipment).Reference(item => item.Category).LoadAsync(cancellationToken);
         return equipment;
     }
- 
+
     public async Task<Equipment?> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken)
     {
         var equipmentToUpdate = await GetEquipmentByIdAsync(equipmentId, cancellationToken);
@@ -43,14 +43,14 @@ public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
         equipmentToUpdate.Name = equipment.Name;
         equipmentToUpdate.Status = equipment.Status;
         equipmentToUpdate.Notes = equipment.Notes;
-        equipmentToUpdate.CreatedByUserId = equipment.CreatedByUserId;  
+        equipmentToUpdate.CreatedByUserId = equipment.CreatedByUserId;
         equipmentToUpdate.RentalPricePerDay = equipment.RentalPricePerDay;
         equipmentToUpdate.SerialNumber = equipment.SerialNumber;
         equipmentToUpdate.CategoryId = equipment.CategoryId;
 
         await _context.Entry(equipmentToUpdate).Reference(item => item.Category).LoadAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return equipmentToUpdate;
     }
 

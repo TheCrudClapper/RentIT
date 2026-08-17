@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentalService.API.Extensions;
-using RentalService.Core.ResultTypes;
+using RentalService.Core.Domain.ResultTypes;
+using System.Net;
 
 namespace RentalService.API.Controllers
 {
@@ -11,15 +12,26 @@ namespace RentalService.API.Controllers
         public ActionResult HandleResult<T>(Result<T> result)
         {
             return result.IsFailure
-                ? Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode)
+                ? Problem(title: result.Error.Code, detail: result.Error.Description, statusCode: (int)MapToStatusCode(result.Error))
                 : Ok(result.Value);
         }
 
         protected IActionResult HandleResult(Result result)
         {
             return result.IsFailure
-                ? Problem(detail: result.Error.Description, statusCode: result.Error.StatusCode)
+                ? Problem(title: result.Error.Code, detail: result.Error.Description, statusCode: (int)MapToStatusCode(result.Error))
                 : NoContent();
         }
+
+        private static HttpStatusCode MapToStatusCode(Error error)
+          => error.Type switch
+          {
+              ErrorType.Validation => HttpStatusCode.BadRequest,
+              ErrorType.NotFound => HttpStatusCode.NotFound,
+              ErrorType.Conflict => HttpStatusCode.Conflict,
+              ErrorType.Unauthorized => HttpStatusCode.Unauthorized,
+              ErrorType.Forbidden => HttpStatusCode.Forbidden,
+              _ => HttpStatusCode.InternalServerError,
+          };
     }
 }

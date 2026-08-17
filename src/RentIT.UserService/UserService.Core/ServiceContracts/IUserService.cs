@@ -1,7 +1,7 @@
-﻿using UserService.Core.DTO.Shared;
+﻿using UserService.Core.Domain.ResultTypes;
+using UserService.Core.DTO.Shared;
 using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
-using UserService.Core.ResultTypes;
 
 namespace UserService.Core.ServiceContracts;
 
@@ -22,7 +22,7 @@ public interface IUserService
     /// <param name="userIds">Collection of user ids to fetch info about</param>
     /// <param name="cancellationToken">Used for canceling asynchronous operation</param>
     /// <returns></returns>
-    Task<IReadOnlyCollection<UserDTO>> GetUsersByUserIds(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyCollection<UserDTO>>> GetUsersByUserIds(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default);
     Task<Result<CreatedResponse>> CreateUser(UserAddRequest request);
 }
 

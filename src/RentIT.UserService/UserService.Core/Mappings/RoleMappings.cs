@@ -1,4 +1,4 @@
-﻿using UserService.Core.Domain.Entities;
+﻿using UserService.Core.Domain.Entities.Role;
 using UserService.Core.Enums;
 
 namespace UserService.Core.Mappings;

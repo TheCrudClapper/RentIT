@@ -5,7 +5,7 @@ using RentalService.Infrastructure.DbContexts;
 
 namespace RentalService.Infrastructure.Repositories;
 
-public class UserRentalRepository : BaseRentalRepository, IUserRentalRepository 
+public class UserRentalRepository : BaseRentalRepository, IUserRentalRepository
 {
     public UserRentalRepository(RentalDbContext context) : base(context) { }
     public async Task<Rental> AddRentalAsync(Rental rental, Guid userId, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ public class UserRentalRepository : BaseRentalRepository, IUserRentalRepository
     public async Task<Rental?> GetRentalByIdAsync(Guid rentalId, Guid userId, CancellationToken cancellationToken)
     {
         return await _context.Rentals
-            .FirstOrDefaultAsync(item => item.Id == rentalId &&  item.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(item => item.Id == rentalId && item.UserId == userId, cancellationToken);
     }
 
     //User can only change start and end date

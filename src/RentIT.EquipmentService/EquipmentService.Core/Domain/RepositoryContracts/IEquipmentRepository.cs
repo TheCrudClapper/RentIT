@@ -1,8 +1,8 @@
-﻿using EquipmentService.Core.Domain.Entities;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 namespace EquipmentService.Core.Domain.RepositoryContracts;
 
 public interface IEquipmentRepository : IBaseEquipmentRepository
-{ 
+{
     Task<Equipment> AddEquipmentAsync(Equipment equipment, CancellationToken cancellationToken = default);
     Task<Equipment?> UpdateEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken = default);
     Task<Equipment?> GetEquipmentByIdAsync(Guid equipmentId, CancellationToken cancellationToken = default);

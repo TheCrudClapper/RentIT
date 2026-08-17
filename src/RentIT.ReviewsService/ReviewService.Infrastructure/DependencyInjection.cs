@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
-using ReviewService.Infrastructure.HttpClients;
 using ReviewService.Infrastructure.Repositories;
 using ReviewServices.Infrastructure.DbContexts;
 namespace ReviewServices.Infrastructure;

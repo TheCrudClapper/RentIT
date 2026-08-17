@@ -2,7 +2,7 @@
 
 namespace ReviewService.Core.DTO.Review;
 
-public record ReviewUpdateRequest 
+public record ReviewUpdateRequest
 {
     [MaxLength(1024)]
     [Required]
@@ -11,4 +11,4 @@ public record ReviewUpdateRequest
     [Range(1, 5)]
     public decimal Rating { get; set; }
 
-} 
+}

@@ -5,7 +5,7 @@ using RentalService.Infrastructure.DbContexts;
 
 namespace RentalService.Infrastructure.Repositories;
 
-public class RentalRepository : BaseRentalRepository ,IRentalRepository
+public class RentalRepository : BaseRentalRepository, IRentalRepository
 {
     public RentalRepository(RentalDbContext context) : base(context) { }
 
@@ -28,7 +28,7 @@ public class RentalRepository : BaseRentalRepository ,IRentalRepository
     {
         var rentalToUpdate = await GetRentalByIdAsync(rentalId, cancellationToken);
 
-        if(rentalToUpdate == null)
+        if (rentalToUpdate == null)
             return false;
 
         rentalToUpdate.StartDate = rental.StartDate;
@@ -46,7 +46,7 @@ public class RentalRepository : BaseRentalRepository ,IRentalRepository
     {
         var rentalToDelete = await GetRentalByIdAsync(rentalId, cancellationToken);
 
-        if(rentalToDelete == null)
+        if (rentalToDelete == null)
             return false;
         rentalToDelete.IsActive = false;
         rentalToDelete.DateDeleted = DateTime.UtcNow;

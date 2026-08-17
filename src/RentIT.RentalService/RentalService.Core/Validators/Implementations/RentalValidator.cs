@@ -1,16 +1,17 @@
 ﻿using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.RentalDto;
-using RentalService.Core.ResultTypes;
 using RentalService.Core.Validators.Contracts;
 
 namespace RentalService.Core.Validators.Implementations;
 
 public class RentalValidator : BaseRentalValidator, IRentalValidator
 {
-    public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient,IRentalRepository rentalRepository,
-        IEquipmentMicroserviceClient equipmentMicroserviceClient) 
+    public RentalValidator(IUsersMicroserviceClient usersMicroserviceClient, IRentalRepository rentalRepository,
+        IEquipmentMicroserviceClient equipmentMicroserviceClient)
         : base(usersMicroserviceClient, rentalRepository, equipmentMicroserviceClient) { }
 
     public async override Task<Result> ValidateEntity(Rental entity, EquipmentResponse equipmentResponse, CancellationToken cancellationToken)
