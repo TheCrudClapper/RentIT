@@ -5,7 +5,7 @@ using UserService.Core.ServiceContracts;
 
 namespace UserService.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/users")]
 [Authorize]
 [ApiController]
 public class UsersController : ControllerBase
@@ -16,7 +16,6 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    //GET :/api/Users/5
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserDTO>> GetUserByUserId(Guid userId, CancellationToken cancellationToken)
     {
@@ -29,18 +28,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("query")]
-    public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByIds([FromBody]IEnumerable<Guid> userIds, CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<UserDTO>>> GetUsersByIds([FromBody]IEnumerable<Guid> userIds, CancellationToken cancellationToken)
     {
-        var users = await _userService.GetUsersByUserId(userIds, cancellationToken);
-        return users.ToList();
-    }
-
-    //GET :/api/Users
-    [HttpGet]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllUsers(CancellationToken cancellationToken)
-    {
-        var users = await _userService.GetAllUsersAsync(cancellationToken);
+        var users = await _userService.GetUsersByUserIds(userIds, cancellationToken);
         return users.ToList();
     }
 }

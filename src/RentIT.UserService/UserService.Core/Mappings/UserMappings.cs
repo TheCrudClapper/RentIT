@@ -21,6 +21,7 @@ public static class UserMappings
             DateCreated = DateTime.UtcNow,
         };
     }
+
     public static UserResponse ToUserResponse(this User user, IList<string> role)
     { 
         return new UserResponse(

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using UserService.Core.Domain.Entities;
 using UserService.Core.DTO.UserDto;
-using UserService.Core.Enums;
 using UserService.Core.Mappings;
 using UserService.Core.ResultTypes;
 using UserService.Core.ServiceContracts;
@@ -22,26 +21,18 @@ namespace UserService.Core.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
+        public async Task<IdentityResult> RegisterUserAsync(RegisterRequest request, CancellationToken cancellationToken)
         {
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
+                return IdentityResult.Failed(new IdentityError { Code = "AccountExists", Description = UserErrors.UserAlreadyExists.Description });
+
+            string userRole = request.UserRoleType.ToString();
+            if (!await _roleManager.RoleExistsAsync(userRole))
+                return IdentityResult.Failed(new IdentityError { Code = "RoleNotExists", Description = "Role does not exists." });
+
             User user = request.ToUserEntity();
 
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return IdentityResult.Failed(new IdentityError { Code = "AccountExists", Description = UserErrors.AccountAlreadyExists.Description });
-
-            if (!IsAllowedRole(request.UserRoleOption))
-                return IdentityResult.Failed(new IdentityError { Code = "InvalidRole", Description = RoleErrors.InvalidRole.Description });
-
-            string userRole = request.UserRoleOption.ToString();
-
-            if (!await _roleManager.RoleExistsAsync(userRole))
-            {
-                var roleCreationResult = await CreateRole(request.UserRoleOption);
-                if (!roleCreationResult.Succeeded)
-                    return roleCreationResult;
-            }
-
-            var userCreationResult = await _userManager.CreateAsync(user, request.Password);
+            IdentityResult userCreationResult = await _userManager.CreateAsync(user, request.Password);
 
             if (!userCreationResult.Succeeded)
                 return userCreationResult;
@@ -53,9 +44,10 @@ namespace UserService.Core.Services
 
             return IdentityResult.Success;
         }
+
         public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            User? user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user is null)
                 return Result.Failure<UserAuthResponse>(UserErrors.UserDoesNotExist);
@@ -65,18 +57,7 @@ namespace UserService.Core.Services
 
             IList<string> roles = await _userManager.GetRolesAsync(user);
 
-            var token = _jwtTokenService.GenerateJwtToken(user, roles);
-
-            return new UserAuthResponse(token);
+            return new UserAuthResponse(_jwtTokenService.GenerateJwtToken(user, roles));
         }
-
-        private async Task<IdentityResult> CreateRole(UserRoleOption roleOption)
-        {
-            Role role = roleOption.ToRoleEntity();
-            return await _roleManager.CreateAsync(role);
-        }
-
-        private bool IsAllowedRole(UserRoleOption role) =>
-                role == UserRoleOption.User || role == UserRoleOption.Admin;
     }
 }

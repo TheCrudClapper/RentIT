@@ -6,12 +6,12 @@ namespace UserService.Core.DTO.UserDto;
 public class RegisterRequest
 {
     [StringLength(50), Required]
-    public string FirstName { get; set; } = null!;
+    public string FirstName { get; init; } = null!;
     [StringLength(50), Required]
-    public string LastName { get; set; } = null!;
+    public string LastName { get; init; } = null!;
     [StringLength(50), Required, EmailAddress]
-    public string Email { get; set; } = null!;
+    public string Email { get; init; } = null!;
     [StringLength(50), Required, PasswordPropertyText]
-    public string Password { get; set; } = null!;
-    public UserRoleOption UserRoleOption { get; set; } = UserRoleOption.User;
+    public string Password { get; init; } = null!;
+    public UserRoleOption UserRoleType { get; set; } = UserRoleOption.User;
 }

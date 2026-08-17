@@ -14,6 +14,7 @@ public static class CategoryMappings
             Description = category.Description
         };
     }
+
     public static Category ToCategory(this CategoryAddRequest request)
     {
         return new Category
@@ -24,6 +25,7 @@ public static class CategoryMappings
             Name = request.Name
         };
     }
+
     public static Category ToCategory(this CategoryUpdateRequest request)
     {
         return new Category

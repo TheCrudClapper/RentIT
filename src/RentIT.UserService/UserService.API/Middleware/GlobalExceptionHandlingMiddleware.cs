@@ -4,14 +4,6 @@ using System.Text.Json;
 
 namespace UserService.API.Middleware;
 
-/// <summary>
-/// Middleware that provides centralized exception handling for HTTP requests in an ASP.NET Core application.
-/// </summary>
-/// <remarks>This middleware intercepts unhandled exceptions that occur during the processing of HTTP
-/// requests and logs the exception details using the configured <see cref="ILogger{TCategoryName}"/>. It also sets
-/// the HTTP response status code to 500 (Internal Server Error) and can optionally return a custom error response
-/// to the client.  To use this middleware, add it to the request pipeline in the `Startup` class or `Program.cs`
-/// using the <c>app.UseMiddleware&lt;GlobalExceptionHandlingMiddleware&gt;()</c> method.</remarks>
 public class GlobalExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -55,8 +47,8 @@ public class GlobalExceptionHandlingMiddleware
             {
                 Status = (int)HttpStatusCode.InternalServerError,
                 Type = "Server Error",
-                Title = "Servcer Error",
-                Detail = "An internal server error has occured",
+                Title = "Server Error",
+                Detail = "An internal server error has occured.",
             };
 
             string json = JsonSerializer.Serialize(details);

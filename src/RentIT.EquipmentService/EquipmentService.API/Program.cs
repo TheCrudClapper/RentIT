@@ -2,9 +2,11 @@ using EquipmentService.API.Extensions;
 using EquipmentService.API.Handlers;
 using EquipmentService.API.Middleware;
 using EquipmentService.Core;
+using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Policies.Contracts;
 using EquipmentService.Core.Policies.Implementations;
 using EquipmentService.Infrastructure;
+using EquipmentService.Infrastructure.HttpClients;
 
 var builder = WebApplication.CreateBuilder(args);
 

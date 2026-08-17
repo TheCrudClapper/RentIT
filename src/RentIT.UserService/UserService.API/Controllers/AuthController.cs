@@ -3,22 +3,18 @@ using UserService.Core.DTO.UserDto;
 using UserService.Core.ServiceContracts;
 namespace UserService.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    public AuthController(IAuthService authService)
-    {
-        _authService = authService;
-    }
+    public AuthController(IAuthService authService) 
+        => _authService = authService;
 
-    //POST :api/User/Register
-    [HttpPost]
-    [Route("Register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
     {
-        var result = await _authService.RegisterAsync(request, cancellationToken);
+        var result = await _authService.RegisterUserAsync(request, cancellationToken);
 
         if (!result.Succeeded)
         {
@@ -35,9 +31,7 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
-    //POST :api/User/Login
-    [Route("Login")]
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.LoginAsync(request, cancellationToken);
@@ -46,9 +40,6 @@ public class AuthController : ControllerBase
             return Problem(detail: result.Error.Description,
                 statusCode: result.Error.ErrorCode);
 
-        //return JWT Token
         return result.Value;
     }
-
-
 }

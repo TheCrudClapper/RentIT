@@ -49,10 +49,9 @@ public class EquipmentService : IEquipmentService
     {
         var equipment = await _equipmentRepository.GetEquipmentByIdAsync(equipmentId, cancellationToken);
 
-        if (equipment == null)
-            return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
-
-        return equipment.ToEquipmentResponse();
+        return equipment is null 
+            ? Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound) 
+            : equipment.ToEquipmentResponse();
     }
 
     public async Task<Result<IEnumerable<EquipmentResponse>>> GetAllEquipmentItems(CancellationToken cancellationToken)

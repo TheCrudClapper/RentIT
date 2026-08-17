@@ -5,6 +5,9 @@
         public static readonly Error InvalidRole = new Error(
             400, "This role cannot be assigned during registration");
 
+        public static readonly Error RoleDoesNotExist = new Error(
+            404, "This role cannot be assigned during registration");
+
         public static readonly Error RoleCreationFailed = new Error(
             400, "Something went wrong while creating your role");
 

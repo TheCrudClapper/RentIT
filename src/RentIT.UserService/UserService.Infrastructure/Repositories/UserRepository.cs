@@ -13,7 +13,7 @@ public class UserRepository : IUserRepository
     {
         _context = dbContext;
     }
-    public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _context.Users
             .AsNoTracking()
@@ -26,7 +26,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.Users
             .AsNoTracking()
