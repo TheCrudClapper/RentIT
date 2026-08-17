@@ -19,7 +19,7 @@ public abstract class BaseRentalRepository : IBaseRentalRepository
             .FirstOrDefaultAsync(conditionExpression, cancellationToken);
     }
 
-    public async Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken)
     {
         return await _context.Rentals.Where(conditionExpression)
             .ToListAsync(cancellationToken);

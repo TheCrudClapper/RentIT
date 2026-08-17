@@ -12,7 +12,7 @@ namespace RentalService.Core.ServiceContracts;
 /// information. Implementations should ensure appropriate authorization and validation for each operation.</remarks>
 public interface IUserRentalService
 {
-    Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(Guid userId, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyCollection<RentalResponse>>> GetAllRentals(Guid userId, CancellationToken cancellationToken = default);
     Task<Result<RentalResponse>> GetRental(Guid rentalId, Guid userId, CancellationToken cancellationToken = default);
     Task<Result<RentalResponse>> AddRental(UserRentalAddRequest request, Guid userId, CancellationToken cancellationToken = default);
     Task<Result> UpdateRental(Guid rentalId, UserRentalUpdateRequest request, Guid userId, CancellationToken cancellationToken = default);

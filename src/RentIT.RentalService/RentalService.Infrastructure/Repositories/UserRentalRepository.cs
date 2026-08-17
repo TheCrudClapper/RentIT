@@ -30,7 +30,7 @@ public class UserRentalRepository : BaseRentalRepository, IUserRentalRepository
         return true;
     }
 
-    public async Task<IEnumerable<Rental>> GetAllRentalsAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Rental>> GetAllRentalsAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _context.Rentals
            .AsNoTracking()

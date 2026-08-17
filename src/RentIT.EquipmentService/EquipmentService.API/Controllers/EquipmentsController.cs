@@ -17,7 +17,7 @@ public class EquipmentsController : BaseApiController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetAllEquipments(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<EquipmentResponse>>> GetAllEquipments(CancellationToken cancellationToken)
         => HandleResult(await _equipmentService.GetAllEquipmentItems(cancellationToken));
 
     [HttpGet("{equipmentId}")]
@@ -42,7 +42,7 @@ public class EquipmentsController : BaseApiController
 
     [HttpPost("query")]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds([FromBody] IEnumerable<Guid>? equipmentIds, CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<EquipmentResponse>>> GetEquipmentsByIds([FromBody] IEnumerable<Guid>? equipmentIds, CancellationToken cancellationToken)
     {
         if (equipmentIds == null || !equipmentIds.Any())
             return BadRequest("No equipment IDs provided.");

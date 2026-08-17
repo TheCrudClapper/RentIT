@@ -25,14 +25,14 @@ public class BaseReviewRepository : IBaseReviewRepository
             .FirstOrDefaultAsync(item => item.Id == reviewId, cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Review>> GetReviewsByConditionAsync(Expression<Func<Review, bool>> conditionExpression, CancellationToken cancellationToken)
     {
         return await _context.Reviews
             .Where(conditionExpression)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Review>> GetReviewsByEquipmentIdAsync(Guid equipmentId, CancellationToken cancellationToken)
     {
         return await _context.Reviews.Where(item => item.EquipmentId == equipmentId)
             .ToListAsync(cancellationToken);

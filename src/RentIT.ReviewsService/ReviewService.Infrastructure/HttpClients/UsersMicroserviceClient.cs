@@ -31,17 +31,17 @@ public class UsersMicroserviceClient : IUsersMicroserviceClient
         return userResponse;
     }
 
-    public async Task<Result<IEnumerable<UserDTO>>> GetUsersByUsersIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<UserDTO>>> GetUsersByUsersIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
     {
         var response = await _httpClient.PostAsJsonAsync("/gateway/Users/query", userIds, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
             string message = await response.Content.ReadAsStringAsync(cancellationToken);
-            return Result.Failure<IEnumerable<UserDTO>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
+            return Result.Failure<IReadOnlyCollection<UserDTO>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
         }
-        var userResponse = await response.Content.ReadFromJsonAsync<IEnumerable<UserDTO>>(cancellationToken);
+        var userResponse = await response.Content.ReadFromJsonAsync<List<UserDTO>>(cancellationToken);
 
-        return Result.Success(userResponse ?? Enumerable.Empty<UserDTO>());
+        return Result.Success<IReadOnlyCollection<UserDTO>>(userResponse ?? []);
     }
 }

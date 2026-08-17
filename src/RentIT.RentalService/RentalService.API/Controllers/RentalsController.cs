@@ -18,7 +18,7 @@ public class RentalsController : BaseApiController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
         => HandleResult(await _rentalService.GetAllRentals(cancellationToken));
 
     [HttpGet("{equipmentId}")]

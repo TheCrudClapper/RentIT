@@ -93,7 +93,7 @@ public class UserEquipmentService : IUserEquipmentService
         return equipment.ToEquipmentResponse();
     }
 
-    public async Task<Result<IEnumerable<EquipmentResponse>>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<EquipmentResponse>>> GetAllUserEquipment(Guid userId, CancellationToken cancellationToken)
     {
         var userEquipments = await _userEquipmentRepository.GetAllUserEquipmentAsync(userId, cancellationToken);
         return userEquipments

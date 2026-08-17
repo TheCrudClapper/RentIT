@@ -76,7 +76,7 @@ public class RentalService : BaseRentalService, IRentalService
         return rental.ToRentalResponse(equipmentResponse.Value);
     }
 
-    public async Task<Result<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
     {
         var rentals = await _rentalRepository.GetAllRentalsAsync(cancellationToken);
 
@@ -86,11 +86,11 @@ public class RentalService : BaseRentalService, IRentalService
             .ToList();
 
         if (equipmentIds.Count == 0)
-            return Result.Success(Enumerable.Empty<RentalResponse>());
+            return Result.Success((IReadOnlyCollection<RentalResponse>)new List<RentalResponse>());
 
         var eqResponse = await _equipmentMicroserviceClient.GetEquipmentsByIds(equipmentIds, cancellationToken);
         if (eqResponse.IsFailure)
-            return Result.Failure<IEnumerable<RentalResponse>>(eqResponse.Error);
+            return Result.Failure<IReadOnlyCollection<RentalResponse>>(eqResponse.Error);
 
         var equipmentDict = eqResponse.Value
             .ToDictionary(x => x.Id, x => x);

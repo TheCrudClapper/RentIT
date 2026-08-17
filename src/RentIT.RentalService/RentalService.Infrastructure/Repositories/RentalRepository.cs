@@ -17,7 +17,7 @@ public class RentalRepository : BaseRentalRepository, IRentalRepository
         return rental;
     }
 
-    public async Task<IEnumerable<Rental>> GetAllRentalsAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Rental>> GetAllRentalsAsync(CancellationToken cancellationToken)
     {
         return await _context.Rentals
             .AsNoTracking()

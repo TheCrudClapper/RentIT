@@ -33,7 +33,7 @@ public abstract class BaseEquipmentRepository : IBaseEquipmentRepository
             .FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
             .Include(item => item.Category)

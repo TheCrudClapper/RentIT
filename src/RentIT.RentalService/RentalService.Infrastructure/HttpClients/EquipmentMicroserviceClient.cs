@@ -58,10 +58,10 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         }
     }
 
-    public async Task<Result<IEnumerable<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<EquipmentResponse>>> GetEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
     {
         var cacheKey = CachingHelper.GenerateCacheKey("equipments", equipmentIds);
-        var cachedObj = await _cachingHelper.GetCachedObject<IEnumerable<EquipmentResponse>>(cacheKey, cancellationToken);
+        var cachedObj = await _cachingHelper.GetCachedObject<IReadOnlyCollection<EquipmentResponse>>(cacheKey, cancellationToken);
         if (cachedObj.Value != null)
             return Result.Success(cachedObj.Value);
 
@@ -78,20 +78,20 @@ public class EquipmentMicroserviceClient : IEquipmentMicroserviceClient
         {
             if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
-                IEnumerable<EquipmentResponse>? equipmentItemsFromFallback = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>();
+                List<EquipmentResponse>? equipmentItemsFromFallback = await response.Content.ReadFromJsonAsync<List<EquipmentResponse>>();
 
-                return Result.Success(equipmentItemsFromFallback ?? []);
+                return Result.Success<IReadOnlyCollection<EquipmentResponse>>(equipmentItemsFromFallback ?? []);
             }
 
             string message = await response.Content.ReadAsStringAsync();
-            return Result.Failure<IEnumerable<EquipmentResponse>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
+            return Result.Failure<IReadOnlyCollection<EquipmentResponse>>(Error.Create(ErrorType.Unexpected, ((int)response.StatusCode).ToString(), message));
         }
 
-        IEnumerable<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<IEnumerable<EquipmentResponse>>(cancellationToken);
+        List<EquipmentResponse>? equipmentItems = await response.Content.ReadFromJsonAsync<List<EquipmentResponse>>(cancellationToken);
 
         await _cachingHelper.CacheObject(equipmentItems, cacheKey, CachingProfiles.ShortTTLCacheOption, cancellationToken);
 
-        return Result.Success(equipmentItems ?? []);
+        return Result.Success<IReadOnlyCollection<EquipmentResponse>>(equipmentItems ?? []);
 
     }
 }

@@ -10,6 +10,6 @@ public interface IBaseEquipmentRepository
 {
     Task<bool> IsEquipmentUnique(Equipment equipment, CancellationToken cancellationToken, Guid? excludeId = null);
     Task<bool> DoesEquipmentExistsAsync(Guid equipmentId, CancellationToken cancellationToken);
-    Task<IEnumerable<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<Equipment>> GetEquipmentsByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken);
     Task<Equipment?> GetEquipmentByCondition(Expression<Func<Equipment, bool>> expression, CancellationToken cancellationToken);
 }

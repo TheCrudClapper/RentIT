@@ -54,7 +54,7 @@ public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
         return equipmentToUpdate;
     }
 
-    public async Task<IEnumerable<Equipment>> GetAllEquipmentAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Equipment>> GetAllEquipmentAsync(CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
             .AsNoTracking()

@@ -47,11 +47,11 @@ public class ReviewAllowanceService : IReviewAllowanceService
         return Result.Success();
     }
 
-    public async Task<Result<IEnumerable<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
     {
         var result = await _reviewAllowanceRepository.GetAllReviewAllowances(cancellationToken);
 
-        return Result.Success(result.Select(item => item.ToReviewAllowanceResponse()));
+        return Result.Success((IReadOnlyCollection<ReviewAllowanceResponse>)result.Select(item => item.ToReviewAllowanceResponse()).ToList());
     }
 
 }

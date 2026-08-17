@@ -19,7 +19,7 @@ public class UserRentalController : BaseApiController
 
     // GET: api/UserRental
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<RentalResponse>>> GetAllRentals(CancellationToken cancellationToken)
         => HandleResult(await _userRentalService.GetAllRentals(CurrentUserId, cancellationToken));
 
     // GET: api/UserRental/{rentalId}

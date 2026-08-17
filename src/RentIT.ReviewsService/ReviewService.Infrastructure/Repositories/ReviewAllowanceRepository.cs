@@ -43,7 +43,7 @@ public class ReviewAllowanceRepository : IReviewAllowanceRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<ReviewAllowance>> GetAllReviewAllowances(CancellationToken cancellationToken)
     {
         return await _context.ReviewsAllowance
             .IgnoreQueryFilters()

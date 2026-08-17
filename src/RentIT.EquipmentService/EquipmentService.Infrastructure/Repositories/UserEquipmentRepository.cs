@@ -39,7 +39,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
         return equipmentToUpdate;
     }
 
-    public async Task<IEnumerable<Equipment>> GetAllUserEquipmentAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Equipment>> GetAllUserEquipmentAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems
             .AsNoTracking()

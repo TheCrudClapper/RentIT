@@ -11,7 +11,7 @@ namespace RentalService.Core.Domain.RepositoryContracts;
 public interface IBaseRentalRepository
 {
     Task<Rental?> GetRentalByIdAsync(Guid rentalId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken = default);
+    Task<IReadOnlyCollection<Rental>> GetRentalsByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken = default);
     Task<Rental?> GetRentalByCondition(Expression<Func<Rental, bool>> conditionExpression, CancellationToken cancellationToken = default);
     Task MarkEquipmentAsReturned(Rental rental, DateTime returnedDate, CancellationToken cancellationToken = default);
     Task UpdateRentalTotalCost(Rental rental, decimal totalCost, CancellationToken cancellationToken = default);

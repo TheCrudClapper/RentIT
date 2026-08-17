@@ -23,6 +23,6 @@ public class ReviewAllowanceController : BaseApiController
     //Testing only
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<IEnumerable<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellation)
+    public async Task<ActionResult<IReadOnlyCollection<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellation)
         => HandleResult(await _reviewAllowanceService.GetAllReviewAllowances(cancellation));
 }
