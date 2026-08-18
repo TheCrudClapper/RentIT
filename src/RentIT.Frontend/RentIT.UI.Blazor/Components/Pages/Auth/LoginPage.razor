@@ -1,0 +1,46 @@
+﻿@page "/login"
+@layout AuthLayout
+@using RentIT.BlazorFrontend.Models.Auth;
+
+<PageTitle>Logowanie</PageTitle>
+
+<div class="eyebrow">Logowanie</div>
+<h2>Wejdź na konto</h2>
+
+<EditForm Model="@model" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+    <div class="field">
+        <label>Adres e-mail</label>
+        <InputText @bind-Value="model.Email" placeholder="jan.kowalski@it-dzial.pl"></InputText>
+        <span><ValidationMessage For="@(() => model.Email)" /></span>
+    </div>
+    <div class="field">
+        <label>Hasło</label>
+        <InputText type="password" @bind-Value="model.Password" />
+        <ValidationMessage For="@(() => model.Password)" />
+    </div>
+    <div class="form-foot">
+        <label style="display:flex; align-items:center; gap:8px; text-transform:none; font-size:13px;"><input type="checkbox">Zapamiętaj mnie</label>
+        <a href="#">Nie pamiętam hasła</a>
+    </div>
+    <button type="submit" class="btn btn-primary">Zaloguj się</button>
+</EditForm>
+
+
+<div class="form-foot" style="justify-content:center; margin-top:20px;">
+    Nie masz konta?
+    <NavLink href="register" class="">
+        <span>Zarejestruj się</span>
+    </NavLink>
+</div>
+
+@code {
+    LoginModel model = new();
+
+    private void HandleSubmit()
+    {
+
+    }
+}
