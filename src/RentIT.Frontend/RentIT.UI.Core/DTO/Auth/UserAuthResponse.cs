@@ -1,4 +1,4 @@
-﻿namespace UserService.Core.DTO.User;
+﻿namespace RentIT.UI.Core.DTO.Auth;
 
 public record UserAuthResponse(string Token);
 

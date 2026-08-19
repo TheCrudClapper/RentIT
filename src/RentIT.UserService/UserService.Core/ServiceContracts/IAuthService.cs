@@ -1,4 +1,5 @@
 ﻿using UserService.Core.Domain.ResultTypes;
+using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
 
 

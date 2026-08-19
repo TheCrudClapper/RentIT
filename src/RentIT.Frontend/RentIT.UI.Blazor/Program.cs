@@ -1,4 +1,6 @@
 using RentIT.BlazorFrontend.Components;
+using RentIT.UI.Core.Extensions;
+using RentIT.UI.Infrastructure.Extensions;
 
 namespace RentIT.BlazorFrontend
 {
@@ -12,7 +14,11 @@ namespace RentIT.BlazorFrontend
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddValidation();
+            builder.Services
+                .AddCoreLayer()
+                .AddInfrastructureLayer()
+                .AddValidation();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

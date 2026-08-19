@@ -1,25 +1,38 @@
 ﻿@page "/register"
+@inject IAuthService service;
 @layout AuthLayout
+
 <PageTitle>Rejestracja</PageTitle>
+
 <div class="eyebrow">Rejestracja</div>
 <h2>Utwórz konto</h2>
-<div class="field">
-    <label>Imie</label>
-    <input type="email" placeholder="Jan">
-</div>
-<div class="field">
-    <label>Nazwisko</label>
-    <input type="email" placeholder="Kowalski">
-</div>
-<div class="field">
-    <label>Adres e-mail</label>
-    <input type="email" placeholder="jan.kowalski@it-dzial.pl">
-</div>
-<div class="field">
-    <label>Hasło</label>
-    <input type="password" placeholder="••••••••••">
-</div>
-<button class="btn btn-primary">Zarejestruj się</button>
+
+<EditForm Model="@Model" FormName="register" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="field">
+        <label>Imie</label>
+        <InputText @bind-Value="Model.FirstName" placeholder="Jan"/>
+        <ValidationMessage For="@(() => Model.FirstName)"/>
+    </div>
+    <div class="field">
+        <label>Nazwisko</label>
+        <InputText @bind-Value="Model.LastName" placeholder="Kowalski" />
+        <ValidationMessage For="@(() => Model.LastName)" />
+    </div>
+    <div class="field">
+        <label>Adres e-mail</label>
+        <InputText @bind-Value="Model.Email" placeholder="jan.kowalski@it-dzial.pl" />
+        <ValidationMessage For="@(() => Model.Email)" />
+    </div>
+    <div class="field">
+        <label>Hasło</label>
+        <InputText type="password" @bind-Value="Model.Password" placeholder="••••••••••" />
+        <ValidationMessage For="@(() => Model.Password)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+</EditForm>
+
+
 <div class="form-foot" style="justify-content:center; margin-top:20px;">
     Masz już konto?
     <NavLink href="login" class="">
@@ -29,4 +42,11 @@
 
 @code {
 
+    [SupplyParameterFromForm]
+    RegisterModel Model { get; set; } = new();
+
+    private async Task HandleSubmit()
+    {
+        var result = await service.RegisterAsync(Model.ToDto());
+    }
 }

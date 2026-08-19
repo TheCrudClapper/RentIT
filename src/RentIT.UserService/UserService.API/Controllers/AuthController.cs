@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.ServiceContracts;
 namespace UserService.API.Controllers;

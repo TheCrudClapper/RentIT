@@ -4,6 +4,7 @@ using UserService.Core.Domain.Entities.Role.Errors;
 using UserService.Core.Domain.Entities.User;
 using UserService.Core.Domain.Entities.User.Errors;
 using UserService.Core.Domain.ResultTypes;
+using UserService.Core.DTO.User;
 using UserService.Core.DTO.UserDto;
 using UserService.Core.Enums;
 using UserService.Core.Extensions;

@@ -1,25 +1,23 @@
 ﻿@page "/login"
 @layout AuthLayout
-@using RentIT.BlazorFrontend.Models.Auth;
+@inject IAuthService service;
 
 <PageTitle>Logowanie</PageTitle>
 
 <div class="eyebrow">Logowanie</div>
 <h2>Wejdź na konto</h2>
 
-<EditForm Model="@model" OnValidSubmit="HandleSubmit">
+<EditForm Model="@Model" OnValidSubmit="HandleSubmit" FormName="loginForm">
     <DataAnnotationsValidator />
-
-    <ValidationSummary />
     <div class="field">
         <label>Adres e-mail</label>
-        <InputText @bind-Value="model.Email" placeholder="jan.kowalski@it-dzial.pl"></InputText>
-        <span><ValidationMessage For="@(() => model.Email)" /></span>
+        <InputText @bind-Value="Model.Email" placeholder="jan.kowalski@it-dzial.pl"/>
+        <ValidationMessage For="@(() => Model.Email)" />
     </div>
     <div class="field">
         <label>Hasło</label>
-        <InputText type="password" @bind-Value="model.Password" />
-        <ValidationMessage For="@(() => model.Password)" />
+        <InputText type="password" placeholder="••••••••••" @bind-Value="Model.Password" />
+        <ValidationMessage For="@(() => Model.Password)" />
     </div>
     <div class="form-foot">
         <label style="display:flex; align-items:center; gap:8px; text-transform:none; font-size:13px;"><input type="checkbox">Zapamiętaj mnie</label>
@@ -37,10 +35,12 @@
 </div>
 
 @code {
-    LoginModel model = new();
 
-    private void HandleSubmit()
+    [SupplyParameterFromForm]
+    LoginModel Model { get; set; } = new() { Email = string.Empty, Password = string.Empty};
+
+    private async Task HandleSubmit()
     {
-
+        var result = await service.LoginAsync(Model.ToDto());
     }
 }
