@@ -54,7 +54,6 @@ public class JwtTokenService : IJwtTokenService
         };
 
         var tokenHandler = new JsonWebTokenHandler();
-
         //Creating token
         var accessToken = tokenHandler.CreateToken(tokenDescriptor);
 

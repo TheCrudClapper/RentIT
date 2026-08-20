@@ -12,21 +12,21 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UserService.API/UserService.API.csproj", "UserService.API/"]
-COPY ["UserService.Core/UserService.Core.csproj", "UserService.Core/"]
-COPY ["UserService.Infrastructure/UserService.Infrastructure.csproj", "UserService.Infrastructure/"]
-RUN dotnet restore "./UserService.API/UserService.API.csproj"
+COPY ["src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj", "src/RentIT.ReviewsService/ReviewService.API/"]
+COPY ["src/RentIT.ReviewsService/ReviewService.Core/ReviewService.Core.csproj", "src/RentIT.ReviewsService/ReviewService.Core/"]
+COPY ["src/RentIT.ReviewsService/ReviewService.Infrastructure/ReviewService.Infrastructure.csproj", "src/RentIT.ReviewsService/ReviewService.Infrastructure/"]
+RUN dotnet restore "./src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj"
 COPY . .
-WORKDIR "/src/UserService.API"
-RUN dotnet build "./UserService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/RentIT.ReviewsService/ReviewService.API"
+RUN dotnet build "./ReviewService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./UserService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ReviewService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserService.API.dll"]
+ENTRYPOINT ["dotnet", "ReviewService.API.dll"]

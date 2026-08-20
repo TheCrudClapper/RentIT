@@ -19,4 +19,8 @@ public class AuthController : BaseApiController
     [HttpPost("login")]
     public async Task<ActionResult<UserAuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
         => HandleResult(await _authService.LoginAsync(request, cancellationToken));
+
+    //[HttpPost("session")]
+    //public async Task<>
+
 }

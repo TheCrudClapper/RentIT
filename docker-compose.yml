@@ -6,8 +6,8 @@ services:
   userservice.api:
     image: users-microservice
     build:
-        context: .
-        dockerfile: src/RentIT.UserService/UserService.API/Dockerfile
+        context: ./src/RentIT.UserService
+        dockerfile: UserService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres 
@@ -43,11 +43,10 @@ services:
         
   # Equipment Microservice
   equipmentservice.api:
-    # image: thecrudclapper/rentit-equipment-microservice:latest
     image: equipment-microservice
     build:
-        context: .
-        dockerfile: src/RentIT.EquipmentService/EquipmentService.API/Dockerfile
+        context: ./src/RentIT.EquipmentService
+        dockerfile: EquipmentService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres 
@@ -92,11 +91,10 @@ services:
 
   # Rental Microservice
   rentalmicroservice.api:
-    # image: thecrudclapper/rentit-rental-microservice:latest
     image: rental-microservice
     build:
-        context: .
-        dockerfile: src/RentIT.RentalService/RentalService.API/Dockerfile
+        context: ./src/RentIT.RentalService
+        dockerfile: RentalService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres
@@ -147,8 +145,8 @@ services:
   reviewmicroservice.api: 
     image: review-microservice
     build: 
-        context: .
-        dockerfile: src/RentIT.ReviewsService/ReviewService.API/Dockerfile
+        context: ./src/RentIT.ReviewsService
+        dockerfile: ReviewService.API/Dockerfile
     ports:
         - "5006:8080"
         - "5007:8081"
@@ -207,8 +205,8 @@ services:
   api-gateway:
      image: ocelot-gateway
      build:
-        context: .
-        dockerfile: src/RentITApiGateway/Dockerfile
+        context: ./src/RentITApiGateway
+        dockerfile: Dockerfile
      environment:
         - Jwt__Issuer=http://localhost:5050 
         - Jwt__Audience=http://localhost:5050
@@ -230,8 +228,6 @@ services:
         - RABBITMQ_DEFAULT_PASS=admin
     networks:
         - rentit-internal-network
-
-  
     
 # Networks
 networks:

@@ -5,7 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <UserSecretsId>c2644476-3724-48f1-a342-88daa1f15a00</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.22.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RentIT.UI.Core\RentIT.UI.Core.csproj" />

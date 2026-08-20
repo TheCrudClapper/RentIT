@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using RentIT.BlazorFrontend.Components;
+using RentIT.BlazorFrontend.Extensions;
 using RentIT.UI.Core.Extensions;
 using RentIT.UI.Infrastructure.Extensions;
 
@@ -14,7 +16,22 @@ namespace RentIT.BlazorFrontend
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/login";
+                    options.LogoutPath = "/logout";
+                    options.Cookie.Name = "RentIt.Auth";
+                    options.AccessDeniedPath = "/access-denied";
+                    options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+                });
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddHttpContextAccessor();
+
             builder.Services
+                .AddUILayer()
                 .AddCoreLayer()
                 .AddInfrastructureLayer()
                 .AddValidation();
@@ -33,6 +50,9 @@ namespace RentIT.BlazorFrontend
             app.UseHttpsRedirection();
 
             app.UseAntiforgery();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapStaticAssets();
             app.MapRazorComponents<App>()

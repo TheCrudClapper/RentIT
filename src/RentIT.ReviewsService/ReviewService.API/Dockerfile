@@ -12,12 +12,12 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj", "src/RentIT.ReviewsService/ReviewService.API/"]
-COPY ["src/RentIT.ReviewsService/ReviewService.Core/ReviewService.Core.csproj", "src/RentIT.ReviewsService/ReviewService.Core/"]
-COPY ["src/RentIT.ReviewsService/ReviewService.Infrastructure/ReviewService.Infrastructure.csproj", "src/RentIT.ReviewsService/ReviewService.Infrastructure/"]
-RUN dotnet restore "./src/RentIT.ReviewsService/ReviewService.API/ReviewService.API.csproj"
+COPY ["ReviewService.API/ReviewService.API.csproj", "ReviewService.API/"]
+COPY ["ReviewService.Core/ReviewService.Core.csproj", "ReviewService.Core/"]
+COPY ["ReviewService.Infrastructure/ReviewService.Infrastructure.csproj", "ReviewService.Infrastructure/"]
+RUN dotnet restore "./ReviewService.API/ReviewService.API.csproj"
 COPY . .
-WORKDIR "/src/src/RentIT.ReviewsService/ReviewService.API"
+WORKDIR "/src/ReviewService.API"
 RUN dotnet build "./ReviewService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

@@ -1,6 +1,9 @@
 ﻿@page "/login"
+@rendermode InteractiveServer
 @layout AuthLayout
-@inject IAuthService service;
+@inject IAuthenticationService authService
+@inject IAuthHttpClient authHttpClient
+@inject NavigationManager navigationManager
 
 <PageTitle>Logowanie</PageTitle>
 
@@ -24,6 +27,7 @@
         <a href="#">Nie pamiętam hasła</a>
     </div>
     <button type="submit" class="btn btn-primary">Zaloguj się</button>
+    <span>@Message</span>
 </EditForm>
 
 
@@ -38,9 +42,20 @@
 
     [SupplyParameterFromForm]
     LoginModel Model { get; set; } = new() { Email = string.Empty, Password = string.Empty};
+    string Message { get; set; } = string.Empty;
 
     private async Task HandleSubmit()
     {
-        var result = await service.LoginAsync(Model.ToDto());
+        var result = await authHttpClient.LoginAsync(Model.ToDto());
+        if (result.IsFailure)
+        {
+            Message = result.Error.Description;
+            return;
+        }
+
+        await authService.SignInAsync(result.Value);
+
+        navigationManager.NavigateTo("/");
     }
+
 }
