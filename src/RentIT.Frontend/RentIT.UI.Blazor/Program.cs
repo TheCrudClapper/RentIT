@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RentIT.BlazorFrontend.Components;
 using RentIT.BlazorFrontend.Extensions;
+using RentIT.BlazorFrontend.Handlers;
 using RentIT.UI.Core.Extensions;
 using RentIT.UI.Infrastructure.Extensions;
 
@@ -29,6 +30,7 @@ namespace RentIT.BlazorFrontend
             builder.Services.AddAuthorization();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddBearerTokenHandler();
 
             builder.Services
                 .AddUILayer()

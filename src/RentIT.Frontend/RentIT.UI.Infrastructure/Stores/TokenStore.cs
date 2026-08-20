@@ -6,8 +6,8 @@ public class TokenStore : ITokenStore
 {
     private string Token { get; set; } = null!;
 
-    public string GetAccessToken(string token) => Token is not null
-            ? token
+    public string GetAccessToken() => Token is not null
+            ? Token
             : throw new ArgumentException("Token is not present in store.");
 
     public void SaveAccessToken(string token) => Token = token;
