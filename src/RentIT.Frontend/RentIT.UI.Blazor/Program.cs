@@ -27,6 +27,7 @@ namespace RentIT.BlazorFrontend
                     options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
                 });
 
+            builder.Services.AddLogging();
             builder.Services.AddAuthorization();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddHttpContextAccessor();

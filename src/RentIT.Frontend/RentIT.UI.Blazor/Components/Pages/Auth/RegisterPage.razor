@@ -1,5 +1,7 @@
 ﻿@page "/register"
-@inject IAuthService service;
+@inject IAuthService service
+@inject NavigationManager navigationManager
+@inject IAuthenticationService authService
 @layout AuthLayout
 
 <PageTitle>Rejestracja</PageTitle>
@@ -45,8 +47,17 @@
     [SupplyParameterFromForm]
     RegisterModel Model { get; set; } = new();
 
+    string Message { get; set; }
+
     private async Task HandleSubmit()
     {
         var result = await service.RegisterAsync(Model.ToDto());
+        if (result.IsFailure)
+        {
+            Message = result.Error.Description;
+            return;
+        }
+
+        navigationManager.NavigateTo("/login");
     }
 }

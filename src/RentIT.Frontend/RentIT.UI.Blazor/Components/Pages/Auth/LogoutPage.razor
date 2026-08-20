@@ -1,0 +1,14 @@
+﻿@page "/logout"
+@inject IAuthenticationService authService
+@inject NavigationManager navigationManager
+@inherits MainLayout
+
+<PageTitle>Logout</PageTitle>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await authService.SignOutAsync();
+        navigationManager.NavigateTo("/login");
+    }
+}

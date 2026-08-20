@@ -4,18 +4,18 @@ services:
   # Blazor application works using http://localhost:7085
 
   # Blazor Frontend
-  blazor.frontend:
-    image: blazor-frontend
-    build: 
-        context: ./src/RentIT.Frontend
-        dockerfile: RentIT.UI.Blazor/Dockerfile
-    environment: 
-        - ASPNETCORE_ENVIRONMENT=Development
-        - DefaultApiUrl=http://api-gateway:8080/gateway/
-    ports:
-        - "7085:8080"
-    networks:
-        - rentit-internal-network
+  # blazor.frontend:
+    # image: blazor-frontend
+    # build: 
+        # context: ./src/RentIT.Frontend
+        # dockerfile: RentIT.UI.Blazor/Dockerfile
+    # environment: 
+        # - ASPNETCORE_ENVIRONMENT=Development
+        # - DefaultApiUrl=http://api-gateway:8080/gateway/
+    # ports:
+        # - "7085:8080"
+    # networks:
+        # - rentit-internal-network
   
   # Users Microservice 
   userservice.api:

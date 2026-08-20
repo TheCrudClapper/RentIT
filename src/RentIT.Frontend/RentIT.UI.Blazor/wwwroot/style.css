@@ -175,55 +175,8 @@ h1, h2, h3, .display {
     padding: 56px 40px;
 }
 
-/* ---------- status pill ---------- */
-.pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'JetBrains Mono',monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid;
-}
+/* login/register */
 
-    .pill::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-    }
-
-.pill-active {
-    color: var(--yellow);
-    border-color: var(--yellow-dim);
-    background: rgba(245,197,24,0.08);
-}
-
-.pill-done {
-    color: var(--ink-muted);
-    border-color: var(--border);
-    background: transparent;
-}
-
-.pill-late {
-    color: var(--danger);
-    border-color: #6b2c1f;
-    background: rgba(224,90,61,0.08);
-}
-
-.pill-ok {
-    color: var(--success);
-    border-color: #4a5c2c;
-    background: rgba(139,171,82,0.08);
-}
-
-/* =========================================================
-     LOGIN / REGISTER
-========================================================== */
 .auth-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -331,4 +284,13 @@ h1, h2, h3, .display {
     width: 100%;
     margin-top: 12px;
     padding: 15px;
+}
+
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 12px;
+    font-family: 'JetBrains Mono';
 }

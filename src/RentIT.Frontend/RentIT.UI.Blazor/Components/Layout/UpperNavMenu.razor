@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<div class="tabbar" id="tabbar">
+    <NavLink class="" href="/">
+        <button class="">Strona Główna</button>
+    </NavLink>
+    <AuthorizeView>
+        <NotAuthorized>
+            <NavLink class="" href="login">
+                <button class="active">Zaloguj się</button>
+            </NavLink>
+        </NotAuthorized>
+    </AuthorizeView>
+    <NavLink class="" href="equipment-catalog">
+        <button class="">Katalog sprzętu</button>
+    </NavLink>
+    <AuthorizeView>
+        <Authorized>
+            <NavLink class="" href="logout">
+                <button class="active">Wyloguj się</button>
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+</div>
+<div class="hazard"></div>
+
+@code {
+
+}
