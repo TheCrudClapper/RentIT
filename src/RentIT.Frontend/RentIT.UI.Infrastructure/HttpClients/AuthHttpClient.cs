@@ -61,10 +61,6 @@ public class AuthHttpClient : HttpClientBase, IAuthHttpClient
             }
         }
 
-        var content = await response.Content.ReadFromJsonAsync<UserAuthResponse>();
-        if (content is null)
-            return Result.Failure(Error.Create("Payload is null", "Response is null"));
-
         return Result.Success();
     }
 }
