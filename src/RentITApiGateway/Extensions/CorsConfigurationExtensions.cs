@@ -8,7 +8,7 @@ public static class CorsConfigurationExtensions
         {
             options.AddPolicy("AllowAngular", policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("https://localhost:7085;http://localhost:5059")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();

@@ -16,8 +16,7 @@ public class AuthHttpClient : HttpClientBase, IAuthHttpClient
 
     public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request)
     {
-        string payload = JsonSerializer.Serialize(request);
-        var response = await _httpClient.PostAsJsonAsync("/login", payload);
+        var response = await _httpClient.PostAsJsonAsync("auth/login", request);
 
         if (!response.IsSuccessStatusCode)
         {
