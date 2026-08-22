@@ -1,51 +1,101 @@
 ﻿@page "/login"
 @layout AuthLayout
+
 @inject IAuthenticationService authService
 @inject IAuthHttpClient authHttpClient
 @inject NavigationManager navigationManager
 
-<PageTitle>Logowanie</PageTitle>
+<PageTitle>Logowanie — Rent/IT</PageTitle>
 
-<div class="eyebrow">Logowanie</div>
-<h2>Wejdź na konto</h2>
+<div class="auth-header">
+    <span class="section-label">AUTORYZACJA</span>
 
-<EditForm Model="@Model" OnValidSubmit="HandleSubmit" FormName="loginForm">
+    <h2>Wejdź na konto</h2>
+
+    <p class="text-faint">
+        Zaloguj się, aby zarządzać swoim sprzętem.
+    </p>
+</div>
+
+<EditForm Model="@Model"
+          OnValidSubmit="HandleSubmit"
+          FormName="loginForm">
+
     <DataAnnotationsValidator />
+
+    @if (!string.IsNullOrWhiteSpace(Message))
+    {
+        <div class="alert alert-danger auth-alert">
+            <div>
+                <strong>Nie udało się zalogować</strong>
+                @Message
+            </div>
+        </div>
+    }
+
     <div class="field">
-        <label>Adres e-mail</label>
-        <InputText @bind-Value="Model.Email" placeholder="jan.kowalski@it-dzial.pl"/>
+        <label for="email">Adres e-mail</label>
+
+
+        <InputText id="email"
+                   type="text"
+                   @bind-Value="Model.Email"
+                   placeholder="jan.kowalski@it-dzial.pl" />
+
+
         <ValidationMessage For="@(() => Model.Email)" />
     </div>
+
     <div class="field">
-        <label>Hasło</label>
-        <InputText type="password" placeholder="••••••••••" @bind-Value="Model.Password" />
+        <label for="password">Hasło</label>
+
+        <InputText id="password"
+                   type="password"
+                   @bind-Value="Model.Password"
+                   placeholder="••••••••••" />
+
         <ValidationMessage For="@(() => Model.Password)" />
     </div>
+
     <div class="form-foot">
-        <label style="display:flex; align-items:center; gap:8px; text-transform:none; font-size:13px;"><input type="checkbox">Zapamiętaj mnie</label>
-        <a href="#">Nie pamiętam hasła</a>
+        <label class="checkbox">
+            <input type="checkbox" />
+            <span>Zapamiętaj mnie</span>
+        </label>
+
+        <a href="#" class="btn-link">
+            Nie pamiętam hasła
+        </a>
     </div>
-    <button type="submit" class="btn btn-primary">Zaloguj się</button>
-    <span>@Message</span>
+
+    <button type="submit" class="btn btn-primary btn-block">
+        Zaloguj się
+    </button>
+
 </EditForm>
 
+<div class="auth-register">
+    <span class="text-faint">Nie masz konta?</span>
 
-<div class="form-foot" style="justify-content:center; margin-top:20px;">
-    Nie masz konta?
-    <NavLink href="register" class="">
-        <span>Zarejestruj się</span>
+    <NavLink href="/register" class="btn-link">
+        Zarejestruj się
     </NavLink>
 </div>
 
 @code {
-
     [SupplyParameterFromForm]
-    LoginModel Model { get; set; } = new() { Email = string.Empty, Password = string.Empty};
-    string Message { get; set; } = string.Empty;
+    private LoginModel Model { get; set; } = new()
+    {
+        Email = string.Empty,
+        Password = string.Empty
+    };
+
+    private string Message { get; set; } = string.Empty;
 
     private async Task HandleSubmit()
     {
         var result = await authHttpClient.LoginAsync(Model.ToDto());
+
         if (result.IsFailure)
         {
             Message = result.Error.Description;
@@ -56,5 +106,4 @@
 
         navigationManager.NavigateTo("/");
     }
-
 }

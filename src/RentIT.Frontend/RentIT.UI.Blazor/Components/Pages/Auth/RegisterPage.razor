@@ -1,57 +1,105 @@
 ﻿@page "/register"
+@layout AuthLayout
+
 @inject IAuthService service
 @inject NavigationManager navigationManager
 @inject IAuthenticationService authService
-@layout AuthLayout
 
-<PageTitle>Rejestracja</PageTitle>
+<PageTitle>Rejestracja — Rent/IT</PageTitle>
 
-<div class="eyebrow">Rejestracja</div>
-<h2>Utwórz konto</h2>
+<div class="auth-header">
+    <span class="section-label">AUTORYZACJA</span>
 
-<EditForm Model="@Model" FormName="register" OnValidSubmit="HandleSubmit">
+    <h2>Utwórz konto</h2>
+
+    <p class="text-faint">
+        Załóż konto, aby rozpocząć korzystanie z platformy w pełni.
+    </p>
+</div>
+
+<EditForm Model="@Model"
+          FormName="register"
+          OnValidSubmit="HandleSubmit">
+
     <DataAnnotationsValidator />
+
+    @if (!string.IsNullOrWhiteSpace(Message))
+    {
+        <div class="alert alert-danger auth-alert">
+            <div>
+                <strong>Nie udało się utworzyć konta</strong>
+                @Message
+            </div>
+        </div>
+    }
+
     <div class="field">
-        <label>Imie</label>
-        <InputText @bind-Value="Model.FirstName" placeholder="Jan"/>
-        <ValidationMessage For="@(() => Model.FirstName)"/>
+        <label for="firstName">Imię</label>
+
+        <InputText id="firstName"
+                   @bind-Value="Model.FirstName"
+                   placeholder="Jan" />
+
+        <ValidationMessage For="@(() => Model.FirstName)" />
     </div>
+
     <div class="field">
-        <label>Nazwisko</label>
-        <InputText @bind-Value="Model.LastName" placeholder="Kowalski" />
+        <label for="lastName">Nazwisko</label>
+
+        <InputText id="lastName"
+                   @bind-Value="Model.LastName"
+                   placeholder="Kowalski" />
+
         <ValidationMessage For="@(() => Model.LastName)" />
     </div>
+
     <div class="field">
-        <label>Adres e-mail</label>
-        <InputText @bind-Value="Model.Email" placeholder="jan.kowalski@it-dzial.pl" />
+        <label for="email">Adres e-mail</label>
+
+        <InputText id="email"
+                   @bind-Value="Model.Email"
+                   placeholder="jan.kowalski@it-dzial.pl" />
+
         <ValidationMessage For="@(() => Model.Email)" />
     </div>
+
     <div class="field">
-        <label>Hasło</label>
-        <InputText type="password" @bind-Value="Model.Password" placeholder="••••••••••" />
+        <label for="password">Hasło</label>
+
+        <InputText id="password"
+                   type="password"
+                   @bind-Value="Model.Password"
+                   placeholder="••••••••••" />
+
         <ValidationMessage For="@(() => Model.Password)" />
     </div>
-    <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+
+    <button type="submit" class="btn btn-primary btn-block">
+        Zarejestruj się
+    </button>
+
 </EditForm>
 
+<div class="auth-register">
+    <span class="text-faint">Masz już konto?</span>
 
-<div class="form-foot" style="justify-content:center; margin-top:20px;">
-    Masz już konto?
-    <NavLink href="login" class="">
-        <span>Zaloguj się</span>
+    <NavLink href="/login" class="btn-link">
+        Zaloguj się
     </NavLink>
 </div>
 
 @code {
-
     [SupplyParameterFromForm]
-    RegisterModel Model { get; set; } = new();
+    private RegisterModel Model { get; set; } = new();
 
-    string Message { get; set; }
+    private string Message { get; set; } = string.Empty;
 
     private async Task HandleSubmit()
     {
+        Message = string.Empty;
+
         var result = await service.RegisterAsync(Model.ToDto());
+
         if (result.IsFailure)
         {
             Message = result.Error.Description;
