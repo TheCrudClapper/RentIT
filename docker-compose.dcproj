@@ -15,5 +15,6 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="src\RentIT.Frontend\RentIT.UI.Blazor\Components\Layout\UpperNavMenu.razor.js" />
   </ItemGroup>
 </Project>

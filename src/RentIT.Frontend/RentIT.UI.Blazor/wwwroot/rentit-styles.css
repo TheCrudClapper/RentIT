@@ -54,10 +54,11 @@
     background: #0f0e0c;
     padding: 10px 16px 0 16px;
     overflow-x: auto;
+    align-items: center;
     border-bottom: 1px solid var(--border);
 }
 
-    .tabbar button {
+    .tabbar a {
         font-family: 'JetBrains Mono',monospace;
         font-size: 11px;
         letter-spacing: 0.06em;
@@ -68,11 +69,13 @@
         border-bottom: none;
         padding: 10px 16px;
         cursor: pointer;
+        
         white-space: nowrap;
         border-radius: 2px 2px 0 0;
+        text-decoration: none;
     }
 
-        .tabbar button.active {
+        .tabbar a.active {
             background: var(--bg);
             color: var(--yellow);
             border-color: var(--border);
@@ -254,6 +257,7 @@ a {
 }
 
     .btn-link:hover {
+        color: white;
     }
 
 /* btn for diff sizes */
@@ -783,7 +787,7 @@ table.data-table {
 }
 
     .nav-links a {
-        color: var(--ink-muted);
+        color: var(--ink-muted) !important;
         text-decoration: none;
         font-size: 13px;
         font-weight: 600;
@@ -791,8 +795,8 @@ table.data-table {
         text-transform: uppercase;
     }
 
-        .nav-links a.current {
-            color: var(--yellow);
+        .nav-links a.active {
+            color: var(--yellow) !important;
         }
 
 
