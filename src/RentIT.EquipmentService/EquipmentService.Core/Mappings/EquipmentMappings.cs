@@ -65,5 +65,8 @@ public static class EquipmentMappings
             Status = equipment.Status.ToString(),
         };
     }
+
+    public static UserEquipmentListResponse ToUserEquipmentListResponse(this Equipment equipment)
+        => new UserEquipmentListResponse(equipment.Id, equipment.Name, equipment.SerialNumber, equipment.RentalPricePerDay);
 }
 

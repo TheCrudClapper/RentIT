@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.BlazorFrontend.Models.Auth;
+
 public class LoginModel
 {
     [Required(ErrorMessage = "Email jest wymagany.")]

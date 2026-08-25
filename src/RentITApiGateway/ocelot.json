@@ -1,8 +1,8 @@
 {
   "Routes": [
     {
-      "UpstreamPathTemplate": "/gateway/Auth/{everyting}",
-      "DownstreamPathTemplate": "/api/Auth/{everyting}",
+      "UpstreamPathTemplate": "/gateway/auth/{everyting}",
+      "DownstreamPathTemplate": "/api/auth/{everyting}",
       "DownstreamHostAndPorts": [
         {
           "Host": "userservice.api",
@@ -13,8 +13,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Users",
-      "DownstreamPathTemplate": "/api/Users",
+      "UpstreamPathTemplate": "/gateway/users",
+      "DownstreamPathTemplate": "/api/users",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -32,8 +32,8 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/Users/query",
-      "DownstreamPathTemplate": "/api/Users/query",
+      "UpstreamPathTemplate": "/gateway/users/query",
+      "DownstreamPathTemplate": "/api/users/query",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -51,9 +51,9 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/Users/{everything}",
-      "DownstreamPathTemplate": "/api/Users/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
+      "UpstreamPathTemplate": "/gateway/users/{everything}",
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
@@ -69,9 +69,10 @@
         }
       ]
     },
+    //Categories
     {
-      "UpstreamPathTemplate": "/gateway/Categories",
-      "DownstreamPathTemplate": "/api/Categories",
+      "UpstreamPathTemplate": "/gateway/categories",
+      "DownstreamPathTemplate": "/api/categories",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -94,8 +95,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Categories",
-      "DownstreamPathTemplate": "/api/Categories",
+      "UpstreamPathTemplate": "/gateway/categories",
+      "DownstreamPathTemplate": "/api/categories",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -111,8 +112,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Categories/{equipmentId}",
-      "DownstreamPathTemplate": "/api/Categories/{equipmentId}",
+      "UpstreamPathTemplate": "/gateway/categories/{equipmentId}",
+      "DownstreamPathTemplate": "/api/categories/{equipmentId}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -133,8 +134,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Categories/{equipmentId}",
-      "DownstreamPathTemplate": "/api/Categories/{equipmentId}",
+      "UpstreamPathTemplate": "/gateway/categories/{equipmentId}",
+      "DownstreamPathTemplate": "/api/categories/{equipmentId}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -147,9 +148,10 @@
         "TtlSeconds": 30
       }
     },
+    //Equipments
     {
-      "UpstreamPathTemplate": "/gateway/Equipments",
-      "DownstreamPathTemplate": "/api/Equipments",
+      "UpstreamPathTemplate": "/gateway/equipments",
+      "DownstreamPathTemplate": "/api/equipments",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -167,8 +169,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Equipments",
-      "DownstreamPathTemplate": "/api/Equipments",
+      "UpstreamPathTemplate": "/gateway/equipments",
+      "DownstreamPathTemplate": "/api/equipments",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -182,8 +184,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Equipments/query",
-      "DownstreamPathTemplate": "/api/Equipments/query",
+      "UpstreamPathTemplate": "/gateway/equipments/query",
+      "DownstreamPathTemplate": "/api/equipments/query",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -194,8 +196,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Equipments/{everything}",
-      "DownstreamPathTemplate": "/api/Equipments/{everything}",
+      "UpstreamPathTemplate": "/gateway/equipments/{everything}",
+      "DownstreamPathTemplate": "/api/equipments/{everything}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -213,8 +215,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Equipments/{everything}",
-      "DownstreamPathTemplate": "/api/Equipments/{everything}",
+      "UpstreamPathTemplate": "/gateway/equipments/{everything}",
+      "DownstreamPathTemplate": "/api/equipments/{everything}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -227,9 +229,11 @@
         "TtlSeconds": 30
       }
     },
+    //User's Equipments
+    //POST
     {
-      "UpstreamPathTemplate": "/gateway/UserEquipment",
-      "DownstreamPathTemplate": "/api/UserEquipment",
+      "UpstreamPathTemplate": "/gateway/user/equipments",
+      "DownstreamPathTemplate": "/api/user/equipments",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -237,23 +241,19 @@
         }
       ],
       "UpstreamHttpMethod": [ "Post", "Options" ],
-      "UpstreamScheme": "http",
+      "DownstreamScheme": "http",
       "AuthenticationOptions": {
-        "AllowedScopes": [],
-        "AuthenticationProviderKey": "Bearer"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       },
       "AddHeadersToRequest": {
         "Authorization": "Bearer {Token}"
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 3,
-        "DurationOfBreak": 30,
-        "TimeoutValue": 10000
       }
     },
+    //GET Many
     {
-      "UpstreamPathTemplate": "/gateway/UserEquipment",
-      "DownstreamPathTemplate": "/api/UserEquipment",
+      "UpstreamPathTemplate": "/gateway/user/equipments",
+      "DownstreamPathTemplate": "/api/user/equipments",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -261,16 +261,19 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamScheme": "http",
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 3,
-        "DurationOfBreak": 30,
-        "TimeoutValue": 10000
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
       }
     },
+    //GET One
     {
-      "UpstreamPathTemplate": "/gateway/UserEquipment/{everything}",
-      "DownstreamPathTemplate": "/api/UserEquipment/{everything}",
+      "UpstreamPathTemplate": "/gateway/user/equipments/{equipmentId}",
+      "DownstreamPathTemplate": "/api/user/equipments/{equipmentId}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
@@ -278,33 +281,39 @@
         }
       ],
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamScheme": "http",
-      "FileCacheOptions": {
-        "TtlSeconds": 30
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
       }
     },
+    //PUT, DELETE
     {
-      "UpstreamPathTemplate": "/gateway/UserEquipment/{everything}",
-      "DownstreamPathTemplate": "/api/UserEquipment/{everything}",
+      "UpstreamPathTemplate": "/gateway/user/equipments/{equipmentId}",
+      "DownstreamPathTemplate": "/api/user/equipments/{equipmentId}",
       "DownstreamHostAndPorts": [
         {
           "Host": "equipmentservice.api",
           "Port": 8080
         }
       ],
-      "UpstreamHttpMethod": [ "Put", "Post", "Delete", "Options" ],
-      "UpstreamScheme": "http",
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "DownstreamScheme": "http",
       "AuthenticationOptions": {
-        "AllowedScopes": [],
-        "AuthenticationProviderKey": "Bearer"
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       },
       "AddHeadersToRequest": {
         "Authorization": "Bearer {Token}"
       }
     },
+    //Rentals
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/",
-      "DownstreamPathTemplate": "/api/Rentals/",
+      "UpstreamPathTemplate": "/gateway/rentals/",
+      "DownstreamPathTemplate": "/api/rentals/",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -322,8 +331,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/",
-      "DownstreamPathTemplate": "/api/Rentals/",
+      "UpstreamPathTemplate": "/gateway/rentals/",
+      "DownstreamPathTemplate": "/api/rentals/",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -344,8 +353,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/{id}",
-      "DownstreamPathTemplate": "/api/Rentals/{id}",
+      "UpstreamPathTemplate": "/gateway/rentals/{id}",
+      "DownstreamPathTemplate": "/api/rentals/{id}",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -363,8 +372,8 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/{id}",
-      "DownstreamPathTemplate": "/api/Rentals/{id}",
+      "UpstreamPathTemplate": "/gateway/rentals/{id}",
+      "DownstreamPathTemplate": "/api/rentals/{id}",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -375,8 +384,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/Rentals/{rentalId}/return",
-      "DownstreamPathTemplate": "/api/Rentals/{rentalId}/return",
+      "UpstreamPathTemplate": "/gateway/rentals/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/rentals/{rentalId}/return",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -393,9 +402,10 @@
         "Authorization": "Bearer {Token}"
       }
     },
+    //UserRentals
     {
-      "UpstreamPathTemplate": "/gateway/UserRental",
-      "DownstreamPathTemplate": "/api/UserRental",
+      "UpstreamPathTemplate": "/gateway/user/rentals",
+      "DownstreamPathTemplate": "/api/user/rentals",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -413,8 +423,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/UserRental/{id}",
-      "DownstreamPathTemplate": "/api/UserRental/{id}",
+      "UpstreamPathTemplate": "/gateway/user/rentals/{id}",
+      "DownstreamPathTemplate": "/api/user/rentals/{id}",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -432,8 +442,8 @@
       "UpstreamScheme": "http"
     },
     {
-      "UpstreamPathTemplate": "/gateway/UserRental/{rentalId}/return",
-      "DownstreamPathTemplate": "/api/UserRental/{rentalId}/return",
+      "UpstreamPathTemplate": "/gateway/user/rentals/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/user/rentals/{rentalId}/return",
       "DownstreamHostAndPorts": [
         {
           "Host": "rentalmicroservice.api",
@@ -450,9 +460,10 @@
       "UpstreamHttpMethod": [ "Post", "Options" ],
       "UpstreamScheme": "http"
     },
+    //Reviews
     {
-      "UpstreamPathTemplate": "/gateway/Reviews/{everything}",
-      "DownstreamPathTemplate": "/api/Reviews/{everything}",
+      "UpstreamPathTemplate": "/gateway/reviews/{everything}",
+      "DownstreamPathTemplate": "/api/reviews/{everything}",
       "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -470,8 +481,8 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/Reviews",
-      "DownstreamPathTemplate": "/api/Reviews",
+      "UpstreamPathTemplate": "/gateway/reviews",
+      "DownstreamPathTemplate": "/api/reviews",
       "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -488,9 +499,10 @@
         }
       ]
     },
+    //User Reviews
     {
-      "UpstreamPathTemplate": "/gateway/UserReviews",
-      "DownstreamPathTemplate": "/api/UserReviews",
+      "UpstreamPathTemplate": "/gateway/user/reviews",
+      "DownstreamPathTemplate": "/api/user/reviews",
       "UpstreamHttpMethod": [ "Post", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -508,8 +520,28 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/UserReviews/{everything}",
-      "DownstreamPathTemplate": "/api/UserReviews/{everything}",
+      "UpstreamPathTemplate": "/gateway/user/reviews/{everything}",
+      "DownstreamPathTemplate": "/api/user/reviews/{everything}",
+      "UpstreamHttpMethod": [ "Delete", "Get", "Put", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    //ReviewALlowance
+    {
+      "UpstreamPathTemplate": "/gateway/review-allowance/{everything}",
+      "DownstreamPathTemplate": "/api/review-allowance/{everything}",
       "UpstreamHttpMethod": [ "Delete", "Get", "Put", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {
@@ -527,27 +559,8 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/ReviewAllowance/{everything}",
-      "DownstreamPathTemplate": "/api/ReviewAllowance/{everything}",
-      "UpstreamHttpMethod": [ "Delete", "Get", "Put", "Options" ],
-      "DownstreamScheme": "http",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "AddHeadersToRequest": {
-        "Authorization": "Bearer {Token}"
-      },
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "reviewmicroservice.api",
-          "Port": 8080
-        }
-      ]
-    },
-    {
-      "UpstreamPathTemplate": "/gateway/ReviewAllowance",
-      "DownstreamPathTemplate": "/api/ReviewAllowance",
+      "UpstreamPathTemplate": "/gateway/review-allowance",
+      "DownstreamPathTemplate": "/api/review-allowance",
       "UpstreamHttpMethod": [ "Post", "Options" ],
       "DownstreamScheme": "http",
       "AuthenticationOptions": {

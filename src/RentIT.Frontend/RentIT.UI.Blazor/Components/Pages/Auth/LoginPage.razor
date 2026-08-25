@@ -1,8 +1,7 @@
 ﻿@page "/login"
 @layout AuthLayout
-
-@inject IAuthenticationService authService
-@inject IAuthHttpClient authHttpClient
+@inject ISessionAuthenticationService sessionAuthService
+@inject IAuthService authService
 @inject NavigationManager navigationManager
 
 <PageTitle>Logowanie — Rent/IT</PageTitle>
@@ -94,7 +93,7 @@
 
     private async Task HandleSubmit()
     {
-        var result = await authHttpClient.LoginAsync(Model.ToDto());
+        var result = await authService.LoginAsync(Model.ToDto());
 
         if (result.IsFailure)
         {
@@ -102,8 +101,8 @@
             return;
         }
 
-        await authService.SignInAsync(result.Value);
+        await sessionAuthService.SignInAsync(result.Value);
 
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/start");
     }
 }

@@ -2,6 +2,7 @@
 using RentIT.UI.Core.DTO.Auth;
 
 namespace RentIT.BlazorFrontend.Mappings;
+
 public static class AuthMappings
 {
     public static LoginRequest ToDto(this LoginModel model)

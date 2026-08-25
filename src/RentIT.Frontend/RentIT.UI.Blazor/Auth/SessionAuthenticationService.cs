@@ -6,10 +6,10 @@ using System.Security.Claims;
 
 namespace RentIT.BlazorFrontend.Auth;
 
-public class AuthenticationService : IAuthenticationService
+public class SessionAuthenticationService : ISessionAuthenticationService
 {
     private readonly IHttpContextAccessor _httpContext;
-    public AuthenticationService(IHttpContextAccessor httpContext)
+    public SessionAuthenticationService(IHttpContextAccessor httpContext)
     {
         _httpContext = httpContext;
     }

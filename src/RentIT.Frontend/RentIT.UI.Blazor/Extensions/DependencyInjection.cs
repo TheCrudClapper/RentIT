@@ -6,7 +6,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddUILayer(this IServiceCollection services)
     {
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<ISessionAuthenticationService, SessionAuthenticationService>();
         return services;
     }
 }

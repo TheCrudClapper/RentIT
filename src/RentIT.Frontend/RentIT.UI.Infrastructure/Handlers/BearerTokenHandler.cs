@@ -1,6 +1,8 @@
-﻿using RentIT.UI.Core.InfrastructureContracts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using RentIT.UI.Core.InfrastructureContracts;
 
-namespace RentIT.BlazorFrontend.Handlers;
+namespace RentIT.UI.Infrastructure.Handlers;
 
 public class BearerTokenHandler : DelegatingHandler
 {

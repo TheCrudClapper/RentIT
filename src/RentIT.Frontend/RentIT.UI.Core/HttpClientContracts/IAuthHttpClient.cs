@@ -6,5 +6,5 @@ namespace RentIT.UI.Core.HttpClientContracts;
 public interface IAuthHttpClient
 {
     Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request);
-    Task<Result>Register(RegisterRequest request);
+    Task<Result> Register(RegisterRequest request);
 }

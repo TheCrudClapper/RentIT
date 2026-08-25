@@ -5,6 +5,6 @@ namespace RentIT.UI.Core.ServiceContracts;
 
 public interface IAuthService
 {
-    Task<Result> LoginAsync(LoginRequest request);
+    Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request);
     Task<Result> RegisterAsync(RegisterRequest request);
 }

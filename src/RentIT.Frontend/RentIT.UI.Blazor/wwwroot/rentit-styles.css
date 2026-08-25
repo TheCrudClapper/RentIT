@@ -131,6 +131,13 @@ a {
     font-family: var(--font-mono);
 }
 
+.page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+}
+
 /* section label  */
 .section-label {
     display: block;
@@ -213,6 +220,7 @@ a {
 
     .btn-primary:hover:not(:disabled) {
         background: var(--yellow-soft);
+        border-color: white;
     }
 
 .btn-ghost {

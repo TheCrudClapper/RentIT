@@ -4,6 +4,7 @@ using RentIT.BlazorFrontend.Extensions;
 using RentIT.BlazorFrontend.Handlers;
 using RentIT.UI.Core.Extensions;
 using RentIT.UI.Infrastructure.Extensions;
+using RentIT.UI.Infrastructure.Handlers;
 
 namespace RentIT.BlazorFrontend
 {
@@ -31,7 +32,6 @@ namespace RentIT.BlazorFrontend
             builder.Services.AddAuthorization();
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddBearerTokenHandler();
 
             builder.Services
                 .AddUILayer()

@@ -2,7 +2,7 @@
 
 namespace RentIT.BlazorFrontend.Auth;
 
-public interface IAuthenticationService
+public interface ISessionAuthenticationService
 {
     Task SignInAsync(UserAuthResponse tokenResponse);
     Task SignOutAsync();

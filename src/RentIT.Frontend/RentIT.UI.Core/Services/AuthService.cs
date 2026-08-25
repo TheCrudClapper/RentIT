@@ -16,17 +16,17 @@ public class AuthService : IAuthService
         _tokenStore = tokenStore;
     }
 
-    public async Task<Result> LoginAsync(LoginRequest request)
+    public async Task<Result<UserAuthResponse>> LoginAsync(LoginRequest request)
     {
         Result<UserAuthResponse> result = await _httpClient.LoginAsync(request);
 
         if (result.IsFailure)
-            return Result.Failure(result.Error);
+            return Result.Failure<UserAuthResponse>(result.Error);
 
         _tokenStore.SaveAccessToken(result.Value.Token);
-        return Result.Success();
+        return Result.Success(result.Value);
     }
 
-    public async Task<Result> RegisterAsync(RegisterRequest request) 
+    public async Task<Result> RegisterAsync(RegisterRequest request)
         => await _httpClient.Register(request);
 }

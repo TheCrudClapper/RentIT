@@ -56,7 +56,7 @@ public class UserService : IUserService
             return userResult.ToResult<CreatedResponse>();
 
         IdentityResult roleResult = await _userManager.AddToRoleAsync(user, requestRole);
-        if(!roleResult.Succeeded)
+        if (!roleResult.Succeeded)
             return roleResult.ToResult<CreatedResponse>();
 
         return user.ToCreatedResponse();

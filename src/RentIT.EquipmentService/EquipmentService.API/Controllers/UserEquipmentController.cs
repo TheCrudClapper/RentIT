@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentService.API.Controllers;
 
-[Route("api/users/equipments")]
+[Route("api/user/equipments")]
 [Authorize]
 [ApiController]
 public class UserEquipmentController : BaseApiController
@@ -15,7 +15,7 @@ public class UserEquipmentController : BaseApiController
         => _userEquipmentService = userEquipmentService;
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<EquipmentResponse>>> GetAllUserEquipments(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<UserEquipmentListResponse>>> GetAllUserEquipments(CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken));
 
     [HttpGet("{equipmentId}")]

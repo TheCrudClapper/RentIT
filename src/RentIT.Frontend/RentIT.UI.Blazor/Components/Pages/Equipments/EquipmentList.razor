@@ -1,6 +1,56 @@
 ﻿@layout EquipmentLayout
 @page "/equipments"
+@inject IUserEquipmentHttpClient httpClient
+@using RentIT.UI.Core.DTO.Equipments
+
+<PageTitle>Moje sprzęty</PageTitle>
+<div class="container">
+    <div class="page-head">
+        <div>
+            <div class="prompt">items --owner=me</div>
+            <h1>Moje przedmioty</h1>
+        </div>
+        <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
+    </div>
+
+    <div class="list-container">
+        <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
+            <span>Nazwa</span>
+            <span>Numer seryjny</span>
+            <span>Kwota najmu/dzień</span>
+            <span>Akcje</span>
+        </div>
+        @if (Equipments is null)
+        {
+            
+        }
+        else
+        {
+            @foreach (var eq in Equipments)
+            {
+                <div class="list-row" style="grid-template-columns:1fr 1fr 1fr 100px;">
+                    <span>@eq.Name</span>
+                    <span>@eq.SerialNumber</span>
+                    <span>@eq.RentalPricePerDay</span>
+                </div>
+            }
+        }
+    </div>
+</div>
 
 @code {
+    List<UserEquipmentListResponse> Equipments = [];
 
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await httpClient.GetUserEquipmentsList();
+        if (result.IsFailure)
+        {
+
+        }
+        else
+        {
+            Equipments = result.Value.ToList();
+        }
+    }
 }
