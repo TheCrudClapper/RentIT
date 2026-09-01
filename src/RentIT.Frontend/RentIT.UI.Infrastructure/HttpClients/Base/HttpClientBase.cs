@@ -13,4 +13,5 @@ public abstract class HttpClientBase
         _httpClient.BaseAddress = new Uri(_config.GetValue<string>("DefaultApiUrl")
             ?? throw new ArgumentNullException("Default api url is not defined"));
     }
+    
 }

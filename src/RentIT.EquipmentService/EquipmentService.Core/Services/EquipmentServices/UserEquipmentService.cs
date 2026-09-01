@@ -4,6 +4,7 @@ using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.RabbitMQ.Messages;
 using EquipmentService.Core.RabbitMQ.Publishers;
@@ -36,19 +37,19 @@ public class UserEquipmentService : IUserEquipmentService
         _configuration = configuration;
     }
 
-    public async Task<Result<EquipmentResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request, CancellationToken cancellationToken)
     {
         var response = await _usersClient.GetUserByUserId(userId, cancellationToken);
 
         if (response.IsFailure)
-            return Result.Failure<EquipmentResponse>(response.Error);
+            return Result.Failure<CreatedResponse>(response.Error);
 
         Equipment equipment = request.ToEquipment();
 
         var validationResult = await _userEquipmentValidator.ValidateEntity(equipment, null, cancellationToken);
 
         if (validationResult.IsFailure)
-            return Result.Failure<EquipmentResponse>(validationResult.Error);
+            return Result.Failure<CreatedResponse>(validationResult.Error);
 
         var createdEntity = await _userEquipmentRepository.AddUserEquipment(equipment, userId, cancellationToken);
 
@@ -58,10 +59,10 @@ public class UserEquipmentService : IUserEquipmentService
             createdEntity.ToEquipmentResponse(),
             _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
-        return createdEntity.ToEquipmentResponse();
+        return createdEntity.ToCreatedResponse();
     }
 
-    public async Task<Result> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
     {
         var equipmentToUpdate = request.ToEquipment();
         equipmentToUpdate.CreatedByUserId = userId;
@@ -69,18 +70,18 @@ public class UserEquipmentService : IUserEquipmentService
         var validationResult = await _userEquipmentValidator.ValidateEntity(equipmentToUpdate, equipmentId, cancellationToken);
 
         if (validationResult.IsFailure)
-            return Result.Failure(validationResult.Error);
+            return Result.Failure<UpdatedResponse>(validationResult.Error);
 
         var updatedEntity = await _userEquipmentRepository.UpdateUserEquipmentAsync(equipmentId, equipmentToUpdate, cancellationToken);
         if (updatedEntity == null)
-            return Result.Failure(EquipmentErrors.EquipmentNotFound);
+            return Result.Failure<UpdatedResponse>(EquipmentErrors.EquipmentNotFound);
 
         _rabbitMqPublisher.Publish(
            "equipment.update",
            updatedEntity.ToEquipmentResponse(),
            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
-        return Result.Success();
+        return equipmentToUpdate.ToUpdatedResponse();
     }
 
     public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken cancellationToken)

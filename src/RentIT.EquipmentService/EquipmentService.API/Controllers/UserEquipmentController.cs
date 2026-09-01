@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ public class UserEquipmentController : BaseApiController
         => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken));
 
     [HttpPut("{equipmentId}")]
-    public async Task<IActionResult> PutUserEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<UpdatedResponse>> PutUserEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request, cancellationToken));
 
     [HttpDelete("{equipmentId}")]

@@ -1,5 +1,7 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.Domain.Interfaces;
 using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Shared;
 
 namespace EquipmentService.Core.Mappings;
 
@@ -64,6 +66,16 @@ public static class EquipmentMappings
             SerialNumber = equipment.SerialNumber,
             Status = equipment.Status.ToString(),
         };
+    }
+
+    public static UpdatedResponse ToUpdatedResponse<T>(this T entity) where T : IBaseEntity
+    {
+        return new UpdatedResponse(entity.Id, entity.DateEdited.GetValueOrDefault());
+    }
+
+    public static CreatedResponse ToCreatedResponse<T>(this T entity) where T : IBaseEntity
+    {
+        return new CreatedResponse(entity.Id, entity.DateCreated);
     }
 
     public static UserEquipmentListResponse ToUserEquipmentListResponse(this Equipment equipment)

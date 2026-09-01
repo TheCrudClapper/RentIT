@@ -1,5 +1,20 @@
-﻿@page "/equipments/{id:guid}/edit"
-<h1>EquipmentEdit</h1>
+﻿@page "/equipments/{EquipmentId:guid}/edit"
+@rendermode InteractiveServer
+
+<div class="content">
+    @if(Equipment is null)
+    {
+        <span>Loading...</span>
+    }
+    else
+    {
+
+        <span>@Equipment.Id</span>
+        <span>@Equipment.CategoryName</span>
+        <span>@Equipment.Notes</span>
+        <span>@Equipment.Status</span>
+    }
+</div>
 
 @code {
 
