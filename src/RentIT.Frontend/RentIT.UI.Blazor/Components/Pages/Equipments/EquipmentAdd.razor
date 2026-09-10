@@ -12,7 +12,6 @@
     </div>
     <EditForm OnValidSubmit="HandleAdd" FormName="EquipmentAddForm" Model="@Model">
         <DataAnnotationsValidator />
-        <ValidationSummary/>
         <div class="field">
             <label for="name">Name</label>
 
@@ -23,6 +22,32 @@
 
             <ValidationMessage For="@(() => Model.Name)" />
         </div>
+
+        <div class="field">
+            <label for="category">Category</label>
+            <select id="category" @bind="Model.CategoryId">
+                @if(Categories.Count != 0)
+                {
+                    foreach(var cat in Categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => Model.CategoryId)" />
+        </div>
+
+        <div class="field">
+            <label for="status">Status</label>
+            <select id="status" @bind="Model.Status">
+                @foreach(var status in Statuses)
+                {
+                    <option value="@status.Item1">@status.Item2</option>
+                }
+            </select>
+            <ValidationMessage For="@(() => Model.Status)" />
+        </div>
+
         <div class="field">
             <label for="serial">Serial Number</label>
 
@@ -51,7 +76,7 @@
                            placeholder="Your notes here" />
             <ValidationMessage For="@(() => Model.Notes)" />
         </div>
-        
+
         <button type="submit" class="btn btn-primary">
             Dodaj
         </button>

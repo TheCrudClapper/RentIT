@@ -3,6 +3,7 @@ using EquipmentService.Core.Domain.Entities.Categories.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.CategoryDto;
+using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 
@@ -53,12 +54,12 @@ public class CategoryService : ICategoryService
         return Result.Success();
     }
 
-    public async Task<Result<IReadOnlyCollection<CategoryResponse>>> GetAllCategories(CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken cancellationToken)
     {
         IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync(cancellationToken);
 
         return categories
-            .Select(item => item.ToCategoryResponse())
+            .Select(item => new SelectItem { Id = item.Id, Name = item.Name})
             .ToList();
     }
 

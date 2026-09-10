@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.BlazorFrontend.Models.Equipments;
 
-public class EquipmentAddModel
+public class EquipmentModel
 {
     [Required]
     public string Name { get; set; } = null!;

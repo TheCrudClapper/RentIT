@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.DTO.CategoryDto;
+using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts.CategoryContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ public class CategoriesController : BaseApiController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IReadOnlyCollection<CategoryResponse>>> GetAllCategories(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken cancellationToken)
         => HandleResult(await _categoryService.GetAllCategories(cancellationToken));
 
     [HttpPut("{categoryId}")]
