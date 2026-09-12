@@ -1,5 +1,6 @@
 ﻿@layout EquipmentLayout
 @page "/equipments/create"
+@using Microsoft.AspNetCore.Components.Forms
 @rendermode InteractiveServer
 <PageTitle>Dodaj sprzęt</PageTitle>
 
@@ -10,6 +11,7 @@
             <h1>Dodaj Sprzęt</h1>
         </div>
     </div>
+
     <EditForm OnValidSubmit="HandleAdd" FormName="EquipmentAddForm" Model="@Model">
         <DataAnnotationsValidator />
         <div class="field">
@@ -26,9 +28,9 @@
         <div class="field">
             <label for="category">Category</label>
             <select id="category" @bind="Model.CategoryId">
-                @if(Categories.Count != 0)
+                @if (Categories.Count != 0)
                 {
-                    foreach(var cat in Categories)
+                    foreach (var cat in Categories)
                     {
                         <option value="@cat.Id">@cat.Name</option>
                     }
@@ -40,7 +42,7 @@
         <div class="field">
             <label for="status">Status</label>
             <select id="status" @bind="Model.Status">
-                @foreach(var status in Statuses)
+                @foreach (var status in Statuses)
                 {
                     <option value="@status.Item1">@status.Item2</option>
                 }
@@ -83,3 +85,7 @@
     </EditForm>
 
 </div>
+
+@code {
+
+}

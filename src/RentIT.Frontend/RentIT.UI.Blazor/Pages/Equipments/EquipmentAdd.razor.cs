@@ -3,7 +3,7 @@ using RentIT.BlazorFrontend.Models.Equipments;
 using RentIT.BlazorFrontend.Models.Shared;
 using RentIT.UI.Core.HttpClientContracts;
 
-namespace RentIT.BlazorFrontend.Components.Pages.Equipments;
+namespace RentIT.BlazorFrontend.Pages.Equipments;
 
 public partial class EquipmentAdd
 {

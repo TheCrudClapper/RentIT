@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using RentIT.UI.Core.DTO.Equipments;
 using RentIT.UI.Core.HttpClientContracts;
 
-namespace RentIT.BlazorFrontend.Components.Pages.Equipments;
+namespace RentIT.BlazorFrontend.Pages.Equipments;
 
 public partial class EquipmentList
 {
