@@ -1,0 +1,52 @@
+﻿using EquipmentService.Core.Caching;
+using EquipmentService.Core.RabbitMQ.Consumers;
+using EquipmentService.Core.RabbitMQ.HostedServices;
+using EquipmentService.Core.RabbitMQ.Publishers;
+using EquipmentService.Core.ServiceContracts.CategoryContracts;
+using EquipmentService.Core.ServiceContracts.Equipment;
+using EquipmentService.Core.Services.CategoryServices;
+using EquipmentService.Core.Services.EquipmentServices;
+using EquipmentService.Core.Validators.Contracts;
+using EquipmentService.Core.Validators.Implementations;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace EquipmentService.Core
+{
+    /// <summary>
+    /// Class to register services related to core layer
+    /// </summary>
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddCoreLayer(this IServiceCollection services)
+        {
+            //Add Services
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserEquipmentService, UserEquipmentService>();
+            services.AddScoped<IEquipmentService, Services.EquipmentServices.EquipmentService>();
+
+            //Add Validators
+            services.AddScoped<IEquipmentValidator, EquipmentValidator>();
+            services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
+
+            //Add RabbitMQ Components
+            services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
+            services.AddTransient<RabbitMQReviewCreatedConsumer>();
+            services.AddTransient<RabbitMQReviewUpdatedConsumer>();
+            services.AddTransient<RabbitMQReviewDeletedConsumer>();
+
+            //Add Hosted Serivce
+            services.AddHostedService<RabbitMQConsumersHostedService>();
+
+            //Add Redis Cache
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
+            });
+
+            //Add CachingHelper
+            services.AddScoped<ICachingHelper, CachingHelper>();
+
+            return services;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+﻿using ReviewService.Core.Domain.ResultTypes;
+using ReviewService.Core.DTO.Reviews;
+
+namespace ReviewServices.Core.ServiceContracts;
+
+/// <summary>
+/// Defines operations for adding, updating, retrieving, and deleting user reviews.
+/// </summary>
+/// <remarks>Implementations of this interface should ensure appropriate validation and authorization for review
+/// operations. Methods are asynchronous and support cancellation via the provided token.</remarks>
+public interface IUserReviewService
+{
+    Task<Result<UserReviewResponse>> AddUserReview(Guid userId, ReviewAddRequest request, CancellationToken cancellationToken = default);
+    Task<Result<UserReviewResponse>> UpdateUserReview(Guid userId, Guid reviewId, ReviewUpdateRequest request, CancellationToken cancellationToken = default);
+    Task<Result<UserReviewResponse>> GetUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default);
+    Task<Result> DeleteUserReview(Guid userId, Guid reviewId, CancellationToken cancellationToken = default);
+}

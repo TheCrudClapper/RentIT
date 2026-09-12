@@ -1,0 +1,57 @@
+﻿using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
+using ReviewService.Core.Domain.RepositoryContracts;
+using ReviewService.Core.Domain.ResultTypes;
+using ReviewService.Core.DTO.ReviewAllowances;
+using ReviewService.Core.Mappings;
+using ReviewService.Core.ServiceContracts;
+
+namespace ReviewService.Core.Services;
+
+public class ReviewAllowanceService : IReviewAllowanceService
+{
+    private readonly IReviewAllowanceRepository _reviewAllowanceRepository;
+    public ReviewAllowanceService(IReviewAllowanceRepository reviewAllowanceRepository)
+    {
+        _reviewAllowanceRepository = reviewAllowanceRepository;
+    }
+
+    public async Task AddReviewAllowance(ReviewAllowanceAddRequest request, CancellationToken cancellationToken)
+    {
+        var allowanceToAdd = request.ToReviewAllowance();
+
+        //if allowace already exists, exit early
+        if (!await _reviewAllowanceRepository.IsAllowanceUnique(allowanceToAdd))
+            return;
+
+        await _reviewAllowanceRepository.AddAllowanceAsync(allowanceToAdd, cancellationToken);
+    }
+
+    public async Task<Result<ReviewAllowanceResponse>> GetReviewAllowance(Guid id, CancellationToken cancellationToken)
+    {
+        var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
+
+        return allowance is null
+            ? Result.Failure<ReviewAllowanceResponse>(ReviewAllowanceErrors.NotFound)
+            : allowance.ToReviewAllowanceResponse();
+    }
+
+    public async Task<Result> DeleteAllowance(Guid id, CancellationToken cancellationToken)
+    {
+        var allowance = await _reviewAllowanceRepository.GetAllowanceById(id, cancellationToken);
+
+        if (allowance is null)
+            return Result.Failure(ReviewAllowanceErrors.NotFound);
+
+        await _reviewAllowanceRepository.DeleteAllowanceAsync(allowance, cancellationToken);
+
+        return Result.Success();
+    }
+
+    public async Task<Result<IReadOnlyCollection<ReviewAllowanceResponse>>> GetAllReviewAllowances(CancellationToken cancellationToken = default)
+    {
+        var result = await _reviewAllowanceRepository.GetAllReviewAllowances(cancellationToken);
+
+        return Result.Success((IReadOnlyCollection<ReviewAllowanceResponse>)result.Select(item => item.ToReviewAllowanceResponse()).ToList());
+    }
+
+}

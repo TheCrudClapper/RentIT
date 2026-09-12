@@ -1,0 +1,108 @@
+﻿@page "/login"
+@layout AuthLayout
+@inject ISessionAuthenticationService sessionAuthService
+@inject IAuthService authService
+@inject NavigationManager navigationManager
+
+<PageTitle>Logowanie — Rent/IT</PageTitle>
+
+<div class="auth-header">
+    <span class="section-label">AUTORYZACJA</span>
+
+    <h2>Wejdź na konto</h2>
+
+    <p class="text-faint">
+        Zaloguj się, aby zarządzać swoim sprzętem.
+    </p>
+</div>
+
+<EditForm Model="@Model"
+          OnValidSubmit="HandleSubmit"
+          FormName="loginForm">
+
+    <DataAnnotationsValidator />
+
+    @if (!string.IsNullOrWhiteSpace(Message))
+    {
+        <div class="alert alert-danger auth-alert">
+            <div>
+                <strong>Nie udało się zalogować</strong>
+                @Message
+            </div>
+        </div>
+    }
+
+    <div class="field">
+        <label for="email">Adres e-mail</label>
+
+
+        <InputText id="email"
+                   type="text"
+                   @bind-Value="Model.Email"
+                   placeholder="jan.kowalski@it-dzial.pl" />
+
+
+        <ValidationMessage For="@(() => Model.Email)" />
+    </div>
+
+    <div class="field">
+        <label for="password">Hasło</label>
+
+        <InputText id="password"
+                   type="password"
+                   @bind-Value="Model.Password"
+                   placeholder="••••••••••" />
+
+        <ValidationMessage For="@(() => Model.Password)" />
+    </div>
+
+    <div class="form-foot">
+        <label class="checkbox">
+            <input type="checkbox" />
+            <span>Zapamiętaj mnie</span>
+        </label>
+
+        <a href="#" class="btn-link">
+            Nie pamiętam hasła
+        </a>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">
+        Zaloguj się
+    </button>
+
+</EditForm>
+
+<div class="auth-register">
+    <span class="text-faint">Nie masz konta?</span>
+
+    <NavLink href="/register" class="btn-link">
+        Zarejestruj się
+    </NavLink>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private LoginModel Model { get; set; } = new()
+    {
+        Email = string.Empty,
+        Password = string.Empty
+    };
+
+    private string Message { get; set; } = string.Empty;
+
+    private async Task HandleSubmit()
+    {
+        var result = await authService.LoginAsync(Model.ToDto());
+
+        if (result.IsFailure)
+        {
+            Message = result.Error.Description;
+            return;
+        }
+
+        await sessionAuthService.SignInAsync(result.Value);
+
+        navigationManager.NavigateTo("/start");
+    }
+}

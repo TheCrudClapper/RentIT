@@ -1,0 +1,585 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/auth/{everyting}",
+      "DownstreamPathTemplate": "/api/auth/{everyting}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/users",
+      "DownstreamPathTemplate": "/api/users",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/users/query",
+      "DownstreamPathTemplate": "/api/users/query",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/users/{everything}",
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    //Categories
+    {
+      "UpstreamPathTemplate": "/gateway/categories",
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 30,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/categories",
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http",
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 30,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/categories/{equipmentId}",
+      "DownstreamPathTemplate": "/api/categories/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/categories/{equipmentId}",
+      "DownstreamPathTemplate": "/api/categories/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    //Equipments
+    {
+      "UpstreamPathTemplate": "/gateway/equipments",
+      "DownstreamPathTemplate": "/api/equipments",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/equipments",
+      "DownstreamPathTemplate": "/api/equipments",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/equipments/query",
+      "DownstreamPathTemplate": "/api/equipments/query",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/equipments/{everything}",
+      "DownstreamPathTemplate": "/api/equipments/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/equipments/{everything}",
+      "DownstreamPathTemplate": "/api/equipments/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http",
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    //User's Equipments
+    //POST
+    {
+      "UpstreamPathTemplate": "/gateway/user/equipments",
+      "DownstreamPathTemplate": "/api/user/equipments",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    //GET Many
+    {
+      "UpstreamPathTemplate": "/gateway/user/equipments",
+      "DownstreamPathTemplate": "/api/user/equipments",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    //GET One
+    {
+      "UpstreamPathTemplate": "/gateway/user/equipments/{equipmentId}",
+      "DownstreamPathTemplate": "/api/user/equipments/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    //PUT, DELETE
+    {
+      "UpstreamPathTemplate": "/gateway/user/equipments/{equipmentId}",
+      "DownstreamPathTemplate": "/api/user/equipments/{equipmentId}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "equipmentservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    //Rentals
+    {
+      "UpstreamPathTemplate": "/gateway/rentals/",
+      "DownstreamPathTemplate": "/api/rentals/",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/rentals/",
+      "DownstreamPathTemplate": "/api/rentals/",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http",
+      "RateLimitOptions": {
+        "Limit": 5,
+        "Period": "1m",
+        "HttpStatusCode": 429,
+        "EnableRateLimiting": true,
+        "PeriodTimespan": 30
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/rentals/{id}",
+      "DownstreamPathTemplate": "/api/rentals/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/rentals/{id}",
+      "DownstreamPathTemplate": "/api/rentals/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/rentals/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/rentals/{rentalId}/return",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      }
+    },
+    //UserRentals
+    {
+      "UpstreamPathTemplate": "/gateway/user/rentals",
+      "DownstreamPathTemplate": "/api/user/rentals",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/user/rentals/{id}",
+      "DownstreamPathTemplate": "/api/user/rentals/{id}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/user/rentals/{rentalId}/return",
+      "DownstreamPathTemplate": "/api/user/rentals/{rentalId}/return",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "rentalmicroservice.api",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "UpstreamScheme": "http"
+    },
+    //Reviews
+    {
+      "UpstreamPathTemplate": "/gateway/reviews/{everything}",
+      "DownstreamPathTemplate": "/api/reviews/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/reviews",
+      "DownstreamPathTemplate": "/api/reviews",
+      "UpstreamHttpMethod": [ "Get", "Post", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    //User Reviews
+    {
+      "UpstreamPathTemplate": "/gateway/user/reviews",
+      "DownstreamPathTemplate": "/api/user/reviews",
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/user/reviews/{everything}",
+      "DownstreamPathTemplate": "/api/user/reviews/{everything}",
+      "UpstreamHttpMethod": [ "Delete", "Get", "Put", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    //ReviewALlowance
+    {
+      "UpstreamPathTemplate": "/gateway/review-allowance/{everything}",
+      "DownstreamPathTemplate": "/api/review-allowance/{everything}",
+      "UpstreamHttpMethod": [ "Delete", "Get", "Put", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/review-allowance",
+      "DownstreamPathTemplate": "/api/review-allowance",
+      "UpstreamHttpMethod": [ "Post", "Options" ],
+      "DownstreamScheme": "http",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "Bearer {Token}"
+      },
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewmicroservice.api",
+          "Port": 8080
+        }
+      ]
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5050"
+  }
+}

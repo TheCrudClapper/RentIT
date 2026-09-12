@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Categories\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

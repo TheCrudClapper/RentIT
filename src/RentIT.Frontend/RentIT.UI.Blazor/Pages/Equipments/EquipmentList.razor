@@ -1,0 +1,56 @@
+﻿@layout EquipmentLayout
+@page "/equipments"
+@rendermode InteractiveServer
+
+<PageTitle>Moje sprzęty</PageTitle>
+<div class="container">
+    <div class="page-head">
+        <div>
+            <div class="prompt">items --owner=me</div>
+            <h1>Moje przedmioty</h1>
+        </div>
+        <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
+    </div>
+
+    <div class="list-container">
+        <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
+            <span>Nazwa</span>
+            <span>Numer seryjny</span>
+            <span>Kwota najmu/dzień</span>
+            <span>Akcje</span>
+        </div>
+        @if (Equipments is null)
+        {
+            <div class="list-row">
+                <span>There are no equipments yet.</span>
+            </div>
+        }
+        else if(Equipments.Count == 0)
+        {
+            <div class="list-row">
+                <span class="text-faint mono">There are no equipments yet.</span>
+            </div>
+        }
+        else
+        {
+            @foreach (var eq in Equipments)
+            {
+                <div class="list-row" style="grid-template-columns:1fr 1fr 1fr 100px;">
+                    <span>@eq.Name</span>
+                    <span>@eq.SerialNumber</span>
+                    <span>@eq.RentalPricePerDay</span>
+                    <div>
+                        <button class="btn btn-primary btn-sm" @onclick="() => HandleEdit(eq.Id)">
+                            <img src="/icons/pen.svg" alt="edit" />
+                        </button>
+                        <button class="btn btn-primary btn-sm" @onclick = "() => HandleDelete(eq)">
+                            <img src="/icons/trash.svg" alt="trash"/>
+                        </button>
+                    </div>
+                    <span>
+                    </span>
+                </div>
+            }
+        }
+    </div>
+</div>

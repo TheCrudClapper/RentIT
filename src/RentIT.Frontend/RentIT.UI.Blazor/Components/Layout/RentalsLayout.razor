@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+@layout MainLayout
+<div class="app-nav">
+    <div class="container-fluid">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-4">
+                <div class="logo">RENT<span>/IT</span></div>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center">
+                <div class="nav-links">
+                    <NavLink href="rentals/browser" Match="NavLinkMatch.All">Przegladarka</NavLink>
+                    <AuthorizeView>
+                        <Authorized>
+                            <NavLink href="rentals" Match="NavLinkMatch.All">Moje najmy</NavLink>
+                            <NavLink href="rentals/create" Match="NavLinkMatch.All">Dodaj najem</NavLink>
+                        </Authorized>
+
+                    </AuthorizeView>
+
+                </div>
+            </div>
+            <AuthorizeView>
+                <Authorized>
+                    <div class="col-md-4 text-end">
+                        <NavLink>
+                            <button class="btn btn-ghost btn-sm">Jan Kowalski</button>
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+        </div>
+    </div>
+</div>
+@Body
+@code {
+
+}

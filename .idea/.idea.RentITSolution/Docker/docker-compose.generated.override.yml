@@ -1,0 +1,60 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  equipmentservice.api:
+    build:
+      context: "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution"
+      dockerfile: "src/RentIT.EquipmentService/EquipmentService.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/EquipmentService.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "equipment-microservice:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution\\src\\RentIT.EquipmentService\\\
+      EquipmentService.API:/app:rw"
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution:/src:rw"
+    - "C:\\Users\\Wojciech Mucha\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  rentalmicroservice.api:
+    build:
+      context: "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution"
+      dockerfile: "src/RentIT.RentalService/RentalService.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/RentalService.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "rental-microservice:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution\\src\\RentIT.RentalService\\\
+      RentalService.API:/app:rw"
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution:/src:rw"
+    - "C:\\Users\\Wojciech Mucha\\AppData\\Roaming\\Microsoft\\UserSecrets:/home/app/.microsoft/usersecrets"
+    - "C:\\Users\\Wojciech Mucha\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  userservice.api:
+    build:
+      context: "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution"
+      dockerfile: "src/RentIT.UserService/UserService.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/UserService.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "users-microservice:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution\\src\\RentIT.UserService\\\
+      UserService.API:/app:rw"
+    - "C:\\Users\\Wojciech Mucha\\Desktop\\RentIT\\RentITSolution:/src:rw"
+    - "C:\\Users\\Wojciech Mucha\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

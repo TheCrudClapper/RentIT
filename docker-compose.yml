@@ -1,0 +1,260 @@
+services:
+  # Host ports for databases descend starting from 5999
+  # Host ports for microservices start from 5000 (ms1: http-5000,https-5001, ms2:http-5003 etc.)
+  # Blazor application works using http://localhost:7085
+
+  # Blazor Frontend
+  # blazor.frontend:
+    # image: blazor-frontend
+    # build: 
+        # context: ./src/RentIT.Frontend
+        # dockerfile: RentIT.UI.Blazor/Dockerfile
+    # environment: 
+        # - ASPNETCORE_ENVIRONMENT=Development
+        # - DefaultApiUrl=http://api-gateway:8080/gateway/
+    # ports:
+        # - "7085:8080"
+    # networks:
+        # - rentit-internal-network
+  
+  # Users Microservice 
+  userservice.api:
+    image: users-microservice
+    build:
+        context: ./src/RentIT.UserService
+        dockerfile: UserService.API/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres 
+        - DB_NAME=users
+        - DB_PORT=5432
+        - DB_HOST=user-microservice-db-postgress
+        - DB_PASSWORD=admin
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
+    ports:
+        - "5000:8080"
+        - "5001:8081"
+    depends_on:
+        - user-microservice-db-postgress
+ 
+    networks:
+      - users-microservice-network  
+      - rentit-internal-network
+    
+  # User Microservice Database
+  user-microservice-db-postgress:
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=users
+        - POSTGRES_PASSWORD=admin
+    ports:
+        - 5999:5432
+    networks:
+        - users-microservice-network
+        
+  # Equipment Microservice
+  equipmentservice.api:
+    image: equipment-microservice
+    build:
+        context: ./src/RentIT.EquipmentService
+        dockerfile: EquipmentService.API/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres 
+        - DB_NAME=equipment
+        - DB_PORT=5432
+        - USERS_MICROSERVICE_NAME=api-gateway
+        - USERS_MICROSERVICE_PORT=8080
+        - DB_HOST=equipment-microservices-db-postgress
+        - DB_PASSWORD=admin
+        - RENTAL_MICROSERVICE_NAME=api-gateway
+        - RENTAL_MICROSERVICE_PORT=8080
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - RABBITMQ_REVIEW_EXCHANGE=review.exchange
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
+    ports:
+        - "5002:8080"
+        - "5003:8081"
+    networks:
+        - equipment-microservice-network
+        - rentit-internal-network
+    depends_on:
+        - equipment-microservices-db-postgress
+
+   # Equipment Microservice Database
+  equipment-microservices-db-postgress:
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=equipment
+    ports:
+        - "5998:5432"
+    networks:
+        - equipment-microservice-network
+
+  # Rental Microservice
+  rentalmicroservice.api:
+    image: rental-microservice
+    build:
+        context: ./src/RentIT.RentalService
+        dockerfile: RentalService.API/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres
+        - DB_NAME=rentals
+        - DB_PORT=5432
+        - DB_HOST=rental-service-db-postgress
+        - DB_PASSWORD=admin
+        - USERS_MICROSERVICE_NAME=api-gateway
+        - USERS_MICROSERVICE_PORT=8080
+        - EQUIPMENT_MICROSERVICE_PORT=8080
+        - EQUIPMENT_MICROSERVICE_NAME=api-gateway
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379 
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_RENTAL_EXCHANGE=rental.exchange
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - DAYS_OVERDUE_COST_MULTIPLIER=1.5
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
+    ports:
+        - "5004:8080"
+        - "5005:8081"
+    networks:
+        - rentit-internal-network
+        - rental-microservice-network
+    depends_on:
+        - rental-service-db-postgress
+ 
+        
+  # Rental Microservice Database
+  rental-service-db-postgress:
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=rentals
+    ports:
+        - "5997:5432"
+    networks:
+        - rental-microservice-network
+
+  # Reviews Microservice
+  reviewmicroservice.api: 
+    image: review-microservice
+    build: 
+        context: ./src/RentIT.ReviewsService
+        dockerfile: ReviewService.API/Dockerfile
+    ports:
+        - "5006:8080"
+        - "5007:8081"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - DB_USER=postgres
+        - DB_NAME=reviews
+        - DB_PORT=5432
+        - DB_HOST=review-microservices-db-postgress
+        - DB_PASSWORD=admin
+        - USERS_MICROSERVICE_NAME=api-gateway
+        - USERS_MICROSERVICE_PORT=8080
+        - RENTAL_MICROSERVICE_NAME=api-gateway
+        - RENTAL_MICROSERVICE_PORT=8080
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379 
+        - RABBITMQ_USER_NAME=user
+        - RABBITMQ_HOST_NAME=rabbitmq
+        - RABBITMQ_PASSWORD=admin
+        - RABBITMQ_PORT=5672
+        - RABBITMQ_EQUIPMENT_EXCHANGE=equipment.exchange
+        - RABBITMQ_RENTAL_EXCHANGE=rental.exchange
+        - RABBITMQ_REVIEW_EXCHANGE=review.exchange
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
+    networks:
+        - rentit-internal-network
+        - review-microservice-network
+    
+  # Review Microservice Database
+  review-microservices-db-postgress:
+    image: postgres
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=reviews
+    ports:
+        - "5996:5432"
+    networks:
+        - review-microservice-network
+
+  # Redis Central Cache
+  redis:
+    image: redis:latest
+    ports:
+        - "6379:6379"
+    networks:
+        - rentit-internal-network
+    volumes:
+        - /src/redis-cache:/data 
+
+
+  # Ocelot API Gateway
+  api-gateway:
+     image: ocelot-gateway
+     build:
+        context: ./src/RentITApiGateway
+        dockerfile: Dockerfile
+     environment:
+        - Jwt__Issuer=http://localhost:5050 
+        - Jwt__Audience=http://localhost:5050
+        - Jwt__ExpirationInMinutes=2
+        - Jwt__SecretKey=some-failry-long-secret-key-i-want-to-use
+     networks:
+        -  rentit-internal-network
+     ports:
+        - "5050:8080"
+  
+  # RabbitMQ 
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    environment:
+        - RABBITMQ_DEFAULT_USER=user 
+        - RABBITMQ_DEFAULT_PASS=admin
+    networks:
+        - rentit-internal-network
+    
+# Networks
+networks:
+  users-microservice-network:
+    driver: bridge
+  equipment-microservice-network:
+    driver: bridge
+  rental-microservice-network:
+    driver: bridge
+  rentit-internal-network:
+    driver: bridge
+  review-microservice-network:
+    driver: bridge
+
+      

@@ -1,0 +1,44 @@
+﻿<div class="tabbar" id="tabbar">
+    <NavLink class="" href="/start" Match="NavLinkMatch.All">
+        Strona Główna
+    </NavLink>
+    <AuthorizeView>
+        <Authorized>
+            <NavLink href="equipments">
+                Sprzęt
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView>
+        <NotAuthorized>
+            <NavLink href="rentals/browser">
+                Najem
+            </NavLink>
+        </NotAuthorized>
+        <Authorized>
+            <NavLink href="rentals">
+                Najem
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+   
+    <AuthorizeView>
+        <NotAuthorized>
+            <NavLink class="" href="login">
+                Zaloguj się
+            </NavLink>
+        </NotAuthorized>
+    </AuthorizeView>
+    <AuthorizeView>
+        <Authorized>
+            <NavLink class="" href="logout">
+                Wyloguj się
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+</div>
+<div class="hazard"></div>
+
+@code {
+
+}

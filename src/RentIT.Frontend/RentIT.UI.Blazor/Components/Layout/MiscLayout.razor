@@ -1,0 +1,39 @@
+﻿@inherits LayoutComponentBase
+@layout MainLayout
+
+<div class="app-nav">
+    <div class="container-fluid">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-4">
+                <div class="logo">RENT<span>/IT</span></div>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center">
+                <div class="nav-links">
+                    <NavLink href="start" Match="NavLinkMatch.All">Start</NavLink>
+                    <NavLink href="contact" Match="NavLinkMatch.All">Kontakt</NavLink>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <NavLink href="login">
+                            <button class="btn btn-sm btn-ghost">Zaloguj się</button>
+                        </NavLink>
+                        <NavLink href="register">
+                            <button class="btn btn-sm btn-primary">Zarejestruj się</button>
+                        </NavLink>
+                    </NotAuthorized>
+                    <Authorized>
+                        <NavLink>
+                            <button class="btn btn-ghost btn-sm">Jan Kowalski</button>
+                        </NavLink>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </div>
+</div>
+@Body
+@code {
+
+}

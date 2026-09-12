@@ -1,0 +1,11 @@
+﻿using ReviewService.Core.Domain.Entities.Review;
+using ReviewServices.Core.Domain.RepositoryContracts;
+
+namespace ReviewService.Core.Domain.RepositoryContracts;
+
+public interface IReviewRepository : IBaseReviewRepository
+{
+    Task DeleteReviewAsync(Review review, CancellationToken cancellationToken = default);
+
+    Task<decimal?> GetReviewScoreAsync(Guid reviewId, CancellationToken cancellationToken = default);
+}
