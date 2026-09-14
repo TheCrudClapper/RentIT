@@ -12,64 +12,71 @@ namespace EquipmentService.Core.Services.CategoryServices;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
-    public CategoryService(ICategoryRepository categoryRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     {
         _categoryRepository = categoryRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CreatedResponse>> AddCategory(CategoryAddRequest request)
     {
-        Category category = request.ToCategory();
+        Category entity = request.ToCategory();
 
-        if (!await _categoryRepository.IsCategoryUnique(category, cancellationToken))
-            return Result.Failure<CategoryResponse>(CategoryErrors.CategoryAlreadyExists);
+        if (!await _categoryRepository.IsCategoryUnique(entity))
+            return Result.Failure<CreatedResponse>(CategoryErrors.CategoryAlreadyExists);
 
-        Category newCategory = await _categoryRepository.AddCategoryAsync(category, cancellationToken);
+        await _categoryRepository.AddAsync(entity);
 
-        return Result.Success(newCategory.ToCategoryResponse());
+        await _unitOfWork.SaveChangesAsync();
+        return entity.ToCreatedResponse();
     }
 
-    public async Task<Result> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteCategory(Guid categoryId)
     {
-        bool isSuccess = await _categoryRepository.DeleteCategoryAsync(categoryId, cancellationToken);
-
-        if (!isSuccess)
+        Category? entity = await _categoryRepository.GetByIdAsync(categoryId);
+        if(entity is null)
             return Result.Failure(CategoryErrors.CategoryNotFound);
 
+        entity.IsActive = false;
+        entity.DateDeleted = DateTime.UtcNow;
+
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 
-    public async Task<Result> UpdateCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<Result<UpdatedResponse>> UpdateCategory(Guid categoryId, CategoryUpdateRequest request)
     {
-        Category categoryToEdit = request.ToCategory();
+        Category? entity = await _categoryRepository.GetByIdAsync(categoryId);
+        if (entity is null)
+            return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryNotFound);
 
-        if (!await _categoryRepository.IsCategoryUnique(categoryToEdit, cancellationToken, categoryId))
-            return Result.Failure(CategoryErrors.CategoryAlreadyExists);
+        if (!await _categoryRepository.IsCategoryUnique(entity, categoryId))
+            return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryAlreadyExists);
 
-        bool isSuccess = await _categoryRepository.UpdateCategoryAsync(categoryId, categoryToEdit, cancellationToken);
+        entity.Name = entity.Name;
+        entity.Description = entity.Description;
+        entity.DateEdited = DateTime.UtcNow;
 
-        if (!isSuccess)
-            return Result.Failure(CategoryErrors.CategoryNotFound);
-
-        return Result.Success();
+        await _unitOfWork.SaveChangesAsync();
+        return entity.ToUpdatedResponse();
     }
 
     public async Task<Result<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken cancellationToken)
     {
-        IEnumerable<Category> categories = await _categoryRepository.GetAllCategoriesAsync(cancellationToken);
+        IReadOnlyCollection<Category> categories = await _categoryRepository.GetAllAsync(cancellationToken);
 
         return categories
             .Select(item => new SelectItem { Id = item.Id, Name = item.Name})
             .ToList();
     }
 
-    public async Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken ct)
     {
-        Category? category = await _categoryRepository.GetCategoryByIdAsync(id, cancellationToken);
+        Category? entity = await _categoryRepository.GetByIdAsync(id, ct: ct);
 
-        if (category == null)
-            return Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound);
-
-        return category.ToCategoryResponse();
+        return entity is null 
+            ? Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound) 
+            : entity.ToCategoryResponse();
     }
 }

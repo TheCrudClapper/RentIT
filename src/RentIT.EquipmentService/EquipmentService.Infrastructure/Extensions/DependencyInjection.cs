@@ -1,10 +1,11 @@
 ﻿using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using EquipmentService.Infrastructure.Repositories;
+using EquipmentService.Infrastructure.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-namespace EquipmentService.Infrastructure
+namespace EquipmentService.Infrastructure.Extensions
 {
     /// <summary>
     /// Class to register services related to infrastructure layer
@@ -31,7 +32,8 @@ namespace EquipmentService.Infrastructure
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IUserEquipmentRepository, UserEquipmentRepository>();
 
-
+            //Uow
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
     }

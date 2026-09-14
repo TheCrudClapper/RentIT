@@ -1,9 +1,9 @@
 ﻿namespace EquipmentService.Core.Domain.Interfaces
 {
     /// <summary>
-    /// Interface that defines basic entity
+    /// Class that defines basic entity
     /// </summary>
-    public interface IBaseEntity
+    public class BaseEntity
     {
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }

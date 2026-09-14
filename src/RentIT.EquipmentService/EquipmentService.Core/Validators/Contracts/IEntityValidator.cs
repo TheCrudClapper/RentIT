@@ -10,10 +10,10 @@ namespace EquipmentService.Core.Validators.Contracts;
 /// </summary>
 /// <typeparam name="T">
 /// Type of the entity to be validated. Must be a reference type
-/// that implements <see cref="IBaseEntity"/>.
+/// that implements <see cref="BaseEntity"/>.
 /// </typeparam>
 public interface IEntityValidator<T>
-    where T : class, IBaseEntity
+    where T : BaseEntity
 {
     Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default);
 }

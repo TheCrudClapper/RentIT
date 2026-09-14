@@ -32,7 +32,7 @@ public abstract class BaseEquipmentValidator
     public async Task<Result> ValidateCategory(Guid categoryId, CancellationToken cancellationToken)
     {
         var categoryResult = await _categoryRepository
-            .DoesCategoryExist(categoryId, cancellationToken);
+            .DoesCategoryExist(categoryId);
 
         return categoryResult
             ? Result.Success()

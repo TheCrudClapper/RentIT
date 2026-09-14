@@ -22,7 +22,7 @@ namespace EquipmentService.Core.RabbitMQ.Consumers
 
         public async Task Handle(ReviewDeleted obj, CancellationToken cancellationToken)
         {
-            await _equipmentService.DeleteEquipmentRating(obj.EquipmentId, obj.Rating, cancellationToken);
+            await _equipmentService.DeleteEquipmentRating(obj.EquipmentId, obj.Rating);
         }
 
         public override void Consume(CancellationToken cancellationToken)

@@ -7,8 +7,8 @@ namespace EquipmentService.Core.ServiceContracts.CategoryContracts;
 public interface ICategoryService
 {
     Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<CategoryResponse>> AddCategory(CategoryAddRequest request, CancellationToken cancellationToken = default);
-    Task<Result> DeleteCategory(Guid id, CancellationToken cancellationToken = default);
-    Task<Result> UpdateCategory(Guid id, CategoryUpdateRequest request, CancellationToken cancellationToken = default);
+    Task<Result<CreatedResponse>> AddCategory(CategoryAddRequest request);
+    Task<Result> DeleteCategory(Guid id);
+    Task<Result<UpdatedResponse>> UpdateCategory(Guid id, CategoryUpdateRequest request);
     Task<Result<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken cancellationToken = default);
 }

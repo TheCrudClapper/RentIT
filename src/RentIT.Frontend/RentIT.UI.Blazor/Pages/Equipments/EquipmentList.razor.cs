@@ -6,31 +6,25 @@ namespace RentIT.BlazorFrontend.Pages.Equipments;
 
 public partial class EquipmentList
 {
-    [Inject]
-    private NavigationManager NavigationManager { get; set; } = default!;
-
-    [Inject]
-    private IUserEquipmentHttpClient UserHttpClient { get; set; } = default!;
-
-    private List<UserEquipmentListResponse> Equipments = [];
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] private IUserEquipmentHttpClient UserEquipmentHttpClient { get; set; } = default!;
+    private List<UserEquipmentListResponse> Equipments { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        await Refresh();
+        await base.OnInitializedAsync();
+        await RefreshAsync();
     }
 
     private async Task HandleDelete(UserEquipmentListResponse equipment)
     {
-        var result = await UserHttpClient.DeleteEquipment(equipment.Id);
-        if (result.IsFailure)
-        {
-
-        }
-        else
-        {
+        var result = await UserEquipmentHttpClient.DeleteEquipment(equipment.Id);
+        //if (result.IsSuccess)
+        //{
             Equipments.Remove(equipment);
-            await Refresh();
-        }
+            //await RefreshAsync();
+            //StateHasChanged();
+        
     }
 
     private async Task HandleEdit(Guid id)
@@ -38,9 +32,9 @@ public partial class EquipmentList
         NavigationManager.NavigateTo($"/equipments/{id}/edit");
     }
 
-    private async Task Refresh()
+    private async Task RefreshAsync()
     {
-        var result = await UserHttpClient.GetUserEquipmentsList();
+        var result = await UserEquipmentHttpClient.GetUserEquipmentsList();
         Equipments = result.Value.ToList();
     }
 }

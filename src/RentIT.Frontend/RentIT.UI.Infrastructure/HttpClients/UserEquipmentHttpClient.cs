@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RentIT.UI.Core.DTO.Equipments;
+using RentIT.UI.Core.DTO.Shared;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.ResultTypes;
 using RentIT.UI.Infrastructure.HttpClients.Base;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
 
 namespace RentIT.UI.Infrastructure.HttpClients;
@@ -14,6 +14,26 @@ public class UserEquipmentHttpClient : HttpClientBase, IUserEquipmentHttpClient
 {
     public UserEquipmentHttpClient(HttpClient httpClient, IConfiguration config) : base(httpClient, config)
     {
+    }
+
+    public async Task<Result<CreatedResponse>> CreateEquipment(EquipmentAddRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"user/equipments", request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            if (problemDetails is null)
+                return Result.Failure<CreatedResponse>(Error.Create("Failed", "Something went wrong."));
+
+            return Result.Failure<CreatedResponse>(Error.Create(problemDetails.Title, problemDetails.Detail));
+        }
+
+        var created = await response.Content.ReadFromJsonAsync<CreatedResponse>();
+        if (created is null)
+            return Result.Failure<CreatedResponse>(Error.Create("Failed", "Response was not recieved."));
+
+        return created;
     }
 
     public async Task<Result> DeleteEquipment(Guid id)
@@ -63,7 +83,7 @@ public class UserEquipmentHttpClient : HttpClientBase, IUserEquipmentHttpClient
         return Result.Success(equipments);
     }
 
-    public async Task<Result> PutEquipment(Guid id, EquipmentUpdateRequest request)
+    public async Task<Result<UpdatedResponse>> PutEquipment(Guid id, EquipmentUpdateRequest request)
     {
         var response = await _httpClient.PutAsJsonAsync($"user/equipments/{id}", request);
 
@@ -71,11 +91,17 @@ public class UserEquipmentHttpClient : HttpClientBase, IUserEquipmentHttpClient
         {
             var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
             if (problemDetails is null)
-                return Result.Failure<EquipmentResponse>(Error.Create("Failed", "Something went wrong."));
+                return Result.Failure<UpdatedResponse>(Error.Create("Failed", "Something went wrong."));
 
-            return Result.Failure<EquipmentResponse>(Error.Create(problemDetails.Title, problemDetails.Detail));
+            return Result.Failure<UpdatedResponse>(Error.Create(problemDetails.Title, problemDetails.Detail));
         }
 
-        return Result.Success();
+        var updated = await response.Content.ReadFromJsonAsync<UpdatedResponse>();
+        if(updated is null)
+            return Result.Failure<UpdatedResponse>(Error.Create("Failed", "Response was not recieved."));
+
+        return updated;
     }
+
+
 }

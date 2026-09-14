@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,18 +28,18 @@ public class EquipmentsController : BaseApiController
 
     [HttpPut("{equipmentId}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _equipmentService.UpdateEquipment(equipmentId, request, cancellationToken));
+    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _equipmentService.UpdateEquipment(equipmentId, request));
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<EquipmentResponse>> PostEquipment(EquipmentAddRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _equipmentService.AddEquipment(request, cancellationToken));
+    public async Task<ActionResult<CreatedResponse>> PostEquipment(EquipmentAddRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _equipmentService.AddEquipment(request));
 
     [HttpDelete("{equipmentId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
-        => HandleResult(await _equipmentService.DeleteEquipment(equipmentId, cancellationToken));
+        => HandleResult(await _equipmentService.DeleteEquipment(equipmentId));
 
     [HttpPost("query")]
     [AllowAnonymous]

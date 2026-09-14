@@ -6,13 +6,12 @@ using System.Linq.Expressions;
 
 namespace EquipmentService.Infrastructure.Repositories;
 
-public abstract class BaseEquipmentRepository : IBaseEquipmentRepository
+public abstract class BaseEquipmentRepository : GenericRepository<Equipment>, IBaseEquipmentRepository
 {
-    protected readonly EquipmentContext _context;
-    protected BaseEquipmentRepository(EquipmentContext context)
+    protected BaseEquipmentRepository(EquipmentContext context) : base(context)
     {
-        _context = context;
     }
+
     public async Task<bool> DoesEquipmentExistsAsync(Guid equipmentId, CancellationToken cancellationToken)
     {
         return await _context.EquipmentItems

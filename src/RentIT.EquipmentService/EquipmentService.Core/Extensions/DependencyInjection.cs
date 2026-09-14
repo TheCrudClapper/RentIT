@@ -10,7 +10,7 @@ using EquipmentService.Core.Validators.Contracts;
 using EquipmentService.Core.Validators.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EquipmentService.Core
+namespace EquipmentService.Core.Extensions
 {
     /// <summary>
     /// Class to register services related to core layer

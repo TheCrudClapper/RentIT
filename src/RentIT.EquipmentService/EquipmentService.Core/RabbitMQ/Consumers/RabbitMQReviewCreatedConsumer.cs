@@ -21,7 +21,7 @@ public class RabbitMQReviewCreatedConsumer : RabbitMQBaseConsumer
 
     public async Task Handle(ReviewCreated obj, CancellationToken cancellationToken)
     {
-        await _equipmentService.UpdateEquipmentRating(obj.EquipmentId, obj.Rating, cancellationToken: cancellationToken);
+        await _equipmentService.UpdateEquipmentRating(obj.EquipmentId, obj.Rating);
     }
 
     public override void Consume(CancellationToken cancellationToken)

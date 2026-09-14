@@ -20,10 +20,8 @@ public enum RentStatusEnum
     Maintenance = 3
 }
 
-public class Equipment : IBaseEntity, ISoftDelete
+public class Equipment : BaseEntity, ISoftDelete
 {
-    public Guid Id { get; set; }
-
     [MaxLength(50)]
     public string Name { get; set; } = null!;
 
@@ -51,7 +49,5 @@ public class Equipment : IBaseEntity, ISoftDelete
 
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
-    public DateTime DateCreated { get; set; }
-    public DateTime? DateEdited { get; set; }
 }
 

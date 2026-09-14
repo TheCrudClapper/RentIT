@@ -18,8 +18,8 @@ public class CategoriesController : BaseApiController
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<CategoryResponse>> PostCategory(CategoryAddRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _categoryService.AddCategory(request, cancellationToken));
+    public async Task<ActionResult<CreatedResponse>> PostCategory(CategoryAddRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _categoryService.AddCategory(request));
 
     [HttpGet("{categoryId}")]
     [AllowAnonymous]
@@ -33,11 +33,11 @@ public class CategoriesController : BaseApiController
 
     [HttpPut("{categoryId}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> PutCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _categoryService.UpdateCategory(categoryId, request, cancellationToken));
+    public async Task<ActionResult<UpdatedResponse>> PutCategory(Guid categoryId, CategoryUpdateRequest request, CancellationToken cancellationToken)
+        => HandleResult(await _categoryService.UpdateCategory(categoryId, request));
 
     [HttpDelete("{categoryId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
-        => HandleResult(await _categoryService.DeleteCategory(categoryId, cancellationToken));
+        => HandleResult(await _categoryService.DeleteCategory(categoryId));
 }

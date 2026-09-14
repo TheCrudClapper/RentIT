@@ -1,4 +1,5 @@
 ﻿@page "/equipments/{EquipmentId:guid}/edit"
+@using RentIT.BlazorFrontend.Pages.Equipments.Components
 @rendermode InteractiveServer
 <PageTitle>Edytuj sprzęt</PageTitle>
 
@@ -9,78 +10,9 @@
             <h1>Edytuj sprzęt</h1>
         </div>
     </div>
-    <EditForm OnValidSubmit="HandleEdit" FormName="EquipmentAddForm" Model="@Model">
-        <DataAnnotationsValidator />
-        <div class="field">
-            <label for="name">Name</label>
 
-            <InputText id="name"
-                       type="text"
-                       @bind-Value="Model.Name"
-                       placeholder="Dell Latitude" />
-
-            <ValidationMessage For="@(() => Model.Name)" />
-        </div>
-
-        <div class="field">
-            <label for="category">Category</label>
-            <select id="category" @bind="Model.CategoryId">
-                @if (Categories.Count != 0)
-                {
-                    foreach (var cat in Categories)
-                    {
-                        <option value="@cat.Id">@cat.Name</option>
-                    }
-                }
-            </select>
-            <ValidationMessage For="@(() => Model.CategoryId)" />
-        </div>
-
-        <div class="field">
-            <label for="status">Status</label>
-            <select id="status" @bind="Model.Status">
-                @foreach (var status in Statuses)
-                {
-                    <option value="@status.Item1">@status.Item2</option>
-                }
-            </select>
-            <ValidationMessage For="@(() => Model.Status)" />
-        </div>
-
-        <div class="field">
-            <label for="serial">Serial Number</label>
-
-            <InputText id="serial"
-                       type="text"
-                       @bind-Value="Model.SerialNumber"
-                       placeholder="SN-623231" />
-
-            <ValidationMessage For="@(() => Model.SerialNumber)" />
-        </div>
-        <div class="field">
-            <label for="price">Rental Price / day</label>
-            <InputNumber id="price"
-                         type="number"
-                         @bind-Value="Model.RentalPricePerDay"
-                         placeholder="1222" />
-            <ValidationMessage For="@(() => Model.RentalPricePerDay)" />
-        </div>
-
-        <div class="field">
-            <label for="notes">Notes</label>
-
-            <InputTextArea id="notes"
-                           type="text"
-                           @bind-Value="Model.Notes"
-                           placeholder="Your notes here" />
-            <ValidationMessage For="@(() => Model.Notes)" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-            Zatwierdź
-        </button>
-    </EditForm>
+    <EquipmentForm OnSubmit="HandleEdit" 
+                Model="Model"
+                Categories="Categories"/>
 
 </div>
-
-}

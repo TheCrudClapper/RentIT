@@ -19,6 +19,7 @@ public static class CategoryMappings
     {
         return new Category
         {
+            Id = Guid.NewGuid(),
             Description = request.Description,
             IsActive = true,
             DateCreated = DateTime.UtcNow,

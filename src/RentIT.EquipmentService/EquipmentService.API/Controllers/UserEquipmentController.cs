@@ -24,7 +24,7 @@ public class UserEquipmentController : BaseApiController
         => HandleResult(await _userEquipmentService.GetUserEquipmentById(CurrentUserId, equipmentId, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<EquipmentResponse>> PostUserEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<CreatedResponse>> PostUserEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken));
 
     [HttpPut("{equipmentId}")]

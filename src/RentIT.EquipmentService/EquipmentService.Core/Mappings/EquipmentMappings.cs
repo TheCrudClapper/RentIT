@@ -11,6 +11,7 @@ public static class EquipmentMappings
     {
         return new Equipment
         {
+            Id = Guid.NewGuid(),
             CategoryId = request.CategoryId,
             Name = request.Name,
             Notes = request.Notes,
@@ -27,6 +28,7 @@ public static class EquipmentMappings
     {
         return new Equipment
         {
+            Id = Guid.NewGuid(),
             CategoryId = request.CategoryId,
             Name = request.Name,
             Notes = request.Notes,
@@ -59,21 +61,20 @@ public static class EquipmentMappings
         {
             Id = equipment.Id,
             Name = equipment.Name,
-            CategoryName = equipment.Category.Name,
-            CreatedByUserId = equipment.CreatedByUserId,
+            CategoryId = equipment.CategoryId,
             RentalPricePerDay = equipment.RentalPricePerDay,
             Notes = equipment.Notes,
             SerialNumber = equipment.SerialNumber,
-            Status = equipment.Status.ToString(),
+            Status = equipment.Status
         };
     }
 
-    public static UpdatedResponse ToUpdatedResponse<T>(this T entity) where T : IBaseEntity
+    public static UpdatedResponse ToUpdatedResponse<T>(this T entity) where T : BaseEntity
     {
         return new UpdatedResponse(entity.Id, entity.DateEdited.GetValueOrDefault());
     }
 
-    public static CreatedResponse ToCreatedResponse<T>(this T entity) where T : IBaseEntity
+    public static CreatedResponse ToCreatedResponse<T>(this T entity) where T : BaseEntity
     {
         return new CreatedResponse(entity.Id, entity.DateCreated);
     }
