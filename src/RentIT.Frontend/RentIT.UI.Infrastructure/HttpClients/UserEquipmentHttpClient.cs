@@ -1,12 +1,10 @@
 ﻿using EquipmentService.Core.DTO.Equipments;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RentIT.UI.Core.DTO.Equipments;
 using RentIT.UI.Core.DTO.Shared;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.ResultTypes;
 using RentIT.UI.Infrastructure.HttpClients.Base;
-using System.Net.Http.Json;
 
 namespace RentIT.UI.Infrastructure.HttpClients;
 

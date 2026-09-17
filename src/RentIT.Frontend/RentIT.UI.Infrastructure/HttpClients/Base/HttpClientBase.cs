@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RentIT.UI.Infrastructure.HttpClients.Base;
+
 public static class ApiErrors
 {
     public static Error UnknownError
@@ -46,7 +47,7 @@ public abstract class HttpClientBase
             var response = await _httpClient.GetAsync(resource);
             return await HandleResponseAsync<T>(response);
         }
-        catch(Exception ex) 
+        catch (Exception ex)
         {
             return Result.Failure<T>(Error.Create("RequestFailed", $"Request failed: {ex.Message}"));
         }
@@ -72,7 +73,7 @@ public abstract class HttpClientBase
             var response = await _httpClient.DeleteAsync(resource);
             return await HandleResponseAsync(response);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return Result.Failure(Error.Create("RequestFailed", $"Request failed: {ex.Message}"));
         }
@@ -187,7 +188,7 @@ public abstract class HttpClientBase
 
             return new Error(details.Title, details.Detail);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return ApiErrors.UnknownError;
         }

@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RentIT.BlazorFrontend.Components;
 using RentIT.BlazorFrontend.Extensions;
-using RentIT.BlazorFrontend.Handlers;
 using RentIT.UI.Core.Extensions;
 using RentIT.UI.Infrastructure.Extensions;
-using RentIT.UI.Infrastructure.Handlers;
 
 namespace RentIT.BlazorFrontend
 {

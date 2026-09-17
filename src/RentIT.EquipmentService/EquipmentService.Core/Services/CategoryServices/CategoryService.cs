@@ -35,7 +35,7 @@ public class CategoryService : ICategoryService
     public async Task<Result> DeleteCategory(Guid categoryId)
     {
         Category? entity = await _categoryRepository.GetByIdAsync(categoryId);
-        if(entity is null)
+        if (entity is null)
             return Result.Failure(CategoryErrors.CategoryNotFound);
 
         entity.IsActive = false;
@@ -67,7 +67,7 @@ public class CategoryService : ICategoryService
         IReadOnlyCollection<Category> categories = await _categoryRepository.GetAllAsync(cancellationToken);
 
         return categories
-            .Select(item => new SelectItem { Id = item.Id, Name = item.Name})
+            .Select(item => new SelectItem { Id = item.Id, Name = item.Name })
             .ToList();
     }
 
@@ -75,8 +75,8 @@ public class CategoryService : ICategoryService
     {
         Category? entity = await _categoryRepository.GetByIdAsync(id, ct: ct);
 
-        return entity is null 
-            ? Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound) 
+        return entity is null
+            ? Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound)
             : entity.ToCategoryResponse();
     }
 }

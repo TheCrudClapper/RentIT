@@ -21,10 +21,10 @@ public partial class EquipmentList
         var result = await UserEquipmentHttpClient.DeleteEquipment(equipment.Id);
         //if (result.IsSuccess)
         //{
-            Equipments.Remove(equipment);
-            //await RefreshAsync();
-            //StateHasChanged();
-        
+        Equipments.Remove(equipment);
+        //await RefreshAsync();
+        //StateHasChanged();
+
     }
 
     private async Task HandleEdit(Guid id)
@@ -35,7 +35,7 @@ public partial class EquipmentList
     private async Task RefreshAsync()
     {
         var result = await UserEquipmentHttpClient.GetUserEquipmentsList();
-        if(result.IsSuccess)
+        if (result.IsSuccess)
             Equipments = result.Value.ToList();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
-using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentService.Infrastructure.Repositories;
 

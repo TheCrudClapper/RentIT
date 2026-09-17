@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace RentIT.UI.Core.DTO.Equipments;
+﻿namespace RentIT.UI.Core.DTO.Equipments;
 
 public class EquipmentResponse
 {

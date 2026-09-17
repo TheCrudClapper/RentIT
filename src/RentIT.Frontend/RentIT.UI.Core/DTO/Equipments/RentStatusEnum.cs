@@ -1,4 +1,5 @@
 ﻿namespace RentIT.UI.Core.DTO.Equipments;
+
 public enum RentStatusEnum
 {
     Avaliable = 1,

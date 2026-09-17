@@ -1,6 +1,4 @@
-﻿using EquipmentService.Core.Attributes;
-using EquipmentService.Core.Domain.Entities.Equipments;
-using System.ComponentModel.DataAnnotations;
+﻿using EquipmentService.Core.Domain.Entities.Equipments;
 
 namespace EquipmentService.Core.DTO.Equipments;
 

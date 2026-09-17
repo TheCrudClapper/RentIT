@@ -20,7 +20,7 @@ public partial class EquipmentAdd
         var result = await CategoriesHttpClient.GetCategories();
         if (result.IsFailure)
         {
-            
+
         }
         Categories = result.Value
             .Select(x => new SelectItem() { Id = x.Id, Name = x.Name })
@@ -31,7 +31,7 @@ public partial class EquipmentAdd
     {
         //validation in future btw
         var request = model.ToAddRequest();
-        
+
 
         var result = await UserEquipmentHttpClient.PostEquipment(request);
         if (result.IsSuccess)

@@ -9,7 +9,7 @@ namespace EquipmentService.Infrastructure.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, ISoftDelete
 {
     protected readonly EquipmentContext _context;
-    
+
     public GenericRepository(EquipmentContext context)
     {
         _context = context;

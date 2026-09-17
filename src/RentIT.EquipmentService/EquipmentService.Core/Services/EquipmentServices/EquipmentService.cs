@@ -109,7 +109,7 @@ public class EquipmentService : IEquipmentService
             return Result.Failure<CreatedResponse>(validationResult.Error);
 
         await _equipmentRepository.AddAsync(equipment);
-        
+
         //Publish create message
         _rabbitMQPublisher.Publish(
             "equipment.create",

@@ -5,7 +5,7 @@ using RentIT.UI.Core.ResultTypes;
 
 namespace RentIT.UI.Core.HttpClientContracts;
 
-public interface IUserEquipmentHttpClient 
+public interface IUserEquipmentHttpClient
 {
     Task<Result<IReadOnlyCollection<UserEquipmentListResponse>>> GetUserEquipmentsList();
     Task<Result> DeleteEquipment(Guid id);
