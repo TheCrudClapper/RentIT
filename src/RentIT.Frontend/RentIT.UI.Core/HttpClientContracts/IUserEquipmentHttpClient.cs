@@ -10,6 +10,6 @@ public interface IUserEquipmentHttpClient
     Task<Result<IReadOnlyCollection<UserEquipmentListResponse>>> GetUserEquipmentsList();
     Task<Result> DeleteEquipment(Guid id);
     Task<Result<EquipmentResponse>> GetEquipment(Guid id);
-    Task<Result<UpdatedResponse>> PutEquipment(Guid id, EquipmentService.Core.DTO.Equipments.EquipmentUpdateRequest request);
-    Task<Result<CreatedResponse>> CreateEquipment(DTO.Equipments.EquipmentAddRequest request);
+    Task<Result<UpdatedResponse>> PutEquipment(Guid id, EquipmentUpdateRequest request);
+    Task<Result<CreatedResponse>> PostEquipment(EquipmentAddRequest request);
 }

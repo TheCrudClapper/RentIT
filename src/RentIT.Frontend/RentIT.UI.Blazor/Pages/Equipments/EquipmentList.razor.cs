@@ -35,6 +35,7 @@ public partial class EquipmentList
     private async Task RefreshAsync()
     {
         var result = await UserEquipmentHttpClient.GetUserEquipmentsList();
-        Equipments = result.Value.ToList();
+        if(result.IsSuccess)
+            Equipments = result.Value.ToList();
     }
 }

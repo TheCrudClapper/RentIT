@@ -33,7 +33,7 @@ public partial class EquipmentAdd
         var request = model.ToAddRequest();
         
 
-        var result = await UserEquipmentHttpClient.CreateEquipment(request);
+        var result = await UserEquipmentHttpClient.PostEquipment(request);
         if (result.IsSuccess)
             Navigation.NavigateTo("/equipments");
     }
