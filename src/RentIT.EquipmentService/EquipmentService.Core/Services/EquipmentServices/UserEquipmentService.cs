@@ -65,7 +65,7 @@ public class UserEquipmentService : IUserEquipmentService
     public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
     {
         var equipmentToUpdate = request.ToEquipment();
-        equipmentToUpdate.CreatedByUserId = userId;
+        equipmentToUpdate.OwnerId = userId;
 
         var validationResult = await _userEquipmentValidator.ValidateEntity(equipmentToUpdate, equipmentId, cancellationToken);
 

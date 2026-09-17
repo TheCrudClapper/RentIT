@@ -23,7 +23,7 @@ public class EquipmentValidator : BaseEquipmentValidator, IEquipmentValidator
         if (categoryValidationResult.IsFailure)
             return Result.Failure(categoryValidationResult.Error);
 
-        var userValidationResult = await ValidateUser(entity.CreatedByUserId, cancellationToken);
+        var userValidationResult = await ValidateUser(entity.OwnerId, cancellationToken);
         if (userValidationResult.IsFailure)
             return Result.Failure(userValidationResult.Error);
 

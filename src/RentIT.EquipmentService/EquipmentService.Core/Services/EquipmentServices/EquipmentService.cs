@@ -83,8 +83,8 @@ public class EquipmentService : IEquipmentService
 
         entity.Name = equipment.Name;
         entity.Status = equipment.Status;
-        entity.Notes = equipment.Notes;
-        entity.CreatedByUserId = equipment.CreatedByUserId;
+        entity.InternalNotes = equipment.InternalNotes;
+        entity.OwnerId = equipment.OwnerId;
         entity.RentalPricePerDay = equipment.RentalPricePerDay;
         entity.SerialNumber = equipment.SerialNumber;
         entity.CategoryId = equipment.CategoryId;

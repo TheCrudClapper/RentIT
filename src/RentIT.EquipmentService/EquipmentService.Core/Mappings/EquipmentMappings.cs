@@ -14,11 +14,11 @@ public static class EquipmentMappings
             Id = Guid.NewGuid(),
             CategoryId = request.CategoryId,
             Name = request.Name,
-            Notes = request.Notes,
+            InternalNotes = request.Notes,
             RentalPricePerDay = request.RentalPricePerDay,
             SerialNumber = request.SerialNumber,
             Status = request.Status,
-            CreatedByUserId = request.UserId,
+            OwnerId = request.UserId,
             DateCreated = DateTime.UtcNow,
             IsActive = true,
         };
@@ -31,7 +31,7 @@ public static class EquipmentMappings
             Id = Guid.NewGuid(),
             CategoryId = request.CategoryId,
             Name = request.Name,
-            Notes = request.Notes,
+            InternalNotes = request.Notes,
             RentalPricePerDay = request.RentalPricePerDay,
             SerialNumber = request.SerialNumber,
             Status = request.Status,
@@ -46,10 +46,10 @@ public static class EquipmentMappings
         {
             CategoryId = request.CategoryId,
             Name = request.Name,
-            Notes = request.Notes,
+            InternalNotes = request.Notes,
             DateEdited = DateTime.UtcNow,
             Status = request.Status,
-            CreatedByUserId = request.UserId,
+            OwnerId = request.UserId,
             RentalPricePerDay = request.RentalPricePerDay,
             SerialNumber = request.SerialNumber,
         };
@@ -63,7 +63,7 @@ public static class EquipmentMappings
             Name = equipment.Name,
             CategoryId = equipment.CategoryId,
             RentalPricePerDay = equipment.RentalPricePerDay,
-            Notes = equipment.Notes,
+            Notes = equipment.InternalNotes,
             SerialNumber = equipment.SerialNumber,
             Status = equipment.Status
         };

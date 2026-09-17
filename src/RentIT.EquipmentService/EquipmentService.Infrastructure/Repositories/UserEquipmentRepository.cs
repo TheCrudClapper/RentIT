@@ -11,7 +11,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
     public async Task<Equipment> AddUserEquipment(Equipment equipment, Guid userId, CancellationToken cancellationToken)
     {
         equipment.Id = Guid.NewGuid();
-        equipment.CreatedByUserId = userId;
+        equipment.OwnerId = userId;
         _context.EquipmentItems.Add(equipment);
         await _context.SaveChangesAsync(cancellationToken);
         await _context.Entry(equipment).Reference(item => item.Category).LoadAsync(cancellationToken);
@@ -20,16 +20,13 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
 
     public async Task<Equipment?> UpdateUserEquipmentAsync(Guid equipmentId, Equipment equipment, CancellationToken cancellationToken)
     {
-        Equipment? equipmentToUpdate = await GetUserEquipmentByIdAsync(equipment.CreatedByUserId, equipmentId, cancellationToken);
+        Equipment? equipmentToUpdate = await GetUserEquipmentByIdAsync(equipment.OwnerId, equipmentId, cancellationToken);
 
         if (equipmentToUpdate == null)
             return null;
 
         equipmentToUpdate.Name = equipment.Name;
-        equipmentToUpdate.Status = equipment.Status;
-        equipmentToUpdate.Notes = equipment.Notes;
-        equipmentToUpdate.RentalPricePerDay = equipment.RentalPricePerDay;
-        equipmentToUpdate.SerialNumber = equipment.SerialNumber;
+        equipmentToUpdate.InternalNotes = equipment.InternalNotes;
         equipmentToUpdate.CategoryId = equipment.CategoryId;
         equipment.DateEdited = DateTime.UtcNow;
 
@@ -44,7 +41,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
         return await _context.EquipmentItems
             .AsNoTracking()
             .Include(item => item.Category)
-            .Where(item => item.CreatedByUserId == userId)
+            .Where(item => item.OwnerId == userId)
             .ToListAsync(cancellationToken);
     }
 
@@ -52,7 +49,7 @@ public class UserEquipmentRepository : BaseEquipmentRepository, IUserEquipmentRe
     {
         return await _context.EquipmentItems
                .Include(item => item.Category)
-               .FirstOrDefaultAsync(item => item.Id == equipmentId && item.CreatedByUserId == userId, cancellationToken);
+               .FirstOrDefaultAsync(item => item.Id == equipmentId && item.OwnerId == userId, cancellationToken);
     }
 
     public async Task DeleteUserEquipmentAsync(Equipment equipment, CancellationToken cancellationToken)

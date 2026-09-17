@@ -1,52 +1,32 @@
 ﻿using EquipmentService.Core.Domain.Entities.Categories;
+using EquipmentService.Core.Domain.Entities.Listing;
 using EquipmentService.Core.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EquipmentService.Core.Domain.Entities.Equipments;
 
-/// <summary>
-/// Represents the status of a rental item.
-/// </summary>
-/// <remarks>This enumeration is used to indicate the current availability or condition of a rental item.
-/// Possible values include: <list type="bullet"> <item><description><see cref="Avaliable"/>: The item is available
-/// for rent.</description></item> <item><description><see cref="Rented"/>: The item is currently
-/// rented.</description></item> <item><description><see cref="Maintenance"/>: The item is undergoing maintenance
-/// and is not available for rent.</description></item> </list></remarks>
-public enum RentStatusEnum
+public enum EquipmentCondition
 {
-    Avaliable = 1,
-    Rented = 2,
-    Maintenance = 3
+    Worn = 1,
+    Used = 2,
+    New = 3,
 }
 
 public class Equipment : BaseEntity, ISoftDelete
 {
     [MaxLength(50)]
     public string Name { get; set; } = null!;
-
-    public Guid CreatedByUserId { get; set; }
-    public Guid CategoryId { get; set; }
-
-    [MaxLength(50)]
-    public string SerialNumber { get; set; } = null!;
-
-    [Column(TypeName = "decimal(10, 2)")]
-    public decimal RentalPricePerDay { get; set; }
-
-    public RentStatusEnum Status { get; set; }
-
+    public string? Description { get; set; }
+    public Guid OwnerId { get; set; }
+    public int Quantity { get; set; }
     [MaxLength(255)]
-    public string? Notes { get; set; }
-
+    public string? InternalNotes { get; set; }
+    public Guid CategoryId { get; set; }
     [ForeignKey("CategoryId")]
     public Category Category { get; set; } = null!;
-
-    public int ReviewCount { get; set; }
-
-    [Column(TypeName = "decimal(3, 2)")]
-    public decimal AverageRating { get; set; }
-
+    public ICollection<EquipmentImage> Images { get; set; } = new List<EquipmentImage>();
+    public ICollection<RentalListing> Listings { get; set; } = new List<RentalListing>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
 }

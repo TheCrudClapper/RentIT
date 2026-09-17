@@ -1,5 +1,4 @@
 ﻿using EquipmentService.Core.Attributes;
-using EquipmentService.Core.Domain.Entities.Equipments;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.Equipments
@@ -17,9 +16,6 @@ namespace EquipmentService.Core.DTO.Equipments
 
         [Required, MinPrice]
         public decimal RentalPricePerDay { get; set; }
-
-        [Required]
-        public RentStatusEnum Status { get; set; }
 
         [StringLength(255)]
         public string? Notes { get; set; }

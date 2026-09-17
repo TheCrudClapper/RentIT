@@ -17,8 +17,6 @@ public class EquipmentAddRequest
     public string SerialNumber { get; set; } = null!;
     [Required, MinPrice]
     public decimal RentalPricePerDay { get; set; }
-    [Required]
-    public RentStatusEnum Status { get; set; }
     [StringLength(255)]
     public string? Notes { get; set; }
 }

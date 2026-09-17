@@ -20,9 +20,6 @@ public class EquipmentUpdateRequest
     [Required]
     public decimal RentalPricePerDay { get; set; }
 
-    [Required]
-    public RentStatusEnum Status { get; set; }
-
     [StringLength(255)]
     public string? Notes { get; set; }
 }
