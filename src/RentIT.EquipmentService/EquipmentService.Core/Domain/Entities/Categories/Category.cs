@@ -13,5 +13,21 @@ public class Category : BaseEntity, ISoftDelete
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
     public ICollection<Equipment> EquipmentItems { get; set; } = new List<Equipment>();
+
+    public void Update(Category category)
+    {
+        Name = category.Name;
+        Description = category.Description;
+        DateEdited = DateTime.UtcNow;
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+            return;
+
+        IsActive = false;
+        DateDeleted = DateTime.UtcNow;
+    }
 }
 

@@ -22,10 +22,40 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
 
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
     {
-        return await _context.Set<T>().ToListAsync(ct);
+        return await _context.Set<T>()
+            .AsNoTracking()
+            .ToListAsync(ct);
     }
 
-    public Task<T?> GetByIdAsync(Guid id, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<BaseEntity, object>>[] includes)
+    public async Task<IReadOnlyCollection<T>> GetAllAsyncByCondition(Expression<Func<T, bool>> expression, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _context.Set<T>()
+               .AsNoTracking()
+               .Where(expression)
+               .AsQueryable();
+
+        foreach (var include in includes)
+            query.Include(include);
+
+        return await query.ToListAsync(ct);
+    }
+
+    public Task<T?> GetByConditionAsync(Expression<Func<T, bool>> expression, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _context.Set<T>()
+            .Where(expression)
+            .AsQueryable();
+
+        if (asNoTracking)
+            query = query.AsNoTracking();
+
+        foreach (var include in includes)
+            query.Include(include);
+
+        return query.FirstOrDefaultAsync(ct);
+    }
+
+    public Task<T?> GetByIdAsync(Guid id, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
     {
         IQueryable<T> query = _context.Set<T>().AsQueryable();
 

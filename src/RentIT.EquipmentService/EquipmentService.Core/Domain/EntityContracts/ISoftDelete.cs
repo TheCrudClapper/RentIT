@@ -5,6 +5,7 @@
     /// </summary>
     public interface ISoftDelete
     {
+        public void Deactivate();
         public bool IsActive { get; set; }
         public DateTime? DateDeleted { get; set; }
     }

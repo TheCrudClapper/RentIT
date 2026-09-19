@@ -3,7 +3,8 @@ using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Equipments.Admin;
+using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.RabbitMQ.Messages;
@@ -44,7 +45,7 @@ public class UserEquipmentService : IUserEquipmentService
         if (response.IsFailure)
             return Result.Failure<CreatedResponse>(response.Error);
 
-        Equipment equipment = request.ToEquipment();
+        Equipment equipment = request.ToUserEquipment();
 
         var validationResult = await _userEquipmentValidator.ValidateEntity(equipment, null, cancellationToken);
 
@@ -64,7 +65,7 @@ public class UserEquipmentService : IUserEquipmentService
 
     public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
     {
-        var equipmentToUpdate = request.ToEquipment();
+        var equipmentToUpdate = request.ToUserEquipment();
         equipmentToUpdate.OwnerId = userId;
 
         var validationResult = await _userEquipmentValidator.ValidateEntity(equipmentToUpdate, equipmentId, cancellationToken);

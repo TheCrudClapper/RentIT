@@ -17,4 +17,6 @@ public sealed record Error(ErrorType Type, string Code, string Description)
 
     public static readonly Error None = new(ErrorType.Unexpected, "Unexpected", string.Empty);
     public static readonly Error NullValue = new(ErrorType.Unexpected, "Null value", "Given value is null");
+    public static Error Validation(string title, string description) 
+        => Error.Create(ErrorType.Validation, title, description);
 }

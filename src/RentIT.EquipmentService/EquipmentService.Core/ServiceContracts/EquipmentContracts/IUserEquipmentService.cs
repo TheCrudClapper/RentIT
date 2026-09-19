@@ -1,5 +1,6 @@
 ﻿using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.Equipments;
+using EquipmentService.Core.DTO.Equipments.Admin;
+using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
 
 namespace EquipmentService.Core.ServiceContracts.Equipment;

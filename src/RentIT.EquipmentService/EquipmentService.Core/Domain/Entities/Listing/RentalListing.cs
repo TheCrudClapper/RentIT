@@ -26,4 +26,13 @@ public class RentalListing : BaseEntity, ISoftDelete
     public ICollection<ListingImage> Images { get; set; } = new List<ListingImage>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+            return;
+
+        IsActive = false;
+        DateDeleted = DateTime.UtcNow;
+    }
 }

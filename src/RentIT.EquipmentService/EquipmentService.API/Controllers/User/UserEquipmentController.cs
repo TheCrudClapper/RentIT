@@ -1,10 +1,11 @@
-﻿using EquipmentService.Core.DTO.Equipments;
+﻿using EquipmentService.Core.DTO.Equipments.Admin;
+using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentService.API.Controllers;
+namespace EquipmentService.API.Controllers.User;
 
 [Route("api/user/equipments")]
 [Authorize]
@@ -16,22 +17,22 @@ public class UserEquipmentController : BaseApiController
         => _userEquipmentService = userEquipmentService;
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<UserEquipmentListResponse>>> GetAllUserEquipments(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<UserEquipmentListResponse>>> GetAllEquipments(CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken));
 
     [HttpGet("{equipmentId}")]
-    public async Task<ActionResult<EquipmentResponse>> GetUserEquipment(Guid equipmentId, CancellationToken cancellationToken)
+    public async Task<ActionResult<UserEquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.GetUserEquipmentById(CurrentUserId, equipmentId, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<CreatedResponse>> PostUserEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<CreatedResponse>> PostEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken));
 
     [HttpPut("{equipmentId}")]
-    public async Task<ActionResult<UpdatedResponse>> PutUserEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request, cancellationToken));
 
     [HttpDelete("{equipmentId}")]
-    public async Task<IActionResult> DeleteUserEquipment(Guid equipmentId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.DeleteUserEquipment(CurrentUserId, equipmentId, cancellationToken));
 }

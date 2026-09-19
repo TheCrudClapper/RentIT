@@ -25,9 +25,29 @@ public class Equipment : BaseEntity, ISoftDelete
     public Guid CategoryId { get; set; }
     [ForeignKey("CategoryId")]
     public Category Category { get; set; } = null!;
+    public EquipmentCondition Condition { get; set; }
     public ICollection<EquipmentImage> Images { get; set; } = new List<EquipmentImage>();
     public ICollection<RentalListing> Listings { get; set; } = new List<RentalListing>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
-}
 
+    public void Update(Equipment equipment)
+    {
+        Name = equipment.Name;
+        Description = equipment.Description;
+        Quantity = equipment.Quantity;
+        InternalNotes = equipment.InternalNotes;
+        CategoryId = equipment.CategoryId;
+        Images = equipment.Images.ToList();
+        DateEdited = DateTime.UtcNow;
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+            return;
+
+        IsActive = false;
+        DateDeleted = DateTime.UtcNow;
+    }
+}

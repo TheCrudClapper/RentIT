@@ -9,6 +9,8 @@ using System.Text.Json;
 
 namespace EquipmentService.Core.RabbitMQ.Consumers;
 
+
+//DEPRECATED - NOT USED FOR EQ ANYMORE
 public class RabbitMQReviewCreatedConsumer : RabbitMQBaseConsumer
 {
     private readonly IEquipmentService _equipmentService;
@@ -21,7 +23,8 @@ public class RabbitMQReviewCreatedConsumer : RabbitMQBaseConsumer
 
     public async Task Handle(ReviewCreated obj, CancellationToken cancellationToken)
     {
-        await _equipmentService.UpdateEquipmentRating(obj.EquipmentId, obj.Rating);
+        //await _equipmentService.UpdateEquipmentRating(obj.EquipmentId, obj.Rating);
+        throw new NotImplementedException();
     }
 
     public override void Consume(CancellationToken cancellationToken)

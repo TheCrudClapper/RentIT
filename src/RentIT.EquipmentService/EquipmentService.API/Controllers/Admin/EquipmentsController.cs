@@ -1,10 +1,10 @@
-﻿using EquipmentService.Core.DTO.Equipments;
+﻿using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts.Equipment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentService.API.Controllers;
+namespace EquipmentService.API.Controllers.Admin;
 
 [Route("api/equipments")]
 [Authorize]

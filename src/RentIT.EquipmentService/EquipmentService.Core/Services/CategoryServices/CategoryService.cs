@@ -38,10 +38,9 @@ public class CategoryService : ICategoryService
         if (entity is null)
             return Result.Failure(CategoryErrors.CategoryNotFound);
 
-        entity.IsActive = false;
-        entity.DateDeleted = DateTime.UtcNow;
-
+        entity.Deactivate();
         await _unitOfWork.SaveChangesAsync();
+
         return Result.Success();
     }
 
@@ -50,21 +49,21 @@ public class CategoryService : ICategoryService
         Category? entity = await _categoryRepository.GetByIdAsync(categoryId);
         if (entity is null)
             return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryNotFound);
-
+        
         if (!await _categoryRepository.IsCategoryUnique(entity, categoryId))
             return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryAlreadyExists);
 
-        entity.Name = entity.Name;
-        entity.Description = entity.Description;
+        entity.Name = request.Name;
+        entity.Description = request.Description;
         entity.DateEdited = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync();
         return entity.ToUpdatedResponse();
     }
 
-    public async Task<Result<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<SelectItem>>> GetAllCategories(CancellationToken ct)
     {
-        IReadOnlyCollection<Category> categories = await _categoryRepository.GetAllAsync(cancellationToken);
+        IReadOnlyCollection<Category> categories = await _categoryRepository.GetAllAsync(ct);
 
         return categories
             .Select(item => new SelectItem { Id = item.Id, Name = item.Name })
@@ -73,7 +72,7 @@ public class CategoryService : ICategoryService
 
     public async Task<Result<CategoryResponse>> GetCategory(Guid id, CancellationToken ct)
     {
-        Category? entity = await _categoryRepository.GetByIdAsync(id, ct: ct);
+        Category? entity = await _categoryRepository.GetByIdAsync(id, ct: ct, asNoTracking: true);
 
         return entity is null
             ? Result.Failure<CategoryResponse>(CategoryErrors.CategoryNotFound)
