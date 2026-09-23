@@ -1,6 +1,6 @@
 ﻿using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.DTO.Shared;
-using EquipmentService.Core.ServiceContracts.CategoryContracts;
+using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

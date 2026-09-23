@@ -11,6 +11,9 @@ namespace EquipmentService.Infrastructure.DbContexts
     {
         public virtual DbSet<Equipment> EquipmentItems { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<RentalListing> RentalListings { get; set; }
+        public virtual DbSet<ListingImage> ListingImages { get; set; }
+        public virtual DbSet<EquipmentImage> EquipmentImage { get; set; }
 
         public EquipmentContext(DbContextOptions options) : base(options) { }
 
@@ -26,7 +29,6 @@ namespace EquipmentService.Infrastructure.DbContexts
             modelBuilder.Entity<Equipment>().HasMany<EquipmentImage>(x => x.Images).WithOne(x => x.Equipment);
             modelBuilder.Entity<Equipment>().ToTable("RentIt.Equipments");
 
-
             //Listings
             modelBuilder.Entity<RentalListing>().HasQueryFilter(item => item.IsActive);
             modelBuilder.Entity<RentalListing>().OwnsOne<Currency>(x => x.PricePerDay);
@@ -40,6 +42,14 @@ namespace EquipmentService.Infrastructure.DbContexts
             modelBuilder.Entity<Category>().HasQueryFilter(item => item.IsActive);
             modelBuilder.Entity<Category>().HasMany<Equipment>(x => x.EquipmentItems).WithOne(x => x.Category);
             modelBuilder.Entity<Category>().ToTable("RentIt.Categories");
+
+            //ListingImages
+            modelBuilder.Entity<ListingImage>().HasQueryFilter(x => x.IsActive);
+            modelBuilder.Entity<ListingImage>().HasOne<RentalListing>(x => x.RentalListing).WithMany(x => x.Images);
+
+            //EquipmentImage
+            modelBuilder.Entity<EquipmentImage>().HasQueryFilter(x => x.IsActive);
+            modelBuilder.Entity<EquipmentImage>().HasOne(x => x.Equipment).WithMany(x => x.Images);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

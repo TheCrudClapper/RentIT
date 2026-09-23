@@ -1,6 +1,6 @@
 ﻿using EquipmentService.Core.RabbitMQ.Consumers.Base;
 using EquipmentService.Core.RabbitMQ.Messages;
-using EquipmentService.Core.ServiceContracts.Equipment;
+using EquipmentService.Core.ServiceContracts;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

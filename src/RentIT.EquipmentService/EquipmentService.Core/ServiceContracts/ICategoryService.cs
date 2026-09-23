@@ -2,7 +2,7 @@
 using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.DTO.Shared;
 
-namespace EquipmentService.Core.ServiceContracts.CategoryContracts;
+namespace EquipmentService.Core.ServiceContracts;
 
 public interface ICategoryService
 {

@@ -5,7 +5,7 @@ using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.CategoryDto;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
-using EquipmentService.Core.ServiceContracts.CategoryContracts;
+using EquipmentService.Core.ServiceContracts;
 
 namespace EquipmentService.Core.Services.CategoryServices;
 

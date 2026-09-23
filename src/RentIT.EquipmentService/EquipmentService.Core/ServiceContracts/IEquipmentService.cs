@@ -2,7 +2,7 @@
 using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Shared;
 
-namespace EquipmentService.Core.ServiceContracts.Equipment;
+namespace EquipmentService.Core.ServiceContracts;
 /// <summary>
 /// Defines operations for managing equipment entities, including creation, retrieval, update, deletion, and rating
 /// management.

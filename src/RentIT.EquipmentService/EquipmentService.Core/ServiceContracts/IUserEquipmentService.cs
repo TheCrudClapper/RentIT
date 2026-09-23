@@ -3,7 +3,7 @@ using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
 
-namespace EquipmentService.Core.ServiceContracts.Equipment;
+namespace EquipmentService.Core.ServiceContracts;
 
 /// <summary>
 /// Defines operations for managing user-associated equipment, including adding, updating, retrieving, and deleting

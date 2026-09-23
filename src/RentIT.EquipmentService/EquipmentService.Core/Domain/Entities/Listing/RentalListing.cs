@@ -12,7 +12,7 @@ public enum ListingStatus
 
 public class RentalListing : BaseEntity, ISoftDelete
 {
-    public int EquipmentId { get; set; }
+    public Guid EquipmentId { get; set; }
     [ForeignKey("EquipmentId")]
     public Equipment Equipment { get; set; } = null!;
     public string Title { get; set; } = null!;

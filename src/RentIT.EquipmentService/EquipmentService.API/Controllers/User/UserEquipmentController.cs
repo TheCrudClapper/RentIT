@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
-using EquipmentService.Core.ServiceContracts.Equipment;
+using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
