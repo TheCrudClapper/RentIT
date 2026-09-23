@@ -30,7 +30,6 @@ namespace EquipmentService.Infrastructure.Extensions
             //Add Repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-            services.AddScoped<IUserEquipmentRepository, UserEquipmentRepository>();
 
             //Uow
             services.AddScoped<IUnitOfWork, UnitOfWork>();

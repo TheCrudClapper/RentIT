@@ -4,14 +4,7 @@ using EquipmentService.Infrastructure.DbContexts;
 
 namespace EquipmentService.Infrastructure.Repositories;
 
-public class EquipmentRepository : BaseEquipmentRepository, IEquipmentRepository
+public class EquipmentRepository : GenericRepository<Equipment>, IEquipmentRepository
 {
     public EquipmentRepository(EquipmentContext context) : base(context) { }
-
-    public async Task UpdateEquipmentRating(Equipment equipment, decimal newAverageRating, int reviewCountToAdd = 0)
-    {
-        equipment.AverageRating = newAverageRating;
-        equipment.ReviewCount = Math.Max(0, equipment.ReviewCount + reviewCountToAdd);
-        await _context.SaveChangesAsync();
-    }
 }

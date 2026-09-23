@@ -28,17 +28,17 @@ public class EquipmentsController : BaseApiController
 
     [HttpPut("{equipmentId}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request)
         => HandleResult(await _equipmentService.UpdateEquipment(equipmentId, request));
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<CreatedResponse>> PostEquipment(EquipmentAddRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<CreatedResponse>> PostEquipment(EquipmentAddRequest request)
         => HandleResult(await _equipmentService.AddEquipment(request));
 
     [HttpDelete("{equipmentId}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteEquipment(Guid equipmentId)
         => HandleResult(await _equipmentService.DeleteEquipment(equipmentId));
 
     [HttpPost("query")]

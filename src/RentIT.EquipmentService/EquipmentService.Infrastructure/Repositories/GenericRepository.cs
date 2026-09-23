@@ -20,6 +20,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
         await _context.Set<T>().AddAsync(entity);
     }
 
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken ct = default)
+    {
+        return await _context.Set<T>()
+            .AnyAsync(x => x.Id == id, ct);
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
     {
         return await _context.Set<T>()
@@ -35,12 +41,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
                .AsQueryable();
 
         foreach (var include in includes)
-            query.Include(include);
+            query = query.Include(include);
 
         return await query.ToListAsync(ct);
     }
 
-    public Task<T?> GetByConditionAsync(Expression<Func<T, bool>> expression, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
+    public Task<T?> GetByConditionAsync(Guid id, Expression<Func<T, bool>> expression, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
     {
         IQueryable<T> query = _context.Set<T>()
             .Where(expression)
@@ -50,9 +56,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
             query = query.AsNoTracking();
 
         foreach (var include in includes)
-            query.Include(include);
+            query = query.Include(include);
 
-        return query.FirstOrDefaultAsync(ct);
+        return query.FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
     public Task<T?> GetByIdAsync(Guid id, bool asNoTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
@@ -63,9 +69,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
             query = query.AsNoTracking();
 
         foreach (var include in includes)
-            query.Include(include);
+            query = query.Include(include);
 
-        return query.FirstOrDefaultAsync(ct);
+        return query.FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
     public void UpdateAsync(T entity)

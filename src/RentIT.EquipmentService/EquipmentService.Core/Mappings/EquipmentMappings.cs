@@ -18,7 +18,7 @@ public static class EquipmentMappings
             Description = request.Description,
             Quantity = request.Quantity,
             Condition = request.Condition,
-            OwnerId = request.UserId,
+            UserId = request.UserId,
             DateCreated = DateTime.UtcNow,
             IsActive = true,
         };
@@ -40,7 +40,7 @@ public static class EquipmentMappings
         };
     }
 
-    public static Equipment ToUserEquipment(this EquipmentUpdateRequest request)
+    public static Equipment ToEquipment(this EquipmentUpdateRequest request)
     {
         return new Equipment
         {
@@ -50,7 +50,7 @@ public static class EquipmentMappings
             Description = request.Description,
             Quantity = request.Quantity,
             Condition = request.Condition,
-            OwnerId = request.UserId,
+            UserId = request.UserId,
         };
     }
 
@@ -61,7 +61,7 @@ public static class EquipmentMappings
             Name = equipment.Name,
             Quantity = equipment.Quantity,
             InternalNotes = equipment.InternalNotes,
-            UserId = equipment.OwnerId,
+            UserId = equipment.UserId,
             Condition = equipment.Condition,
             Description = equipment.Description,
             CategoryId = equipment.CategoryId,

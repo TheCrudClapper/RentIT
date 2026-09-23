@@ -26,7 +26,6 @@ namespace EquipmentService.Core.Extensions
 
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
-            services.AddScoped<IUserEquipmentValidator, UserEquipmentValidator>();
 
             //Add RabbitMQ Components
             services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();

@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.Domain.Entities.Equipments.Errors;
+﻿using EquipmentService.Core.Domain.Entities.Categories.Errors;
+using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
@@ -7,32 +7,34 @@ using EquipmentService.Core.Validators.Contracts;
 
 namespace EquipmentService.Core.Validators.Implementations;
 
-public class EquipmentValidator : BaseEquipmentValidator, IEquipmentValidator
+public class EquipmentValidator : IEquipmentValidator
 {
-    private readonly IEquipmentRepository _equipmentRepository;
-    public EquipmentValidator(IEquipmentRepository equipmentRepository,
-        ICategoryRepository categoryRepository,
-        IUsersMicroserviceClient usersMicroserviceClient) : base(categoryRepository, usersMicroserviceClient)
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IUsersMicroserviceClient _usersClient;
+
+    public EquipmentValidator(ICategoryRepository categoryRepository,
+        IUsersMicroserviceClient userClient)
     {
-        _equipmentRepository = equipmentRepository;
+        _usersClient = userClient;
+        _categoryRepository = categoryRepository;
     }
 
-    public override async Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default)
-    {
-        var categoryValidationResult = await ValidateCategory(entity.CategoryId, cancellationToken);
-        if (categoryValidationResult.IsFailure)
-            return Result.Failure(categoryValidationResult.Error);
+    public async Task<Result> ValidateCreateAsync(Equipment entity)
+        => await ValidateCommon(entity);
 
-        var userValidationResult = await ValidateUser(entity.OwnerId, cancellationToken);
+    public async Task<Result> ValidateUpdateAsync(Equipment entity)
+        => await ValidateCommon(entity);
+
+    private async Task<Result> ValidateCommon(Equipment entity, CancellationToken cancellationToken = default)
+    {
+        bool categoryExists = await _categoryRepository.ExistsAsync(entity.CategoryId);
+        if (!categoryExists)
+            return Result.Failure(CategoryErrors.CategoryNotFound);
+
+        var userValidationResult = await _usersClient.GetUserByUserId(entity.UserId, cancellationToken);
         if (userValidationResult.IsFailure)
             return Result.Failure(userValidationResult.Error);
 
-        bool isValid = await _equipmentRepository.IsEquipmentUnique(entity, cancellationToken, entityId);
-
-        if (!isValid)
-            return Result.Failure(EquipmentErrors.EquipmentAlreadyExist);
-
         return Result.Success();
     }
-
 }

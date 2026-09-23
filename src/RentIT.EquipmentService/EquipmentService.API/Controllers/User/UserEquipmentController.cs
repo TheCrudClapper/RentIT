@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentService.API.Controllers.User;
 
-[Route("api/user/equipments")]
+[Route("api/equipments/user")]
 [Authorize]
 [ApiController]
 public class UserEquipmentController : BaseApiController
@@ -25,14 +25,14 @@ public class UserEquipmentController : BaseApiController
         => HandleResult(await _userEquipmentService.GetUserEquipmentById(CurrentUserId, equipmentId, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<CreatedResponse>> PostEquipment(UserEquipmentAddRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request, cancellationToken));
+    public async Task<ActionResult<CreatedResponse>> PostEquipment(UserEquipmentAddRequest request)
+        => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, request));
 
     [HttpPut("{equipmentId}")]
-    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request, CancellationToken cancellationToken)
-        => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request, cancellationToken));
+    public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequest request)
+        => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, request));
 
     [HttpDelete("{equipmentId}")]
-    public async Task<IActionResult> DeleteEquipment(Guid equipmentId, CancellationToken cancellationToken)
-        => HandleResult(await _userEquipmentService.DeleteUserEquipment(CurrentUserId, equipmentId, cancellationToken));
+    public async Task<IActionResult> DeleteEquipment(Guid equipmentId)
+        => HandleResult(await _userEquipmentService.DeleteUserEquipment(CurrentUserId, equipmentId));
 }

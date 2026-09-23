@@ -71,14 +71,14 @@ public class EquipmentService : IEquipmentService
 
     public async Task<Result<UpdatedResponse>> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request)
     {
-        Equipment equipment = request.ToUserEquipment();
-        var validationResult = await _equipmentValidator.ValidateEntity(equipment, equipmentId);
-        if (validationResult.IsFailure)
-            return Result.Failure<UpdatedResponse>(validationResult.Error);
-
         Equipment? entity = await _equipmentRepository.GetByIdAsync(equipmentId);
         if (entity is null)
             return Result.Failure<UpdatedResponse>(EquipmentErrors.EquipmentNotFound);
+
+        Equipment equipment = request.ToEquipment();
+        var validationResult = await _equipmentValidator.ValidateUpdateAsync(equipment);
+        if (validationResult.IsFailure)
+            return Result.Failure<UpdatedResponse>(validationResult.Error);
 
         entity.Update(equipment);
         await _unitOfWork.SaveChangesAsync();
@@ -96,7 +96,7 @@ public class EquipmentService : IEquipmentService
     public async Task<Result<CreatedResponse>> AddEquipment(EquipmentAddRequest request)
     {
         Equipment equipment = request.ToEquipment();
-        var validationResult = await _equipmentValidator.ValidateEntity(equipment, null);
+        var validationResult = await _equipmentValidator.ValidateCreateAsync(equipment);
         if (validationResult.IsFailure)
             return Result.Failure<CreatedResponse>(validationResult.Error);
 
@@ -115,7 +115,7 @@ public class EquipmentService : IEquipmentService
     public async Task<Result<IReadOnlyCollection<EquipmentResponse>>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken)
     {
         var equipmentsByCondition = await _equipmentRepository
-            .GetEquipmentsByCondition(item => equipmentIds.Contains(item.Id), cancellationToken);
+            .GetAllAsyncByCondition(item => equipmentIds.Contains(item.Id), cancellationToken);
 
         return equipmentsByCondition
             .Select(equipment => equipment.ToEquipmentResponse())

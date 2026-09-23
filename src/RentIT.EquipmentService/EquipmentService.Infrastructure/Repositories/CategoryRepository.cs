@@ -16,7 +16,7 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
             && (excludeId == null || item.Id != excludeId));
     }
 
-    public async Task<bool> DoesCategoryExist(Guid categoryId)
+    public async Task<bool> ExistsAsync(Guid categoryId)
     {
         return await _context.Categories
             .AnyAsync(item => item.Id == categoryId);

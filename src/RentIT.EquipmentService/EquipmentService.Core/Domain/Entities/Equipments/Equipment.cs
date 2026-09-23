@@ -18,7 +18,7 @@ public class Equipment : BaseEntity, ISoftDelete
     [MaxLength(50)]
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
-    public Guid OwnerId { get; set; }
+    public Guid UserId { get; set; }
     public int Quantity { get; set; }
     [MaxLength(255)]
     public string? InternalNotes { get; set; }
@@ -30,7 +30,7 @@ public class Equipment : BaseEntity, ISoftDelete
     public ICollection<RentalListing> Listings { get; set; } = new List<RentalListing>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
-
+   
     public void Update(Equipment equipment)
     {
         Name = equipment.Name;

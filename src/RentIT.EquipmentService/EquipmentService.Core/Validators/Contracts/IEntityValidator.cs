@@ -15,5 +15,6 @@ namespace EquipmentService.Core.Validators.Contracts;
 public interface IEntityValidator<T>
     where T : BaseEntity
 {
-    Task<Result> ValidateEntity(Equipment entity, Guid? entityId = null, CancellationToken cancellationToken = default);
+    Task<Result> ValidateCreateAsync(T entity);
+    Task<Result> ValidateUpdateAsync(T entity);
 }
