@@ -45,11 +45,9 @@ namespace EquipmentService.Infrastructure.DbContexts
 
             //ListingImages
             modelBuilder.Entity<ListingImage>().HasQueryFilter(x => x.IsActive);
-            modelBuilder.Entity<ListingImage>().HasOne<RentalListing>(x => x.RentalListing).WithMany(x => x.Images);
 
             //EquipmentImage
             modelBuilder.Entity<EquipmentImage>().HasQueryFilter(x => x.IsActive);
-            modelBuilder.Entity<EquipmentImage>().HasOne(x => x.Equipment).WithMany(x => x.Images);
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

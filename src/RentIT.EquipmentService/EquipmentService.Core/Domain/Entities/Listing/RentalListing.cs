@@ -15,6 +15,7 @@ public class RentalListing : BaseEntity, ISoftDelete
     public Guid EquipmentId { get; set; }
     [ForeignKey("EquipmentId")]
     public Equipment Equipment { get; set; } = null!;
+    public Guid UserId { get; set; }
     public string Title { get; set; } = null!;
     public string Description { get; set; } = null!;
     public int Quantity { get; set; }

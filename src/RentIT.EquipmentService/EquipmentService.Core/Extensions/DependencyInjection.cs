@@ -22,9 +22,12 @@ namespace EquipmentService.Core.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserEquipmentService, UserEquipmentService>();
             services.AddScoped<IEquipmentService, Services.EquipmentServices.EquipmentService>();
+            services.AddScoped<IRentalListingService, Services.ListingServices.RentalListingService>();
+            services.AddScoped<IUserRentalListingService, Services.ListingServices.UserRentalListingService>();
 
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
+            services.AddScoped<IRentalListingValidator, RentalListingValidator>();
 
             //Add RabbitMQ Components
             services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();

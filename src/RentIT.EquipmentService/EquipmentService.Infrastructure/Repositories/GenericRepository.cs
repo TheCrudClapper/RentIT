@@ -26,6 +26,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, 
             .AnyAsync(x => x.Id == id, ct);
     }
 
+    public async Task<bool> ExistsAsyncByCondition(Expression<Func<T, bool>> expresion, CancellationToken ct = default)
+    {
+        return await _context.Set<T>()
+            .AnyAsync(expresion, ct);
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
     {
         return await _context.Set<T>()

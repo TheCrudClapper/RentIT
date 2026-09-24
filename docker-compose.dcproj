@@ -20,4 +20,7 @@
     <None Include="src\RentIT.Frontend\RentIT.UI.Blazor\Components\Pages\Equipments\EquipmentEdit.razor.cs" />
     <None Include="src\RentIT.Frontend\RentIT.UI.Blazor\Components\Pages\Equipments\EquipmentList.razor.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\RentIT.EquipmentService\" />
+  </ItemGroup>
 </Project>
