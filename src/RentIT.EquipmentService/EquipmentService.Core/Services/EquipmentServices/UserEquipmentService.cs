@@ -19,7 +19,6 @@ public class UserEquipmentService : IUserEquipmentService
 {
     private readonly IEquipmentRepository _equipmentRepository;
     private readonly IEquipmentValidator _equipmentValidator;
-    private readonly IRabbitMQPublisher _rabbitMqPublisher;
     private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -27,13 +26,11 @@ public class UserEquipmentService : IUserEquipmentService
         IEquipmentRepository equipmentRepository,
         IEquipmentValidator equipmentValidator,
         IUsersMicroserviceClient usersClient,
-        IRabbitMQPublisher rabbitMqPublisher,
         IConfiguration configuration,
         IUnitOfWork uow)
     {
         _equipmentRepository = equipmentRepository;
         _equipmentValidator = equipmentValidator;
-        _rabbitMqPublisher = rabbitMqPublisher;
         _configuration = configuration;
         _unitOfWork = uow;
     }
@@ -51,10 +48,10 @@ public class UserEquipmentService : IUserEquipmentService
         await _equipmentRepository.AddAsync(equipment);
         await _unitOfWork.SaveChangesAsync();
 
-        _rabbitMqPublisher.Publish(
-            "equipment.create",
-            equipment.ToEquipmentResponse(),
-            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
+        //_rabbitMqPublisher.Publish(
+        //    "equipment.create",
+        //    equipment.ToEquipmentResponse(),
+        //    _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
         return equipment.ToCreatedResponse();
     }
@@ -76,10 +73,10 @@ public class UserEquipmentService : IUserEquipmentService
         entity.Update(equipmentToUpdate);
         await _unitOfWork.SaveChangesAsync();
 
-        _rabbitMqPublisher.Publish(
-           "equipment.update",
-           entity.ToEquipmentResponse(),
-           _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
+        //_rabbitMqPublisher.Publish(
+        //   "equipment.update",
+        //   entity.ToEquipmentResponse(),
+        //   _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
         return entity.ToUpdatedResponse();
     }
@@ -115,9 +112,9 @@ public class UserEquipmentService : IUserEquipmentService
         equipment.Deactivate();
         await _unitOfWork.SaveChangesAsync();
 
-        _rabbitMqPublisher.Publish("equipment.delete",
-            new EquipmentDeletedMessage(equipmentId),
-            _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
+        //_rabbitMqPublisher.Publish("equipment.delete",
+        //    new EquipmentDeletedMessage(equipmentId),
+        //    _configuration["RABBITMQ_EQUIPMENT_EXCHANGE"]!);
 
         return Result.Success();
     }

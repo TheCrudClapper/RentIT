@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentService.API.Controllers;
+namespace EquipmentService.API.Controllers.Public;
 
 [Route("api/listings")]
-[Authorize]
+[AllowAnonymous]
 [ApiController]
 public class RentalListingController : BaseApiController
 {
@@ -18,12 +18,10 @@ public class RentalListingController : BaseApiController
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
     public async Task<ActionResult<RentalListingResponse>> GetByEquipmentId(Guid id, CancellationToken ct)
         => HandleResult(await _rentalListingService.GetRentalListing(id, ct));
 
     [HttpGet("equipment/{id}")]
-    [AllowAnonymous]
     public async Task<ActionResult<RentalListingResponse>> GetById(Guid id, CancellationToken ct)
         => HandleResult(await _rentalListingService.GetRentalListingsByEquipmentId(id, ct));
 
