@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using RentIT.UI.Core.DTO.Equipments;
+using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
 using RentIT.UI.Core.HttpClientContracts;
 
 namespace RentIT.BlazorFrontend.Pages.Equipments;
@@ -19,12 +19,11 @@ public partial class EquipmentList
     private async Task HandleDelete(UserEquipmentListResponse equipment)
     {
         var result = await UserEquipmentHttpClient.DeleteEquipment(equipment.Id);
-        //if (result.IsSuccess)
-        //{
-        Equipments.Remove(equipment);
-        //await RefreshAsync();
-        //StateHasChanged();
-
+        if (result.IsSuccess)
+        {
+            Equipments.Remove(equipment);
+            await RefreshAsync();
+        }
     }
 
     private async Task HandleEdit(Guid id)

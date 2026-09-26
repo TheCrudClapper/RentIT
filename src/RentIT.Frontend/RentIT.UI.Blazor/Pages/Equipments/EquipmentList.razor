@@ -1,19 +1,18 @@
 ﻿@layout EquipmentLayout
 @page "/equipments"
+@using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments
 @rendermode InteractiveServer
 
 <PageTitle>Moje sprzęty</PageTitle>
 <div class="container">
-    <div class="page-head">
-        <div>
-            <div class="prompt">items --owner=me</div>
-            <h1>Moje przedmioty</h1>
-        </div>
-        <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
-    </div>
+    <PageHead PrompText="items --owner=me" PageHeader="Moje przedmioty"/>
+        <ChildContent>
+              <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
+        </ChildContent>
+    <PageHead/>
 
     <div class="list-container">
-        <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
+           <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
             <span>Nazwa</span>
             <span>Numer seryjny</span>
             <span>Kwota najmu/dzień</span>
@@ -37,8 +36,6 @@
             {
                 <div class="list-row" style="grid-template-columns:1fr 1fr 1fr 100px;">
                     <span>@eq.Name</span>
-                    <span>@eq.SerialNumber</span>
-                    <span>@eq.RentalPricePerDay</span>
                     <div>
                         <button class="btn btn-primary btn-sm" @onclick="() => HandleEdit(eq.Id)">
                             <img src="/icons/pen.svg" alt="edit" />
@@ -53,4 +50,5 @@
             }
         }
     </div>
+
 </div>

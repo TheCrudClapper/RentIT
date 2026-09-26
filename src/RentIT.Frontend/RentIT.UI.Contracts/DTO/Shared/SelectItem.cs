@@ -1,4 +1,4 @@
-﻿namespace RentIT.BlazorFrontend.Models.Shared;
+﻿namespace RentIT.UI.Contracts.DTO.Shared;
 
 public class SelectItem
 {

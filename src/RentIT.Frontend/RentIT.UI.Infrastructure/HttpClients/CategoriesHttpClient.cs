@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RentIT.UI.Core.DTO.Shared;
+using RentIT.UI.Contracts.DTO.Shared;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.ResultTypes;
 using RentIT.UI.Infrastructure.HttpClients.Base;

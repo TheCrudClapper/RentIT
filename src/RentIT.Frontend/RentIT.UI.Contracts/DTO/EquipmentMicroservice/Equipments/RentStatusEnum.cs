@@ -1,4 +1,4 @@
-﻿namespace RentIT.UI.Core.DTO.Equipments;
+﻿namespace RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
 
 public enum RentStatusEnum
 {

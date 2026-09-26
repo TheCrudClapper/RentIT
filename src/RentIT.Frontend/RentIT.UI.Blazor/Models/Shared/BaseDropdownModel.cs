@@ -1,6 +1,6 @@
-﻿namespace RentIT.UI.Core.DTO.Shared;
+﻿namespace RentIT.BlazorFrontend.Models.Shared;
 
-public class SelectItem
+public class BaseDropdownModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;

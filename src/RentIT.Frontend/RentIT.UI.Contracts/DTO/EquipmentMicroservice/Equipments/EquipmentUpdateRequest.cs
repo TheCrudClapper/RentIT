@@ -1,9 +1,8 @@
-﻿using RentIT.UI.Core.DTO.Equipments;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentIT.BlazorFrontend.Models.Equipments;
+namespace RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
 
-public class EquipmentModel
+public class EquipmentUpdateRequest
 {
     [Required]
     public string Name { get; set; } = null!;
@@ -15,6 +14,9 @@ public class EquipmentModel
     public string SerialNumber { get; set; } = null!;
 
     [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
     public decimal RentalPricePerDay { get; set; }
 
     [Required]
@@ -23,3 +25,4 @@ public class EquipmentModel
     [StringLength(255)]
     public string? Notes { get; set; }
 }
+

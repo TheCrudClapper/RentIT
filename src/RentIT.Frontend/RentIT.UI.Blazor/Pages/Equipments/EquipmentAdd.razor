@@ -2,20 +2,16 @@
 @page "/equipments/create"
 @using RentIT.BlazorFrontend.Pages.Equipments.Components
 @rendermode InteractiveServer
+
 <PageTitle>Dodaj sprzęt</PageTitle>
-
-<div class="container">
-    <div class="page-head">
-        <div>
-            <div class="prompt">items --owner=me</div>
-            <h1>Dodaj Sprzęt</h1>
-        </div>
-    </div>
-    <EquipmentForm OnSubmit="HandleAdd"
-        Model="Model" 
-        Categories="Categories"/>
-
-</div>
+    <BasePageContent>
+        <PageHead 
+            PageHeader="Dodaj sprzęt" 
+            PrompText="equipment -- owner=me"/>
+        <EquipmentForm OnSubmit="HandleAdd"
+                       Model="Model"
+                       Categories="Categories" />
+    </BasePageContent>
 
 @code {
 

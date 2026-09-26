@@ -1,41 +1,41 @@
-﻿using EquipmentService.Core.DTO.Equipments;
-using RentIT.BlazorFrontend.Models.Equipments;
-using RentIT.UI.Core.DTO.Equipments;
+﻿using RentIT.BlazorFrontend.Models.Equipments;
+using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
 
 namespace RentIT.BlazorFrontend.Mappings;
 
 public static class EquipmentMappings
 {
-    public static EquipmentModel ToModel(this EquipmentResponse response)
+    public static UserEquipmentFormModel ToUserModel(this UserEquipmentResponse response)
         => new()
         {
             CategoryId = response.CategoryId,
             Name = response.Name,
-            Notes = response.Notes,
-            RentalPricePerDay = response.RentalPricePerDay,
-            SerialNumber = response.SerialNumber,
-            Status = response.Status
+            Description = response.Description,
+            Condition = response.Condition,
+            Quantity = response.Quantity,
+            InternalNotes = response.InternalNotes,
         };
 
-    public static EquipmentAddRequest ToAddRequest(this EquipmentModel model)
+    public static UserEquipmentAddRequest ToAddRequest(this UserEquipmentFormModel model)
         => new()
         {
             CategoryId = model.CategoryId,
             Name = model.Name,
-            Notes = model.Notes,
-            RentalPricePerDay = model.RentalPricePerDay,
-            SerialNumber = model.SerialNumber,
-            Status = model.Status
+            Condition = model.Condition,
+            Description = model.Description,
+            InternalNotes = model.InternalNotes,
+            Quantity = model.Quantity,
         };
 
-    public static EquipmentUpdateRequest ToUpdateRequest(this EquipmentModel model)
+    public static UserEquipmentUpdateRequest ToUpdateRequest(this UserEquipmentFormModel model)
         => new()
         {
             CategoryId = model.CategoryId,
             Name = model.Name,
-            Notes = model.Notes,
-            RentalPricePerDay = model.RentalPricePerDay,
-            SerialNumber = model.SerialNumber,
-            Status = model.Status
+            Condition = model.Condition,
+            Description = model.Description,
+            Quantity = model.Quantity,
+            InternalNotes = model.InternalNotes 
         };
+
 }

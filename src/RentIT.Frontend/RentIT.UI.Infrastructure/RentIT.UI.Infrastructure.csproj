@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RentIT.UI.Contracts\RentIT.UI.Contracts.csproj" />
     <ProjectReference Include="..\RentIT.UI.Core\RentIT.UI.Core.csproj" />
   </ItemGroup>
 

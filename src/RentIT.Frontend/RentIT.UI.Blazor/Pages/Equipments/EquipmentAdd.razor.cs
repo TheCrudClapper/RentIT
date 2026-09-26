@@ -11,8 +11,8 @@ public partial class EquipmentAdd
     [Inject] public NavigationManager Navigation { get; set; } = default!;
     [Inject] private IUserEquipmentHttpClient UserEquipmentHttpClient { get; set; } = default!;
     [Inject] private ICategoriesHttpClient CategoriesHttpClient { get; set; } = default!;
-    public List<SelectItem> Categories { get; set; } = [];
-    private EquipmentModel Model { get; set; } = new();
+    public List<BaseDropdownModel> Categories { get; set; } = [];
+    private UserEquipmentFormModel Model { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -23,11 +23,11 @@ public partial class EquipmentAdd
 
         }
         Categories = result.Value
-            .Select(x => new SelectItem() { Id = x.Id, Name = x.Name })
+            .Select(x => new BaseDropdownModel() { Id = x.Id, Name = x.Name })
             .ToList();
     }
 
-    private async Task HandleAdd(EquipmentModel model)
+    private async Task HandleAdd(UserEquipmentFormModel model)
     {
         //validation in future btw
         var request = model.ToAddRequest();
@@ -37,5 +37,5 @@ public partial class EquipmentAdd
         if (result.IsSuccess)
             Navigation.NavigateTo("/equipments");
     }
-
+    
 }

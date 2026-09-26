@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RentIT.UI.Contracts\RentIT.UI.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

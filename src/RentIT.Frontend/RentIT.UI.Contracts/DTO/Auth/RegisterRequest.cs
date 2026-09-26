@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RentIT.UI.Core.DTO.Auth;
+namespace RentIT.UI.Contracts.DTO.Auth;
 
 public class RegisterRequest
 {

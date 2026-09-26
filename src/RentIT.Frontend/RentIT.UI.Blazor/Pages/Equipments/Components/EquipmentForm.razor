@@ -1,5 +1,6 @@
 ﻿@using RentIT.BlazorFrontend.Models.Equipments
 @using RentIT.BlazorFrontend.Models.Shared
+@using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Enums
 
 <EditForm OnValidSubmit="OnValidSubmit" FormName="EquipmentAddForm" Model="@Model">
     <DataAnnotationsValidator />
@@ -29,34 +30,27 @@
         <ValidationMessage For="@(() => Model.CategoryId)" />
     </div>
 
+     <div class="field">
+        <label for="quantity">Quantity</label>
+        <InputNumber @bind-Value="Model.Quantity"/>
+        <ValidationMessage For="@(() => Model.Quantity)" />
+    </div>
+
     <div class="field">
-        <label for="status">Status</label>
-        <select id="status" @bind="Model.Status">
+        <label for="status">Condition</label>
+        <select id="status" @bind="Model.Condition">
             @foreach (var status in Statuses)
             {
-                <option value="@status.Item1">@status.Item2</option>
+                <option value="@status">@status</option>
             }
         </select>
-        <ValidationMessage For="@(() => Model.Status)" />
+        <ValidationMessage For="@(() => Model.Condition)" />
     </div>
 
     <div class="field">
-        <label for="serial">Serial Number</label>
-
-        <InputText id="serial"
-                   type="text"
-                   @bind-Value="Model.SerialNumber"
-                   placeholder="SN-623231" />
-
-        <ValidationMessage For="@(() => Model.SerialNumber)" />
-    </div>
-    <div class="field">
-        <label for="price">Rental Price / day</label>
-        <InputNumber id="price"
-                     type="number"
-                     @bind-Value="Model.RentalPricePerDay"
-                     placeholder="1222" />
-        <ValidationMessage For="@(() => Model.RentalPricePerDay)" />
+        <label for="description">Description</label>
+        <InputTextArea id="description" @bind-Value="Model.Description" />
+        <ValidationMessage For="@(() => Model.Description)" />
     </div>
 
     <div class="field">
@@ -64,26 +58,37 @@
 
         <InputTextArea id="notes"
                        type="text"
-                       @bind-Value="Model.Notes"
+                       @bind-Value="Model.InternalNotes"
                        placeholder="Your notes here" />
-        <ValidationMessage For="@(() => Model.Notes)" />
+        <ValidationMessage For="@(() => Model.InternalNotes)" />
     </div>
 
     <button type="submit" class="btn btn-primary">
        Zatwierdz
     </button>
+
 </EditForm>
 
 
 @code {
-    [Parameter] public EquipmentModel Model { get; set; }
+    [Parameter] public UserEquipmentFormModel Model { get; set; }
     [Parameter] public bool IsEditMode { get; set; } = false;
-    [Parameter] public EventCallback<EquipmentModel> OnSubmit { get; set; }
-    [Parameter] public List<SelectItem> Categories { get; set; } = [];
-    private List<(int, string)> Statuses { get; set; } = [new(1, "Rented"), new(2, "Nigga")];
+    [Parameter] public EventCallback<UserEquipmentFormModel> OnSubmit { get; set; }
+    [Parameter] public List<BaseDropdownModel> Categories { get; set; } = [];
+    private List<EquipmentCondition> Statuses = new();
+
+    protected override void OnInitialized()
+    {
+        PopulateStatuses();
+    }
 
     public async Task OnValidSubmit()
     {
         await OnSubmit.InvokeAsync(Model);
+    }
+
+    private void PopulateStatuses()
+    {
+        Statuses = Enum.GetValues(typeof(EquipmentCondition)).Cast<EquipmentCondition>().ToList();
     }
 }

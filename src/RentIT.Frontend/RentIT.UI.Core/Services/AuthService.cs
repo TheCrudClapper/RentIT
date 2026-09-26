@@ -1,4 +1,4 @@
-﻿using RentIT.UI.Core.DTO.Auth;
+﻿using RentIT.UI.Contracts.DTO.Auth;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.InfrastructureContracts;
 using RentIT.UI.Core.ResultTypes;

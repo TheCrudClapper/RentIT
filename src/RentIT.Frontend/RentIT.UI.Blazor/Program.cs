@@ -37,6 +37,7 @@ namespace RentIT.BlazorFrontend
                 .AddInfrastructureLayer()
                 .AddValidation();
 
+            builder.Services.AddLocalizationSupport();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,6 +48,7 @@ namespace RentIT.BlazorFrontend
                 app.UseHsts();
             }
 
+            app.UseLocalization();
             app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
             app.UseHttpsRedirection();
 

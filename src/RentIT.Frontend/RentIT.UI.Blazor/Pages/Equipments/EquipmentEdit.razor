@@ -1,18 +1,12 @@
 ﻿@page "/equipments/{EquipmentId:guid}/edit"
 @using RentIT.BlazorFrontend.Pages.Equipments.Components
 @rendermode InteractiveServer
+
 <PageTitle>Edytuj sprzęt</PageTitle>
-
-<div class="container">
-    <div class="page-head">
-        <div>
-            <div class="prompt">items --owner=me</div>
-            <h1>Edytuj sprzęt</h1>
-        </div>
-    </div>
-
-    <EquipmentForm OnSubmit="HandleEdit" 
-                Model="Model"
-                Categories="Categories"/>
-
-</div>
+<BasePageContent>
+    <PageHead PageHeader="Edytuj sprzęt"
+                PrompText="equipment -- owner=me" />
+    <EquipmentForm OnSubmit="HandleEdit"
+                   Model="Model"
+                   Categories="Categories" />
+</BasePageContent>

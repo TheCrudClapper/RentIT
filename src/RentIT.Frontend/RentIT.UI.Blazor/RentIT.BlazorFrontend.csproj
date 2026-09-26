@@ -16,12 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RentIT.UI.Contracts\RentIT.UI.Contracts.csproj" />
     <ProjectReference Include="..\RentIT.UI.Core\RentIT.UI.Core.csproj" />
     <ProjectReference Include="..\RentIT.UI.Infrastructure\RentIT.UI.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

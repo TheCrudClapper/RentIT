@@ -1,3 +1,3 @@
-﻿namespace RentIT.UI.Core.DTO.Shared;
+﻿namespace RentIT.UI.Contracts.DTO.Shared;
 
 public record CreatedResponse(Guid Id, DateTime DateCreated);

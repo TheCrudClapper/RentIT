@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.UI.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.UI.Core", "src\RentIT.Frontend\RentIT.UI.Core\RentIT.UI.Core.csproj", "{BAC768B0-8391-2DE7-243C-003F0EF47116}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentIT.UI.Contracts", "src\RentIT.Frontend\RentIT.UI.Contracts\RentIT.UI.Contracts.csproj", "{1BA8A674-9594-4F07-A80F-8468B59DA741}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{BAC768B0-8391-2DE7-243C-003F0EF47116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAC768B0-8391-2DE7-243C-003F0EF47116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAC768B0-8391-2DE7-243C-003F0EF47116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BA8A674-9594-4F07-A80F-8468B59DA741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BA8A674-9594-4F07-A80F-8468B59DA741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BA8A674-9594-4F07-A80F-8468B59DA741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BA8A674-9594-4F07-A80F-8468B59DA741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -149,6 +155,7 @@ Global
 		{EE8FF6AF-C09E-6DBC-6FB3-B9E532477EFF} = {65C01997-4FE5-45DD-BCE1-EB28614B363E}
 		{EBD849F2-129F-17AA-09A4-D650AD487E3D} = {65C01997-4FE5-45DD-BCE1-EB28614B363E}
 		{BAC768B0-8391-2DE7-243C-003F0EF47116} = {65C01997-4FE5-45DD-BCE1-EB28614B363E}
+		{1BA8A674-9594-4F07-A80F-8468B59DA741} = {65C01997-4FE5-45DD-BCE1-EB28614B363E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B4ED6B7-1926-45F4-B6DD-392B68932D4A}

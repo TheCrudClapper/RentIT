@@ -1,5 +1,5 @@
 ﻿using RentIT.BlazorFrontend.Models.Auth;
-using RentIT.UI.Core.DTO.Auth;
+using RentIT.UI.Contracts.DTO.Auth;
 
 namespace RentIT.BlazorFrontend.Mappings;
 

@@ -1,0 +1,13 @@
+﻿<div class="page-head">
+    <div>
+        <div class="prompt">@PrompText</div>
+        <h1>@PageHeader</h1>
+    </div>
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public string PrompText { get; set; }
+    [Parameter] public string PageHeader { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.JsonWebTokens;
-using RentIT.UI.Core.DTO.Auth;
+using RentIT.UI.Contracts.DTO.Auth;
 using System.Security.Claims;
 
 namespace RentIT.BlazorFrontend.Auth;

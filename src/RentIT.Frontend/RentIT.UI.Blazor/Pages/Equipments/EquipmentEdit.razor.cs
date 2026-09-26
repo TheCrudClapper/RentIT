@@ -12,8 +12,8 @@ public partial class EquipmentEdit
     [Inject] private ICategoriesHttpClient CategoriesHttpClient { get; set; } = default!;
 
     [Parameter] public Guid EquipmentId { get; set; }
-    private EquipmentModel Model { get; set; } = new();
-    private List<SelectItem> Categories { get; set; } = [];
+    private UserEquipmentFormModel Model { get; set; } = new();
+    private List<BaseDropdownModel> Categories { get; set; } = [];
 
     protected override async Task OnParametersSetAsync()
     {
@@ -27,17 +27,17 @@ public partial class EquipmentEdit
         }
 
         var response = t1.Value;
-        Model = response.ToModel();
+        Model = response.ToUserModel();
 
         if (t2.IsSuccess)
         {
             Categories = t2.Value
-            .Select(x => new SelectItem() { Id = x.Id, Name = x.Name })
+            .Select(x => new BaseDropdownModel() { Id = x.Id, Name = x.Name })
             .ToList();
         }
     }
 
-    private async Task HandleEdit(EquipmentModel model)
+    private async Task HandleEdit(UserEquipmentFormModel model)
     {
         //validation in future btw
         var request = model.ToUpdateRequest();
