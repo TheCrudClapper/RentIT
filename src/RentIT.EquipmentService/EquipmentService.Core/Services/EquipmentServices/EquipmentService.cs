@@ -17,19 +17,16 @@ public class EquipmentService : IEquipmentService
 {
     private readonly IEquipmentRepository _equipmentRepository;
     private readonly IEquipmentValidator _equipmentValidator;
-    private readonly IRabbitMQPublisher _rabbitMQPublisher;
     private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
 
     public EquipmentService(IEquipmentRepository equipmentRepository,
         IEquipmentValidator equipmentValidator,
-        IRabbitMQPublisher rabbitMQ,
         IConfiguration configuration,
         IUnitOfWork unitOfWork)
     {
         _equipmentRepository = equipmentRepository;
         _equipmentValidator = equipmentValidator;
-        _rabbitMQPublisher = rabbitMQ;
         _configuration = configuration;
         _unitOfWork = unitOfWork;
     }

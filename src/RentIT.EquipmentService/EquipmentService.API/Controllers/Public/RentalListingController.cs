@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentService.API.Controllers;
+namespace EquipmentService.API.Controllers.Public;
 
 [Route("api/listings")]
 [AllowAnonymous]

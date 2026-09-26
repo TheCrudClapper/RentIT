@@ -30,22 +30,22 @@ namespace EquipmentService.Core.Extensions
             services.AddScoped<IRentalListingValidator, RentalListingValidator>();
 
             //Add RabbitMQ Components
-            services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
-            services.AddTransient<RabbitMQReviewCreatedConsumer>();
-            services.AddTransient<RabbitMQReviewUpdatedConsumer>();
-            services.AddTransient<RabbitMQReviewDeletedConsumer>();
+            //services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
+            //services.AddTransient<RabbitMQReviewCreatedConsumer>();
+            //services.AddTransient<RabbitMQReviewUpdatedConsumer>();
+            //services.AddTransient<RabbitMQReviewDeletedConsumer>();
 
             //Add Hosted Serivce
-            services.AddHostedService<RabbitMQConsumersHostedService>();
+            //services.AddHostedService<RabbitMQConsumersHostedService>();
 
             //Add Redis Cache
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
-            });
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = $"{Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost"}:{Environment.GetEnvironmentVariable("REDIS_PORT")}" ?? "6379";
+            //});
 
             //Add CachingHelper
-            services.AddScoped<ICachingHelper, CachingHelper>();
+            //services.AddScoped<ICachingHelper, CachingHelper>();
 
             return services;
         }
