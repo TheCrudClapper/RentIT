@@ -4,27 +4,19 @@
 @rendermode InteractiveServer
 
 <PageTitle>Moje sprzęty</PageTitle>
-<div class="container">
-    <PageHead PrompText="items --owner=me" PageHeader="Moje przedmioty"/>
-        <ChildContent>
-              <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
-        </ChildContent>
-    <PageHead/>
+<BasePageContent>
+    <PageHead PrompText="items --owner=me" PageHeader="Moje przedmioty">
+        <NavLink href="/equipments/create" class="btn btn-primary">+ Nowy Sprzęt</NavLink>
+    </PageHead >
 
     <div class="list-container">
-           <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
+        <div class="list-row head" style="grid-template-columns:1fr 1fr 1fr 100px;">
             <span>Nazwa</span>
             <span>Numer seryjny</span>
             <span>Kwota najmu/dzień</span>
             <span>Akcje</span>
         </div>
-        @if (Equipments is null)
-        {
-            <div class="list-row">
-                <span>There are no equipments yet.</span>
-            </div>
-        }
-        else if(Equipments.Count == 0)
+        @if (Equipments is null || Equipments.Count == 0)
         {
             <div class="list-row">
                 <span class="text-faint mono">There are no equipments yet.</span>
@@ -40,8 +32,8 @@
                         <button class="btn btn-primary btn-sm" @onclick="() => HandleEdit(eq.Id)">
                             <img src="/icons/pen.svg" alt="edit" />
                         </button>
-                        <button class="btn btn-primary btn-sm" @onclick = "() => HandleDelete(eq)">
-                            <img src="/icons/trash.svg" alt="trash"/>
+                        <button class="btn btn-primary btn-sm" @onclick="() => HandleDelete(eq)">
+                            <img src="/icons/trash.svg" alt="trash" />
                         </button>
                     </div>
                     <span>
@@ -51,4 +43,43 @@
         }
     </div>
 
-</div>
+</BasePageContent>
+
+@code{
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private IUserEquipmentHttpClient UserEquipmentHttpClient { get; set; } = null!;
+    private List<UserEquipmentListResponse> Equipments { get; set; } = [];
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await RefreshAsync();
+    //}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await RefreshAsync();
+    }
+
+    private async Task HandleDelete(UserEquipmentListResponse equipment)
+    {
+        var result = await UserEquipmentHttpClient.DeleteEquipment(equipment.Id);
+        if (result.IsSuccess)
+        {
+            Equipments.Remove(equipment);
+            await RefreshAsync();
+        }
+    }
+
+    private async Task HandleEdit(Guid id)
+    {
+        NavigationManager.NavigateTo($"/equipments/{id}/edit");
+    }
+
+    private async Task RefreshAsync()
+    {
+        var result = await UserEquipmentHttpClient.GetUserEquipmentsList();
+        if (result.IsSuccess)
+            Equipments = result.Value.ToList();
+    }
+}

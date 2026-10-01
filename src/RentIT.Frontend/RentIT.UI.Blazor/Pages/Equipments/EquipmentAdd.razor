@@ -1,6 +1,9 @@
 ﻿@layout EquipmentLayout
 @page "/equipments/create"
+@using RentIT.BlazorFrontend.Models.Equipments
+@using RentIT.BlazorFrontend.Models.Shared
 @using RentIT.BlazorFrontend.Pages.Equipments.Components
+
 @rendermode InteractiveServer
 
 <PageTitle>Dodaj sprzęt</PageTitle>
@@ -9,10 +12,37 @@
             PageHeader="Dodaj sprzęt" 
             PrompText="equipment -- owner=me"/>
         <EquipmentForm OnSubmit="HandleAdd"
-                       Model="Model"
+                       EditContext="EditContext"
                        Categories="Categories" />
     </BasePageContent>
 
 @code {
 
+    [Inject] public NavigationManager Navigation { get; set; } = default!;
+    [Inject] private IUserEquipmentHttpClient UserEquipmentHttpClient { get; set; } = default!;
+    [Inject] private ICategoriesHttpClient CategoriesHttpClient { get; set; } = default!;
+    public List<BaseDropdownModel> Categories { get; set; } = [];
+    private EditContext EditContext { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EditContext = new EditContext(new UserEquipmentFormModel());
+        var result = await CategoriesHttpClient.GetCategories();
+        if (result.IsFailure)
+        {
+
+        }
+        Categories = result.Value
+            .Select(x => new BaseDropdownModel() { Id = x.Id, Text = x.Name })
+            .ToList();
+    }
+
+    private async Task HandleAdd(UserEquipmentFormModel model)
+    {
+        var request = model.ToAddRequest();
+        var result = await UserEquipmentHttpClient.PostEquipment(request);
+        if (result.IsSuccess)
+            Navigation.NavigateTo("/equipments");
+
+    }
 }

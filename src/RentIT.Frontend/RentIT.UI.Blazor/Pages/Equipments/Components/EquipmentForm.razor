@@ -2,7 +2,7 @@
 @using RentIT.BlazorFrontend.Models.Shared
 @using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Enums
 
-<EditForm OnValidSubmit="OnValidSubmit" FormName="EquipmentAddForm" Model="@Model">
+<EditForm OnValidSubmit="OnValidSubmit" FormName="EquipmentAddForm" EditContext="@EditContext">
     <DataAnnotationsValidator />
     <div class="field">
         <label for="name">Name</label>
@@ -23,7 +23,7 @@
             {
                 foreach (var cat in Categories)
                 {
-                    <option value="@cat.Id">@cat.Name</option>
+                    <option value="@cat.Id">@cat.Text</option>
                 }
             }
         </InputSelect>
@@ -71,10 +71,11 @@
 
 
 @code {
-    [Parameter] public UserEquipmentFormModel Model { get; set; }
     [Parameter] public bool IsEditMode { get; set; } = false;
     [Parameter] public EventCallback<UserEquipmentFormModel> OnSubmit { get; set; }
     [Parameter] public List<BaseDropdownModel> Categories { get; set; } = [];
+    [Parameter, EditorRequired] public EditContext EditContext { get; set; }
+    private UserEquipmentFormModel Model => (UserEquipmentFormModel)EditContext.Model;
     private List<EquipmentCondition> Statuses = new();
 
     protected override void OnInitialized()
@@ -84,11 +85,14 @@
 
     public async Task OnValidSubmit()
     {
+        if (!EditContext.Validate())
+            return;
+
         await OnSubmit.InvokeAsync(Model);
     }
 
     private void PopulateStatuses()
-    {
+    {   
         Statuses = Enum.GetValues(typeof(EquipmentCondition)).Cast<EquipmentCondition>().ToList();
     }
 }

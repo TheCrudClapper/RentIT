@@ -3,5 +3,5 @@
 public class BaseDropdownModel
 {
     public Guid Id { get; set; }
-    public string Name { get; set; } = default!;
+    public string Text { get; set; } = null!;
 }
