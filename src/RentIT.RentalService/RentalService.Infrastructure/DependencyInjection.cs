@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
 using RentalService.Infrastructure.Repositories;
+using RentalService.Infrastructure.Repositories.UnitOfWork;
 namespace RentalService.Infrastructure;
 
 
@@ -26,7 +27,7 @@ public static class DependencyInjection
         });
         services.AddScoped<IRentalRepository, RentalRepository>();
         services.AddScoped<IUserRentalRepository, UserRentalRepository>();
-
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

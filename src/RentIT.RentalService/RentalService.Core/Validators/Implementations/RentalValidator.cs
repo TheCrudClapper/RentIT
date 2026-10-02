@@ -1,5 +1,5 @@
-﻿using RentalService.Core.Domain.Entities;
-using RentalService.Core.Domain.Entities.Errors;
+﻿using RentalService.Core.Domain.Entities.Errors;
+using RentalService.Core.Domain.Entities.Rentals;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.Domain.ResultTypes;

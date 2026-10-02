@@ -1,4 +1,4 @@
-﻿using RentalService.Core.Domain.Entities;
+﻿using RentalService.Core.Domain.Entities.Rentals;
 using RentalService.Core.Domain.ResultTypes;
 using RentalService.Core.DTO.Rentals;
 

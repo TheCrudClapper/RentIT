@@ -4,7 +4,7 @@ using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentService.API.Controllers;
+namespace EquipmentService.API.Controllers.Public;
 
 [Route("api/categories")]
 [Authorize]

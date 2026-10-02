@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RentalService.Core.Domain.Entities;
+using RentalService.Core.Domain.Entities.Rentals;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Infrastructure.DbContexts;
 

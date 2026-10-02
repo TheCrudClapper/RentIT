@@ -7,7 +7,7 @@ namespace EquipmentService.Core.Domain.Entities.Listing;
 public enum ListingStatus
 {
     Open = 1,
-    Closed = 2
+    Ended = 2
 }
 
 public class RentalListing : BaseEntity, ISoftDelete
@@ -24,6 +24,7 @@ public class RentalListing : BaseEntity, ISoftDelete
     public ListingStatus ListingStatus { get; set; }
     public int MaximumRentalDays { get; set; }
     public int MinimumRentalDays { get; set; }
+    public DateTime ListingAvaliableTo { get; set; }
     public ICollection<ListingImage> Images { get; set; } = new List<ListingImage>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }

@@ -1,4 +1,4 @@
-﻿using RentalService.Core.Domain.Entities;
+﻿using RentalService.Core.Domain.Entities.Rentals;
 using System.Linq.Expressions;
 
 namespace RentalService.Core.Domain.RepositoryContracts;

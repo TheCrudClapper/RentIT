@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RentalService.Core.DTO.Rentals;
 using RentalService.Core.ServiceContracts;
 
-namespace RentalService.API.Controllers;
+namespace RentalService.API.Controllers.User;
 
 [Route("api/user/rentals")]
 [Authorize]

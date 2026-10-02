@@ -1,0 +1,122 @@
+﻿@using RentIT.BlazorFrontend.Models
+<div class="field">
+    <label>@Label</label>
+
+    @if (Images.Any())
+    {
+        var cover = Images.FirstOrDefault(i => i.IsCover) ?? Images.First();
+
+        <div class="gallery-main reticle">
+            <img src="@cover.Url" alt="Zdjęcie główne" />
+            <span class="pill pill-active cover-badge">okładka</span>
+            <div class="rc-tl"></div>
+            <div class="rc-br"></div>
+        </div>
+
+        <div class="gallery-thumbs">
+            @foreach (var img in Images)
+            {
+                <div class="gallery-thumb @(img.IsCover ? "active" : "")" @onclick="() => SetCover(img)">
+                    <img src="@img.Url" alt="" />
+                    <div class="gallery-thumb-actions">
+                        <button type="button" class="btn-icon btn-icon-danger" title="Usuń"
+                                @onclick="() => RemoveImage(img)" @onclick:stopPropagation="true">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            }
+
+            @if (Images.Count < MaxImages)
+            {
+                <label class="gallery-add" title="Dodaj kolejne zdjęcia">
+                    <InputFile OnChange="HandleFilesSelected" multiple accept="image/*" />
+                    <span>+</span>
+                </label>
+            }
+        </div>
+    }
+    else
+    {
+        <label class="upload-zone">
+            <InputFile OnChange="HandleFilesSelected" multiple accept="image/*" />
+            <span>📷</span>
+            <span class="upload-title">Dodaj zdjęcia</span>
+            <span>PNG, JPG do @(MaxFileSizeBytes / 1_000_000)MB każde</span>
+        </label>
+    }
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="error-msg">@ErrorMessage</div>
+    }
+
+    <div class="hint">@Images.Count / @MaxImages zdjęć · kliknij miniaturę, aby ustawić jako okładkę</div>
+</div>
+
+@code {
+    [Parameter] public List<GalleryImage> Images { get; set; } = new();
+    [Parameter] public EventCallback<List<GalleryImage>> ImagesChanged { get; set; }
+    [Parameter] public int MaxImages { get; set; } = 8;
+    [Parameter] public long MaxFileSizeBytes { get; set; } = 5_000_000;
+    [Parameter] public string Label { get; set; } = "Zdjęcia";
+
+    string ErrorMessage = string.Empty;
+
+    private async Task HandleFilesSelected(InputFileChangeEventArgs e)
+    {
+        ErrorMessage = string.Empty;
+        var slotsLeft = MaxImages - Images.Count;
+
+        if (slotsLeft <= 0)
+        {
+            ErrorMessage = $"Możesz dodać maksymalnie {MaxImages} zdjęć.";
+            return;
+        }
+
+        foreach (var file in e.GetMultipleFiles(slotsLeft))
+        {
+            if (file.Size > MaxFileSizeBytes)
+            {
+                ErrorMessage = $"Plik \"{file.Name}\" przekracza {MaxFileSizeBytes / 1_000_000}MB.";
+                continue;
+            }
+
+            using var stream = file.OpenReadStream(MaxFileSizeBytes);
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+
+            Images.Add(new GalleryImage
+            {
+                Url = $"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}",
+                PendingFile = file,
+                IsCover = Images.Count == 0
+            });
+        }
+
+        await ImagesChanged.InvokeAsync(Images);
+    }
+
+    private async Task RemoveImage(GalleryImage image)
+    {
+        var wasCover = image.IsCover;
+        Images.Remove(image);
+
+        if (wasCover && Images.Any())
+        {
+            Images[0].IsCover = true;
+        }
+
+        await ImagesChanged.InvokeAsync(Images);
+    }
+
+    private async Task SetCover(GalleryImage image)
+    {
+        foreach (var img in Images)
+        {
+            img.IsCover = img == image;
+        }
+
+        await ImagesChanged.InvokeAsync(Images);
+    }
+}

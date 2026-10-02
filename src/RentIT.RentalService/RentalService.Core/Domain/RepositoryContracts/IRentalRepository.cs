@@ -1,4 +1,4 @@
-﻿using RentalService.Core.Domain.Entities;
+﻿using RentalService.Core.Domain.Entities.Rentals;
 namespace RentalService.Core.Domain.RepositoryContracts;
 
 public interface IRentalRepository : IBaseRentalRepository

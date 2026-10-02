@@ -55,7 +55,7 @@ namespace RentalService.API.Middleware
                 {
                     Status = (int)HttpStatusCode.InternalServerError,
                     Type = "Server Error",
-                    Title = "Servcer Error",
+                    Title = "Server Error",
                     Detail = "An internal server error has occured",
                 };
 
