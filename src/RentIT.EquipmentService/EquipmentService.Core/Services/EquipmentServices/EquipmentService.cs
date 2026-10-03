@@ -66,7 +66,7 @@ public class EquipmentService : IEquipmentService
             .ToList();
     }
 
-    public async Task<Result<UpdatedResponse>> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request)
+    public async Task<Result<UpdatedResponse>> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequestInternal request)
     {
         Equipment? entity = await _equipmentRepository.GetByIdAsync(equipmentId);
         if (entity is null)
@@ -90,7 +90,7 @@ public class EquipmentService : IEquipmentService
         return entity.ToUpdatedResponse();
     }
 
-    public async Task<Result<CreatedResponse>> AddEquipment(EquipmentAddRequest request)
+    public async Task<Result<CreatedResponse>> AddEquipment(EquipmentAddRequestInternal request)
     {
         Equipment equipment = request.ToEquipment();
         var validationResult = await _equipmentValidator.ValidateCreateAsync(equipment);

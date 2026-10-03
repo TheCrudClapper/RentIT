@@ -14,8 +14,8 @@ namespace EquipmentService.Core.ServiceContracts;
 /// cancellation token to support cooperative cancellation of ongoing operations.</remarks>
 public interface IUserEquipmentService
 {
-    Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request);
-    Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request);
+    Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequestInternal request);
+    Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, UserEquipmentUpdateRequestInternal request);
     Task<Result<IReadOnlyCollection<UserEquipmentListItem>>> GetAllUserEquipment(Guid userId, CancellationToken ct);
     Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId);
     Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken ct);

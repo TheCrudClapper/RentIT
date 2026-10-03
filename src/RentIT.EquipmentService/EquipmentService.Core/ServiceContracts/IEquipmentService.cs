@@ -13,8 +13,8 @@ namespace EquipmentService.Core.ServiceContracts;
 /// specific implementation.</remarks>
 public interface IEquipmentService
 {
-    Task<Result<UpdatedResponse>> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequest request);
-    Task<Result<CreatedResponse>> AddEquipment(EquipmentAddRequest request);
+    Task<Result<UpdatedResponse>> UpdateEquipment(Guid equipmentId, EquipmentUpdateRequestInternal request);
+    Task<Result<CreatedResponse>> AddEquipment(EquipmentAddRequestInternal request);
     Task<Result<EquipmentResponse>> GetEquipment(Guid equipmentId, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyCollection<EquipmentResponse>>> GetAllEquipmentItems(CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyCollection<EquipmentResponse>>> GetAllEquipmentsByIds(IEnumerable<Guid> equipmentIds, CancellationToken cancellationToken = default);

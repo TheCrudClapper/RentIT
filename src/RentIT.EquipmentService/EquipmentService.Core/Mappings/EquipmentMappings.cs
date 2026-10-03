@@ -7,7 +7,7 @@ namespace EquipmentService.Core.Mappings;
 
 public static class EquipmentMappings
 {
-    public static Equipment ToEquipment(this EquipmentAddRequest request)
+    public static Equipment ToEquipment(this EquipmentAddRequestInternal request)
     {
         return new Equipment
         {
@@ -24,7 +24,7 @@ public static class EquipmentMappings
         };
     }
 
-    public static Equipment ToUserEquipment(this UserEquipmentAddRequest request)
+    public static Equipment ToUserEquipment(this UserEquipmentAddRequestInternal request)
     {
         return new Equipment
         {
@@ -40,7 +40,7 @@ public static class EquipmentMappings
         };
     }
 
-    public static Equipment ToEquipment(this EquipmentUpdateRequest request)
+    public static Equipment ToEquipment(this EquipmentUpdateRequestInternal request)
     {
         return new Equipment
         {

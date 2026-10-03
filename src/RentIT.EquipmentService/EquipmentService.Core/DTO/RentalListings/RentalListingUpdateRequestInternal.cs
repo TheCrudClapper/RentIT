@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.RentalListings;
 
-public class RentalListingUpdateRequest
+public class RentalListingUpdateRequestInternal
 {
     [Required]
     [StringLength(150, MinimumLength = 5)]

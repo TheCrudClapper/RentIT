@@ -26,7 +26,7 @@ public class UserRentalListingService : IUserRentalListingService
         _validator = validator;
     }
 
-    public async Task<Result<CreatedResponse>> AddUserRentalListing(Guid userId, RentalListingAddRequest request)
+    public async Task<Result<CreatedResponse>> AddUserRentalListing(Guid userId, RentalListingAddRequestInternal request)
     {
         RentalListing entity = request.ToRentalListing();
         entity.UserId = userId;
@@ -39,7 +39,7 @@ public class UserRentalListingService : IUserRentalListingService
         return entity.ToCreatedResponse();
     }
 
-    public async Task<Result<UpdatedResponse>> UpdateUserRentalListing(Guid rentalListingId, Guid userId, RentalListingUpdateRequest request)
+    public async Task<Result<UpdatedResponse>> UpdateUserRentalListing(Guid rentalListingId, Guid userId, RentalListingUpdateRequestInternal request)
     {
         RentalListing? entity = await _rentalListingRepository.GetByIdAsync(rentalListingId);
         if (entity is null)

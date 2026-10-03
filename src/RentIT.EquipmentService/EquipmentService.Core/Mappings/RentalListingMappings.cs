@@ -59,7 +59,7 @@ public static class RentalListingMappings
         };
     }
 
-    public static RentalListing ToRentalListing(this RentalListingAddRequest request)
+    public static RentalListing ToRentalListing(this RentalListingAddRequestInternal request)
     {
         return new RentalListing
         {
@@ -79,7 +79,7 @@ public static class RentalListingMappings
         };
     }
 
-    public static RentalListing ToRentalListing(this RentalListingUpdateRequest request)
+    public static RentalListing ToRentalListing(this RentalListingUpdateRequestInternal request)
     {
         return new RentalListing
         {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.Equipments.User;
 
-public class UserEquipmentUpdateRequest
+public class UserEquipmentUpdateRequestInternal
 {
     [Required]
     public string Name { get; set; } = null!;

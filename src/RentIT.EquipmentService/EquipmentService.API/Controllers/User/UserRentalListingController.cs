@@ -16,11 +16,11 @@ public class UserRentalListingController : BaseApiController
         => _service = service;
 
     [HttpPost]
-    public async Task<ActionResult<CreatedResponse>> PostRentalListing(RentalListingAddRequest request)
+    public async Task<ActionResult<CreatedResponse>> PostRentalListing(RentalListingAddRequestInternal request)
         => HandleResult(await _service.AddUserRentalListing(CurrentUserId, request));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<UpdatedResponse>> PutRentalListing(Guid id, RentalListingUpdateRequest request)
+    public async Task<ActionResult<UpdatedResponse>> PutRentalListing(Guid id, RentalListingUpdateRequestInternal request)
         => HandleResult(await _service.UpdateUserRentalListing(id, CurrentUserId, request));
 
     [HttpDelete("{id:guid}")]

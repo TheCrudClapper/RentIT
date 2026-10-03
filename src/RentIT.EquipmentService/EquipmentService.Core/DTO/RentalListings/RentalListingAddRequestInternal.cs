@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.RentalListings;
 
-public class RentalListingAddRequest
+public class RentalListingAddRequestInternal
 {
     [Required]
     public Guid EquipmentId { get; set; }
-
+    
     [Required]
     [StringLength(150, MinimumLength = 5)]
     public string Title { get; set; } = null!;

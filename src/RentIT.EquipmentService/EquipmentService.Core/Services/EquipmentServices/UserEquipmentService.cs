@@ -35,7 +35,7 @@ public class UserEquipmentService : IUserEquipmentService
         _unitOfWork = uow;
     }
 
-    public async Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequest request)
+    public async Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequestInternal request)
     {
         Equipment equipment = request.ToUserEquipment();
         equipment.UserId = userId;
@@ -56,7 +56,7 @@ public class UserEquipmentService : IUserEquipmentService
         return equipment.ToCreatedResponse();
     }
 
-    public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, EquipmentUpdateRequest request)
+    public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, UserEquipmentUpdateRequestInternal request)
     {
         Equipment? entity = await _equipmentRepository.GetByConditionAsync(equipmentId, x => x.UserId == userId);
 
