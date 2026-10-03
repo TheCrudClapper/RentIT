@@ -43,9 +43,9 @@ public static class RentalListingMappings
         };
     }
 
-    public static UserRentalListingListResponse ToUserRentalListingListResponse(this RentalListing rentalListing)
+    public static UserRentalListingListItem ToUserRentalListingListResponse(this RentalListing rentalListing)
     {
-        return new UserRentalListingListResponse
+        return new UserRentalListingListItem
         {
             Id = rentalListing.Id,
             EquipmentId = rentalListing.EquipmentId,

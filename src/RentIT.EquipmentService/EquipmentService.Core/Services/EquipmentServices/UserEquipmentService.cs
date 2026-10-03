@@ -91,7 +91,7 @@ public class UserEquipmentService : IUserEquipmentService
         return equipment.ToEquipmentResponse();
     }
 
-    public async Task<Result<IReadOnlyCollection<UserEquipmentListResponse>>> GetAllUserEquipment(Guid userId, CancellationToken ct)
+    public async Task<Result<IReadOnlyCollection<UserEquipmentListItem>>> GetAllUserEquipment(Guid userId, CancellationToken ct)
     {
         var userEquipments = await _equipmentRepository.GetAllAsyncByCondition(
             e => e.UserId == userId,

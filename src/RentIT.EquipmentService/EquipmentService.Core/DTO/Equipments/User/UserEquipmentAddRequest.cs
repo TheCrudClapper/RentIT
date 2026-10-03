@@ -1,5 +1,6 @@
-﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.EquipmentImages;
+﻿using EquipmentService.Core.Attributes;
+using EquipmentService.Core.Domain.Entities.Equipments;
+using EquipmentService.Core.DTO.Images;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.Equipments.User;
@@ -17,5 +18,8 @@ public class UserEquipmentAddRequest
     public Guid CategoryId { get; set; }
     [Required]
     public EquipmentCondition Condition { get; set; }
-    public IEnumerable<EquipmentImageAddRequest> Images { get; set; } = [];
+
+    [Required]
+    [MaxCount(10, ErrorMessage = $"You can upload up to 10 images per equipment.")]
+    public IEnumerable<ImageRequest> Images { get; set; } = [];
 }

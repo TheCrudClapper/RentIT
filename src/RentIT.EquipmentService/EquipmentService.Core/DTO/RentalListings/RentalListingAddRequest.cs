@@ -1,3 +1,5 @@
+using EquipmentService.Core.Attributes;
+using EquipmentService.Core.DTO.Images;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.Core.DTO.RentalListings;
@@ -32,6 +34,10 @@ public class RentalListingAddRequest
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Minimum rental days must be greater than 0")]
     public int MinimumRentalDays { get; set; }
+
+    [Required]
+    [MaxCount(10, ErrorMessage = "You can upload up to 10 images per equipment.")]
+    public IEnumerable<ImageRequest> Images { get; set; } = [];
 }
 
 public class CurrencyRequest

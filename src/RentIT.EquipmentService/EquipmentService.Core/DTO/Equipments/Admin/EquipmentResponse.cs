@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.EquipmentImages;
+using EquipmentService.Core.DTO.Images;
 
 namespace EquipmentService.Core.DTO.Equipments.Admin;
 
@@ -13,6 +13,6 @@ public class EquipmentResponse
     public string? InternalNotes { get; set; }
     public Guid CategoryId { get; set; }
     public EquipmentCondition Condition { get; set; }
-    public IEnumerable<EquipmentImageResponse> Images { get; set; } = [];
+    public IReadOnlyCollection<ImageResponse> Images { get; set; } = [];
 }
 

@@ -84,7 +84,7 @@ public static class EquipmentMappings
         };
    
 
-    public static UserEquipmentListResponse ToUserEquipmentListResponse(this Equipment equipment)
-        => new UserEquipmentListResponse(equipment.Id, equipment.Name, equipment.Quantity, equipment.Category.Name, equipment.DateCreated);
+    public static UserEquipmentListItem ToUserEquipmentListResponse(this Equipment equipment)
+        => new UserEquipmentListItem(equipment.Id, equipment.Name, equipment.Quantity, equipment.Category.Name, equipment.DateCreated);
 }
 

@@ -1,6 +1,6 @@
 ﻿namespace EquipmentService.Core.DTO.Equipments.User;
 
-public record UserEquipmentListResponse
+public record UserEquipmentListItem
     (Guid Id,
     string Name,
     int Quantity,

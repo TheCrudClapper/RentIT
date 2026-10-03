@@ -1,4 +1,5 @@
-﻿using EquipmentService.Core.DTO.Shared;
+﻿using EquipmentService.Core.DTO.Images;
+using EquipmentService.Core.DTO.Shared;
 namespace EquipmentService.Core.DTO.RentalListings;
 
 public class RentalListingListResponse
@@ -13,4 +14,5 @@ public class RentalListingListResponse
     public int ListingStatus { get; set; }
     public DateTime DateCreated { get; set; }
     public DateTime DateEdited { get; set; }
+    public IReadOnlyCollection<ImageResponse> Images { get; set; } = [];
 }

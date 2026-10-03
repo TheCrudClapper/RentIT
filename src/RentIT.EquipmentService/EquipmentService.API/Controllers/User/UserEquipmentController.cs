@@ -17,7 +17,7 @@ public class UserEquipmentController : BaseApiController
         => _userEquipmentService = userEquipmentService;
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<UserEquipmentListResponse>>> GetAllEquipments(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<UserEquipmentListItem>>> GetAllEquipments(CancellationToken cancellationToken)
         => HandleResult(await _userEquipmentService.GetAllUserEquipment(CurrentUserId, cancellationToken));
 
     [HttpGet("{equipmentId:guid}")]
