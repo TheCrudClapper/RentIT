@@ -1,4 +1,6 @@
-﻿using EquipmentService.Infrastructure.DbContexts;
+﻿using EquipmentService.Core.Domain.Entities.Categories;
+using EquipmentService.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentService.Infrastructure.Seeders
 {
@@ -6,26 +8,34 @@ namespace EquipmentService.Infrastructure.Seeders
     {
         public static async Task Seed(EquipmentContext context)
         {
-            //Add sample categories
-            //if (!await context.Categories.AnyAsync())
-            //{
-            //    await context.Categories.AddRangeAsync(
-            //    new Category
-            //    {
-            //        DateCreated = DateTime.UtcNow,
-            //        Id = Guid.Parse("71A890DE-C3DF-41AC-A22E-F0332326EBC5"),
-            //        IsActive = true,
-            //        Name = "Gaming Console"
-            //    },
+         
+            if (!await context.Categories.AnyAsync())
+            {
+                await context.Categories.AddRangeAsync(
+                new Category
+                {
+                    DateCreated = DateTime.UtcNow,
+                    Id = Guid.Parse("71A890DE-C3DF-41AC-A22E-F0332326EBC5"),
+                    IsActive = true,
+                    Name = "Gaming Console"
+                },
 
-            //    new Category
-            //    {
-            //        DateCreated = DateTime.UtcNow,
-            //        Id = Guid.Parse("469683FB-9A89-4C1D-9B3E-D35A24157ED8"),
-            //        IsActive = true,
-            //        Name = "PC"
-            //    });
-            //}
+                new Category
+                {
+                    DateCreated = DateTime.UtcNow,
+                    Id = Guid.Parse("469683FB-9A89-4C1D-9B3E-D35A24157ED8"),
+                    IsActive = true,
+                    Name = "PC"
+                },
+
+                new Category
+                {
+                    DateCreated = DateTime.UtcNow,
+                    Id = Guid.Parse("C098B0F8-1B0E-454A-8C61-22217E4AC27D"),
+                    IsActive = true,
+                    Name = "Notebook"
+                });
+            }
 
             //if (!await context.EquipmentItems.AnyAsync())
             //{
@@ -72,8 +82,7 @@ namespace EquipmentService.Infrastructure.Seeders
             //    );
             //}
 
-            //await context.SaveChangesAsync();
-            await Task.CompletedTask;
+            await context.SaveChangesAsync();
         }
 
 

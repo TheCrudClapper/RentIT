@@ -1,8 +1,7 @@
 ﻿using EquipmentService.Core.ServiceContracts;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
-using EquipmentService.Core.Validators.Contracts;
-using EquipmentService.Core.Validators.Implementations;
+using EquipmentService.Core.Validators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EquipmentService.Core.Extensions
@@ -24,6 +23,8 @@ namespace EquipmentService.Core.Extensions
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IRentalListingValidator, RentalListingValidator>();
+            services.AddScoped<IEquipmentImageValidator, EquipmentImageValidator>();
+            services.AddScoped<IListingImageValidator, ListingImageValidator>();
 
             //Add RabbitMQ Components
             //services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();

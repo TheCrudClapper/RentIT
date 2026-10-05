@@ -6,7 +6,7 @@ using EquipmentService.Core.DTO.RentalListings;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
-using EquipmentService.Core.Validators.Contracts;
+using EquipmentService.Core.Validators;
 
 namespace EquipmentService.Core.Services.ListingServices;
 

@@ -40,6 +40,22 @@ public static class EquipmentMappings
         };
     }
 
+    public static Equipment ToUserEquipment(this UserEquipmentUpdateRequestInternal request)
+    {
+        return new Equipment
+        {
+            Id = Guid.NewGuid(),
+            CategoryId = request.CategoryId,
+            Name = request.Name,
+            InternalNotes = request.InternalNotes,
+            Description = request.Description,
+            Quantity = request.Quantity,
+            Condition = request.Condition,
+            DateCreated = DateTime.UtcNow,
+            IsActive = true,
+        };
+    }
+
     public static Equipment ToEquipment(this EquipmentUpdateRequestInternal request)
     {
         return new Equipment

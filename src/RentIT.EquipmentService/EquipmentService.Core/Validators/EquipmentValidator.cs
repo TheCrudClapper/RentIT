@@ -3,9 +3,10 @@ using EquipmentService.Core.Domain.Entities.Equipments;
 using EquipmentService.Core.Domain.HtppClientContracts;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.Validators.Contracts;
 
-namespace EquipmentService.Core.Validators.Implementations;
+namespace EquipmentService.Core.Validators;
+
+public interface IEquipmentValidator : IEntityValidator<Equipment> { }
 
 public class EquipmentValidator : IEquipmentValidator
 {

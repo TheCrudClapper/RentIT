@@ -6,7 +6,7 @@ using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
-using EquipmentService.Core.Validators.Contracts;
+using EquipmentService.Core.Validators;
 using Microsoft.Extensions.Configuration;
 
 namespace EquipmentService.Core.Services.EquipmentServices;

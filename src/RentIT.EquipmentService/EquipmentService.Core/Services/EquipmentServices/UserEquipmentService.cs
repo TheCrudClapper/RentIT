@@ -5,10 +5,11 @@ using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Equipments.User;
+using EquipmentService.Core.DTO.Images;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
-using EquipmentService.Core.Validators.Contracts;
+using EquipmentService.Core.Validators;
 using Microsoft.Extensions.Configuration;
 
 namespace EquipmentService.Core.Services.EquipmentServices;
@@ -17,6 +18,7 @@ public class UserEquipmentService : IUserEquipmentService
 {
     private readonly IEquipmentRepository _equipmentRepository;
     private readonly IEquipmentValidator _equipmentValidator;
+    private readonly IEquipmentImageValidator _imageValidator;
     private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -25,12 +27,13 @@ public class UserEquipmentService : IUserEquipmentService
         IEquipmentValidator equipmentValidator,
         IUsersMicroserviceClient usersClient,
         IConfiguration configuration,
-        IUnitOfWork uow)
+        IUnitOfWork uow, IEquipmentImageValidator imageValidator)
     {
         _equipmentRepository = equipmentRepository;
         _equipmentValidator = equipmentValidator;
         _configuration = configuration;
         _unitOfWork = uow;
+        _imageValidator = imageValidator;
     }
 
     public async Task<Result<CreatedResponse>> AddUserEquipment(Guid userId, UserEquipmentAddRequestInternal request)
@@ -39,9 +42,17 @@ public class UserEquipmentService : IUserEquipmentService
         equipment.UserId = userId;
 
         var validationResult = await _equipmentValidator.ValidateCreateAsync(equipment);
-
         if (validationResult.IsFailure)
             return Result.Failure<CreatedResponse>(validationResult.Error);
+
+        //foreach (var image in request.Images)
+        //{
+        //    var imageValidation = await _imageValidator.ValidateCreateAsync();
+        //}
+
+        //presave images and return ready entity 
+        //attach entity to equipment
+        //on error rollbacksave
 
         await _equipmentRepository.AddAsync(equipment);
         await _unitOfWork.SaveChangesAsync();
@@ -61,7 +72,7 @@ public class UserEquipmentService : IUserEquipmentService
         if (entity is null)
             return Result.Failure<UpdatedResponse>(EquipmentErrors.EquipmentNotFound);
 
-        Equipment equipmentToUpdate = request.ToEquipment();
+        Equipment equipmentToUpdate = request.ToUserEquipment();
 
         var validationResult = await _equipmentValidator.ValidateUpdateAsync(equipmentToUpdate);
 

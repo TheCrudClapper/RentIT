@@ -3,9 +3,10 @@ using EquipmentService.Core.Domain.Entities.Listing.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.Shared;
-using EquipmentService.Core.Validators.Contracts;
 
-namespace EquipmentService.Core.Validators.Implementations;
+namespace EquipmentService.Core.Validators;
+
+public interface IRentalListingValidator : IEntityValidator<RentalListing> { }
 
 public class RentalListingValidator : IRentalListingValidator
 {
@@ -27,7 +28,6 @@ public class RentalListingValidator : IRentalListingValidator
             return Result.Failure<CreatedResponse>(RentalListingErrors.RentalListingAlreadyExists);
 
         return Result.Success();
-
     }
 
     public async Task<Result> ValidateUpdateAsync(RentalListing entity)

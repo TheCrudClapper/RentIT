@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.Domain.Interfaces;
 using EquipmentService.Core.Domain.ResultTypes;
 
-namespace EquipmentService.Core.Validators.Contracts;
+namespace EquipmentService.Core.Validators;
 
 /// <summary>
 /// Defines a contract for validating business rules of domain entities 
