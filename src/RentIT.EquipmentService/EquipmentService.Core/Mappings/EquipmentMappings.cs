@@ -1,7 +1,7 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.EquipmentImages;
 using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Equipments.User;
+using EquipmentService.Core.DTO.Images;
 
 namespace EquipmentService.Core.Mappings;
 
@@ -65,7 +65,7 @@ public static class EquipmentMappings
             Condition = equipment.Condition,
             Description = equipment.Description,
             CategoryId = equipment.CategoryId,
-            Images = equipment.Images.Select(x => new EquipmentImageResponse(x.Id, x.ResourcePath) { })
+            Images = equipment.Images.Select(x => new ImageResponse(x.Id, x.IsCover, x.ResourcePath))
                 .ToList(),
         };
 
@@ -79,10 +79,10 @@ public static class EquipmentMappings
             Description = equipment.Description,
             CategoryId = equipment.CategoryId,
             Condition = equipment.Condition,
-            Images = equipment.Images.Select(x => new EquipmentImageResponse(x.Id, x.ResourcePath) { })
+            Images = equipment.Images.Select(x => new ImageResponse(x.Id, x.IsCover, x.ResourcePath))
                 .ToList(),
         };
-   
+
 
     public static UserEquipmentListItem ToUserEquipmentListResponse(this Equipment equipment)
         => new UserEquipmentListItem(equipment.Id, equipment.Name, equipment.Quantity, equipment.Category.Name, equipment.DateCreated);

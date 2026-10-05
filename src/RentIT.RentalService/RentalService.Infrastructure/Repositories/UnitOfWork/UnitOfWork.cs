@@ -1,12 +1,12 @@
-﻿using EquipmentService.Core.Domain.RepositoryContracts;
-using EquipmentService.Infrastructure.DbContexts;
+﻿using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Infrastructure.DbContexts;
 
 namespace RentalService.Infrastructure.Repositories.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly EquipmentContext _context;
-    public UnitOfWork(EquipmentContext context)
+    private readonly RentalDbContext _context;
+    public UnitOfWork(RentalDbContext context)
     {
         _context = context;
     }

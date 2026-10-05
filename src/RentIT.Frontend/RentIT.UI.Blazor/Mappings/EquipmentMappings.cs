@@ -35,7 +35,7 @@ public static class EquipmentMappings
             Condition = model.Condition,
             Description = model.Description,
             Quantity = model.Quantity,
-            InternalNotes = model.InternalNotes 
+            InternalNotes = model.InternalNotes
         };
 
 }

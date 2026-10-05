@@ -7,7 +7,7 @@ public class CartItem : BaseEntity, ISoftDelete
 {
     public Guid CartId { get; set; }
     [ForeignKey("CartId")]
-    public Cart Cart { get; set; }
+    public Cart Cart { get; set; } = null!;
     public Guid RentalListingId { get; set; }
     public int Quantity { get; set; }
     public DateTime StartDate { get; set; }

@@ -49,7 +49,7 @@ public class CategoryService : ICategoryService
         Category? entity = await _categoryRepository.GetByIdAsync(categoryId);
         if (entity is null)
             return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryNotFound);
-        
+
         if (!await _categoryRepository.IsCategoryUnique(entity, categoryId))
             return Result.Failure<UpdatedResponse>(CategoryErrors.CategoryAlreadyExists);
 

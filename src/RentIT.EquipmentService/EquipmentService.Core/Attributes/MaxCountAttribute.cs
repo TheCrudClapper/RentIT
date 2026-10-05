@@ -19,7 +19,7 @@ public class MaxCountAttribute : ValidationAttribute
         if (list is null)
             return new ValidationResult("List cannot be null");
 
-        if(list.Count() > MaxCount)
+        if (list.Count() > MaxCount)
             return new ValidationResult(ErrorMessage ?? _defaultErrorMessage);
 
         return ValidationResult.Success;

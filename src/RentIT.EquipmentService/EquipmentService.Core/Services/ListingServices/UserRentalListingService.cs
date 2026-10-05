@@ -72,7 +72,7 @@ public class UserRentalListingService : IUserRentalListingService
         return userListings;
     }
 
-    public async Task<Result<RentalListingResponse>> GetUserRentalListingById(Guid rentalListingId, Guid userId,  CancellationToken cancellationToken = default)
+    public async Task<Result<RentalListingResponse>> GetUserRentalListingById(Guid rentalListingId, Guid userId, CancellationToken cancellationToken = default)
     {
         RentalListing? entity = await _rentalListingRepository.GetByConditionAsync(rentalListingId, expression: x => x.UserId == userId, asNoTracking: true, ct: cancellationToken);
 

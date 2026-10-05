@@ -1,6 +1,5 @@
 ﻿using EquipmentService.Core.Attributes;
 using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.Images;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentService.API.DTO.Public;

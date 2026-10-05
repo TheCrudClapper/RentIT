@@ -1,12 +1,10 @@
 ﻿using EquipmentService.API.DTO.Public;
 using EquipmentService.API.Mappings;
 using EquipmentService.Core.DTO.Equipments.Admin;
-using EquipmentService.Core.DTO.Images;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace EquipmentService.API.Controllers.Admin;
 
@@ -33,46 +31,14 @@ public class EquipmentsController : BaseApiController
     [HttpPut("{equipmentId}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, EquipmentUpdateRequestExternal request)
-    {
-        var images = await Task.WhenAll(
-            request.Images.Select(image => image.MapAsync()));
-
-        var internalDto = new EquipmentUpdateRequestInternal()
-        {
-            CategoryId = request.CategoryId,
-            Condition = request.Condition,
-            Description = request.Description,
-            InternalNotes = request.InternalNotes,
-            Name = request.Name,
-            Quantity = request.Quantity,
-            UserId = request.UserId,
-            Images = images,
-        };
-
-        return HandleResult(await _equipmentService.UpdateEquipment(equipmentId, internalDto));
-    }
+        => HandleResult(await _equipmentService.UpdateEquipment(equipmentId, await request.Map()));
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CreatedResponse>> PostEquipment(EquipmentAddRequestExternal request)
-    {
-        var images = await Task.WhenAll(
-           request.Images.Select(image => image.MapAsync()));
+         => HandleResult(await _equipmentService.AddEquipment(await request.Map()));
 
-        var internalDto = new EquipmentAddRequestInternal()
-        {
-            CategoryId = request.CategoryId,
-            Condition = request.Condition,
-            Description = request.Description,
-            InternalNotes = request.InternalNotes,
-            Name = request.Name,
-            Quantity = request.Quantity,
-            UserId = request.UserId,
-            Images = images,
-        };
-        return HandleResult(await _equipmentService.AddEquipment(internalDto));
-    }
-     
+
     [HttpDelete("{equipmentId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteEquipment(Guid equipmentId)

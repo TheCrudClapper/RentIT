@@ -1,8 +1,4 @@
-﻿using EquipmentService.Core.Caching;
-using EquipmentService.Core.RabbitMQ.Consumers;
-using EquipmentService.Core.RabbitMQ.HostedServices;
-using EquipmentService.Core.RabbitMQ.Publishers;
-using EquipmentService.Core.ServiceContracts;
+﻿using EquipmentService.Core.ServiceContracts;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
 using EquipmentService.Core.Validators.Contracts;

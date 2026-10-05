@@ -1,7 +1,6 @@
 ﻿using EquipmentService.Core.DTO.RentalListings;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentService.API.Controllers.Public;

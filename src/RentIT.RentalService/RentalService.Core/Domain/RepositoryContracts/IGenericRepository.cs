@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.Domain.Interfaces;
+﻿using RentalService.Core.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace RentalService.Core.Domain.RepositoryContracts;

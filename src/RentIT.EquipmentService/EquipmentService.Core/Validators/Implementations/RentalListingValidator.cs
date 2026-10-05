@@ -20,7 +20,7 @@ public class RentalListingValidator : IRentalListingValidator
     public async Task<Result> ValidateCreateAsync(RentalListing entity)
     {
         var baseValidation = await ValidateCommon(entity);
-        if(baseValidation.IsFailure)
+        if (baseValidation.IsFailure)
             return baseValidation;
 
         if (!await _listingRepository.IsRentalListingUnique(entity))

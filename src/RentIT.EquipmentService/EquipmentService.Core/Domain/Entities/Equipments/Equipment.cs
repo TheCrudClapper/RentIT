@@ -30,7 +30,7 @@ public class Equipment : BaseEntity, ISoftDelete
     public ICollection<RentalListing> Listings { get; set; } = new List<RentalListing>();
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
-   
+
     public void Update(Equipment equipment)
     {
         Name = equipment.Name;

@@ -12,7 +12,7 @@ namespace EquipmentService.API.Controllers.User;
 public class UserRentalListingController : BaseApiController
 {
     private readonly IUserRentalListingService _service;
-    public UserRentalListingController(IUserRentalListingService service) 
+    public UserRentalListingController(IUserRentalListingService service)
         => _service = service;
 
     [HttpPost]

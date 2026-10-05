@@ -1,18 +1,16 @@
-﻿using EquipmentService.Core.Domain.Interfaces;
-using EquipmentService.Core.Domain.RepositoryContracts;
-using EquipmentService.Infrastructure.DbContexts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RentalService.Core.Domain.Interfaces;
 using RentalService.Core.Domain.RepositoryContracts;
+using RentalService.Infrastructure.DbContexts;
 using System.Linq.Expressions;
 
 namespace RentalService.Infrastructure.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, ISoftDelete
 {
-    protected readonly EquipmentContext _context;
+    protected readonly RentalDbContext _context;
 
-    public GenericRepository(EquipmentContext context)
+    public GenericRepository(RentalDbContext context)
     {
         _context = context;
     }

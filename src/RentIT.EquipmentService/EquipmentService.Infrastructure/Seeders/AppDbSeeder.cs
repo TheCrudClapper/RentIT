@@ -1,7 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities.Categories;
-using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Infrastructure.DbContexts;
-using Microsoft.EntityFrameworkCore;
+﻿using EquipmentService.Infrastructure.DbContexts;
 
 namespace EquipmentService.Infrastructure.Seeders
 {

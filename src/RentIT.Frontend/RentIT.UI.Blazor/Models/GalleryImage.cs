@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
 namespace RentIT.BlazorFrontend.Models;
+
 public class GalleryImage
 {
     public Guid? Id { get; set; }

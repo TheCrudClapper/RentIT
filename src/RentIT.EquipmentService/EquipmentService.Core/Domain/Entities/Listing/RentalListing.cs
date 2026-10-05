@@ -4,6 +4,7 @@ using EquipmentService.Core.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EquipmentService.Core.Domain.Entities.Listing;
+
 public enum ListingStatus
 {
     Open = 1,

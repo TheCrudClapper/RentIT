@@ -7,6 +7,7 @@ public class EquipmentImage : BaseEntity, ISoftDelete
     public string ResourcePath { get; set; } = null!;
     public Guid EquipmentId { get; set; }
     public Equipment Equipment { get; set; } = null!;
+    public bool IsCover { get; set; }
     public bool IsActive { get; set; }
     public DateTime? DateDeleted { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using EquipmentService.API.DTO.Public;
 using EquipmentService.API.Mappings;
-using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Equipments.User;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.ServiceContracts;
@@ -28,43 +27,11 @@ public class UserEquipmentController : BaseApiController
 
     [HttpPost]
     public async Task<ActionResult<CreatedResponse>> PostEquipment(UserEquipmentAddRequestExternal request)
-    {
-        var images = await Task.WhenAll(
-            request.Images.Select(image => image.MapAsync()));
-
-        var internalDto = new UserEquipmentAddRequestInternal()
-        {
-            CategoryId = request.CategoryId,
-            Condition = request.Condition,
-            Description = request.Description,
-            InternalNotes = request.InternalNotes,
-            Name = request.Name,
-            Quantity = request.Quantity,
-            Images = images,
-        };
-
-        return HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, internalDto));
-    }
-
+        => HandleResult(await _userEquipmentService.AddUserEquipment(CurrentUserId, await request.Map()));
 
     [HttpPut("{equipmentId:guid}")]
     public async Task<ActionResult<UpdatedResponse>> PutEquipment(Guid equipmentId, UserEquipmentUpdateRequestExternal request)
-    {
-        var images = await Task.WhenAll(
-            request.Images.Select(image => image.MapAsync()));
-
-        var internalDto = new UserEquipmentUpdateRequestInternal()
-        {
-            CategoryId = request.CategoryId,
-            Condition = request.Condition,
-            Description = request.Description,
-            InternalNotes = request.InternalNotes,
-            Name = request.Name,
-            Quantity = request.Quantity,
-            Images = images,
-        };
-        return HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, internalDto));
-    }
+        => HandleResult(await _userEquipmentService.UpdateUserEquipment(equipmentId, CurrentUserId, await request.Map()));
 
     [HttpDelete("{equipmentId:guid}")]
     public async Task<IActionResult> DeleteEquipment(Guid equipmentId)

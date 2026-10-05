@@ -5,8 +5,6 @@ using EquipmentService.Core.Domain.ResultTypes;
 using EquipmentService.Core.DTO.Equipments.Admin;
 using EquipmentService.Core.DTO.Shared;
 using EquipmentService.Core.Mappings;
-using EquipmentService.Core.RabbitMQ.Messages;
-using EquipmentService.Core.RabbitMQ.Publishers;
 using EquipmentService.Core.ServiceContracts;
 using EquipmentService.Core.Validators.Contracts;
 using Microsoft.Extensions.Configuration;

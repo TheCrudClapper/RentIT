@@ -1,5 +1,4 @@
-﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.Domain.Interfaces;
+﻿using EquipmentService.Core.Domain.Interfaces;
 using EquipmentService.Core.Domain.ResultTypes;
 
 namespace EquipmentService.Core.Validators.Contracts;

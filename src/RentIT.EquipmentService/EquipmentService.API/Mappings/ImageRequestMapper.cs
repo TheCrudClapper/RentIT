@@ -5,13 +5,13 @@ namespace EquipmentService.API.Mappings;
 
 public static class ImageRequestMapper
 {
-    public async static Task<ImageRequest> MapAsync (this ImageRequestExternal dto)
+    public async static Task<ImageRequest> MapAsync(this ImageRequestExternal dto)
     {
         byte[] image;
-        if (dto.Image is null || dto.Image.Length == 0) 
+        if (dto.Image is null || dto.Image.Length == 0)
         {
             image = [];
-        }   
+        }
         else
         {
             using var stream = new MemoryStream();
