@@ -22,6 +22,7 @@ public class EquipmentUpdateRequestExternal
     public EquipmentCondition Condition { get; set; }
     [Required]
     [MaxCount(10, ErrorMessage = $"You can upload up to 10 images per equipment.")]
+    [OneCover]
     public IEnumerable<ImageRequestExternal> Images { get; set; } = [];
 }
 
