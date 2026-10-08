@@ -1,6 +1,45 @@
 ﻿@page "/rentals/browser"
-<h3>RentalBrowser</h3>
+@rendermode InteractiveServer
+@using RentIT.BlazorFrontend.Models.Rentals
+
+<BasePageContent>
+    <PageHead PageHeader="Dostępny sprzęt" PrompText=@($"Pozycje // {_positionNum}")>
+        <NavLink href="/rentals/create" class="btn btn-primary">+ Dodaj wynajem</NavLink>
+    </PageHead>
+    <SearchBar OnSearchClicked="HandleSearch"/>
+    
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <h3>Filters</h3>
+        </div>
+        <div class="col-md-9">
+            <div class="row g-3">
+                @foreach(var item in Items)
+                {
+                    <div class="col-md-4">
+                        <RentalCard Model="@item"/>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</BasePageContent>
 
 @code {
+    private int _positionNum = 5;
+    private string SearchPhrase { get; set; }
+    private List<RentalBrowserItemViewModel> Items = new()
+    {
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB", },
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB" },
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB" },
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB" },
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(),  Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB" },
+        new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB" },
+    };
 
+    public async Task HandleSearch(string phrase)
+    {
+        
+    }
 }

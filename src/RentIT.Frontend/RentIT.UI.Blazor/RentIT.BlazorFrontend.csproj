@@ -21,8 +21,4 @@
     <ProjectReference Include="..\RentIT.UI.Infrastructure\RentIT.UI.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>

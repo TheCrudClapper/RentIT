@@ -1,0 +1,30 @@
+﻿@using RentIT.BlazorFrontend.Models.Rentals
+<div class="tag-card">
+    <div class="punch"></div>
+    <div class="thumb reticle">
+        <div class="rc-tl"></div>
+        <div class="rc-br"></div>
+        @if (string.IsNullOrWhiteSpace(Model.CoverImageUrl))
+        {
+            <span>@LocService.GetLocalizedText("NoCoverImage")</span>
+        }
+        else
+        {
+            <img src="@Model.CoverImageUrl" class="thumb-img" />
+        }
+    </div>
+    <div class="body">
+        <div class="cat">@Model.CategoryName</div>
+        <h4 style="font-family:'Inter'; font-weight:700; font-size:18px; margin:6px 0 10px;">
+            @Model.Name
+        </h4>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="price">@Model.Money.Amount @Model.Money.CurrencyCode <small>@LocService.GetLocalizedText("DayPriceBrowser")</small></span>
+            <span class="pill pill-ok">@Model.Status</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public RentalBrowserItemViewModel Model { get; set; }
+}

@@ -69,7 +69,6 @@
         border-bottom: none;
         padding: 10px 16px;
         cursor: pointer;
-        
         white-space: nowrap;
         border-radius: 2px 2px 0 0;
         text-decoration: none;
@@ -611,30 +610,37 @@ select {
         border-bottom: 1px dashed var(--border);
     }
 
-    .tag-card .body {
-        padding: 18px;
-    }
+.thumb-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
 
-    .tag-card .cat {
-        font-family: var(--font-mono);
-        font-size: 10px;
-        color: var(--yellow-dim);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
+.tag-card .body {
+    padding: 18px;
+}
 
-    .tag-card .price {
-        font-family: var(--font-mono);
-        color: var(--yellow);
-        font-size: 16px;
-        font-weight: 700;
-    }
+.tag-card .cat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--yellow-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
 
-        .tag-card .price small {
-            color: var(--ink-faint);
-            font-weight: 400;
-            font-size: 11px;
-        }
+.tag-card .price {
+    font-family: var(--font-mono);
+    color: var(--yellow);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+    .tag-card .price small {
+        color: var(--ink-faint);
+        font-weight: 400;
+        font-size: 11px;
+    }
 
 /*  corners on photos */
 .reticle {

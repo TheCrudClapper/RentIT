@@ -123,4 +123,10 @@
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="DayPriceBrowser" xml:space="preserve">
+    <value>{0} day</value>
+  </data>
+  <data name="NoCoverImage" xml:space="preserve">
+    <value>No image</value>
+  </data>
 </root>
