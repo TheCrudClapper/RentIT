@@ -1,0 +1,12 @@
+﻿@using RentIT.BlazorFrontend.Models.Rentals
+<div class="row g-3">
+    @foreach(var item in Items)
+{
+<div class="col-md-4">
+    <RentalCard Model="@item"/>
+</div>
+}
+</div>
+@code {
+    [Parameter, EditorRequired] public List<RentalBrowserItemViewModel> Items {get; set;}
+}

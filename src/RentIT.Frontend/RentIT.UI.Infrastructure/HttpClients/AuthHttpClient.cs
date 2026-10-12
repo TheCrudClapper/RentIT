@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using RentIT.UI.Contracts.DTO.Auth;
+using RentIT.Contracts.DTO.UserMicroservice.User;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.ResultTypes;
 using RentIT.UI.Infrastructure.HttpClients.Base;

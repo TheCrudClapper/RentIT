@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
-using RentIT.UI.Contracts.DTO.Shared;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments;
+using RentIT.Contracts.DTO.Shared;
 using RentIT.UI.Core.HttpClientContracts;
 using RentIT.UI.Core.ResultTypes;
 using RentIT.UI.Infrastructure.HttpClients.Base;

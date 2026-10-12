@@ -1,5 +1,5 @@
 ﻿using RentIT.BlazorFrontend.Models.Equipments;
-using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments;
 
 namespace RentIT.BlazorFrontend.Mappings;
 

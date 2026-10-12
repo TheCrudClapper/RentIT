@@ -1,5 +1,5 @@
-﻿using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Equipments;
-using RentIT.UI.Contracts.DTO.Shared;
+﻿using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments;
+using RentIT.Contracts.DTO.Shared;
 using RentIT.UI.Core.ResultTypes;
 namespace RentIT.UI.Core.HttpClientContracts;
 

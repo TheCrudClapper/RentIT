@@ -1,4 +1,4 @@
-﻿using RentIT.UI.Contracts.DTO.Auth;
+﻿using RentIT.Contracts.DTO.UserMicroservice.User;
 using RentIT.UI.Core.ResultTypes;
 
 namespace RentIT.UI.Core.HttpClientContracts;

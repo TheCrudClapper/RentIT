@@ -1,0 +1,20 @@
+using RentIT.Contracts.DTO.EquipmentMicroservice.Enums;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
+
+namespace RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Admin;
+
+public class EquipmentResponse
+{
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public int Quantity { get; set; }
+    public string? InternalNotes { get; set; }
+    public Guid CategoryId { get; set; }
+    public EquipmentCondition Condition { get; set; }
+    public IReadOnlyCollection<ImageResponse> Images { get; set; } = [];
+}
+
+
+

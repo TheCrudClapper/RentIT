@@ -1,5 +1,4 @@
 ﻿using RentIT.BlazorFrontend.Models.Shared;
-using RentIT.UI.Contracts.DTO.Shared;
 
 namespace RentIT.BlazorFrontend.Models.Rentals
 {

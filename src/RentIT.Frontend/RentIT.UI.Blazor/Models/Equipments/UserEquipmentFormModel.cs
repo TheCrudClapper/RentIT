@@ -1,4 +1,4 @@
-﻿using RentIT.UI.Contracts.DTO.EquipmentMicroservice.Enums;
+﻿using RentIT.Contracts.DTO.EquipmentMicroservice.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.BlazorFrontend.Models.Equipments;

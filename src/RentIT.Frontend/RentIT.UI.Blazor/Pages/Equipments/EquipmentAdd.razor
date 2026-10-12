@@ -30,7 +30,7 @@
         var result = await CategoriesHttpClient.GetCategories();
         if (result.IsFailure)
         {
-
+            return;
         }
         Categories = result.Value
             .Select(x => new BaseDropdownModel() { Id = x.Id, Text = x.Name })

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RentIT.UI.Contracts\RentIT.UI.Contracts.csproj" />
     <ProjectReference Include="..\RentIT.UI.Core\RentIT.UI.Core.csproj" />
     <ProjectReference Include="..\RentIT.UI.Infrastructure\RentIT.UI.Infrastructure.csproj" />
   </ItemGroup>
