@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RentIT.Contracts.DTO.Shared;
+using RentIT.Contracts.DTO.UserMicroservice.User;
 using UserService.Core.Domain.Entities.Role;
 using UserService.Core.Domain.Entities.Role.Errors;
 using UserService.Core.Domain.Entities.User;
 using UserService.Core.Domain.Entities.User.Errors;
 using UserService.Core.Domain.RepositoryContracts;
 using UserService.Core.Domain.ResultTypes;
-using UserService.Core.DTO.Shared;
-using UserService.Core.DTO.User;
-using UserService.Core.DTO.UserDto;
 using UserService.Core.Extensions;
 using UserService.Core.Mappings;
 using UserService.Core.ServiceContracts;

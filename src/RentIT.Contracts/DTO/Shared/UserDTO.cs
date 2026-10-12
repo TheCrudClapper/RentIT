@@ -1,4 +1,4 @@
-namespace RentIT.Contracts.DTO.EquipmentMicroservice.Users
+namespace RentIT.Contracts.DTO.Shared
 {
     /// <summary>
     /// This record is being used while calling other microservices

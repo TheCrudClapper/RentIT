@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\RentIT.Contracts\RentIT.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,6 @@
-﻿using UserService.Core.Domain.Entities.User;
-using UserService.Core.DTO.Shared;
-using UserService.Core.DTO.User;
-using UserService.Core.DTO.UserDto;
+﻿using RentIT.Contracts.DTO.Shared;
+using RentIT.Contracts.DTO.UserMicroservice.User;
+using UserService.Core.Domain.Entities.User;
 
 namespace UserService.Core.Mappings;
 /// <summary>
@@ -52,7 +51,7 @@ public static class UserMappings
 
     public static UserDTO ToUserDTO(this User user)
     {
-        return new UserDTO(user.Id, user.Email!);
+        return new UserDTO(user.Id, user.Email!, string.Empty);
     }
 }
 

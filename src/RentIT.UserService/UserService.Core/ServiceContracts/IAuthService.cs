@@ -1,6 +1,5 @@
-﻿using UserService.Core.Domain.ResultTypes;
-using UserService.Core.DTO.User;
-using UserService.Core.DTO.UserDto;
+﻿using RentIT.Contracts.DTO.UserMicroservice.User;
+using UserService.Core.Domain.ResultTypes;
 
 
 namespace UserService.Core.ServiceContracts;
