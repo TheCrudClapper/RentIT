@@ -1,10 +1,10 @@
-﻿using EquipmentService.Core.Validators.ValidatorContracts;
-using RentalService.Core.Domain.Entities.Errors;
+﻿using RentalService.Core.Domain.Entities.Errors;
 using RentalService.Core.Domain.Entities.Rentals;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.RepositoryContracts;
 using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.Rentals;
+using RentalService.Core.Validators.Contracts;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 
 namespace RentalService.Core.Validators.Implementations;
 

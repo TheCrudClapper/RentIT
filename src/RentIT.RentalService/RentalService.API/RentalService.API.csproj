@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\RentIT.Contracts\RentIT.Contracts.csproj" />
     <ProjectReference Include="..\RentalService.Core\RentalService.Core.csproj" />
     <ProjectReference Include="..\RentalService.Infrastructure\RentalService.Infrastructure.csproj" />
   </ItemGroup>

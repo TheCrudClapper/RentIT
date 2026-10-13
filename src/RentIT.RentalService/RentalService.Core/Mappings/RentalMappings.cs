@@ -1,6 +1,6 @@
 ﻿using RentalService.Core.Domain.Entities.Rentals;
-using RentalService.Core.DTO.Rentals;
-
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
+using RentIT.Contracts.DTO.Shared;
 namespace RentalService.Core.Mappings
 {
     public static class RentalMappings

@@ -2,8 +2,8 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RentalService.Core.Caching;
-using RentalService.Core.DTO.Rentals;
 using RentalService.Core.RabbitMQ.Consumers.Base;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 using System.Text;
 using System.Text.Json;
 

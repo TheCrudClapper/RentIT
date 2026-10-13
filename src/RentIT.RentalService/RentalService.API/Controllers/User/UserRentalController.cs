@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentalService.Core.DTO.Rentals;
 using RentalService.Core.ServiceContracts;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
+using RentIT.Contracts.DTO.Shared;
 
 namespace RentalService.API.Controllers.User;
 

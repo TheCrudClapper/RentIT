@@ -1,5 +1,6 @@
 ﻿using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.Rentals;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
+using RentIT.Contracts.DTO.Shared;
 namespace RentalService.Core.ServiceContracts;
 /// <summary>
 /// Defines the contract for managing equipment rental operations, including creating, retrieving, updating, and

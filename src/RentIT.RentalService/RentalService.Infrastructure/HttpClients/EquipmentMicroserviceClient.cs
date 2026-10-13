@@ -3,8 +3,8 @@ using Polly.CircuitBreaker;
 using RentalService.Core.Caching;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.Rentals;
 using RentalService.Core.Policies.Contracts;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 using System.Net;
 using System.Net.Http.Json;
 

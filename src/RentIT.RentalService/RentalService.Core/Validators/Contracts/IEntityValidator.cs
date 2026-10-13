@@ -1,8 +1,8 @@
 ﻿using RentalService.Core.Domain.Entities.Rentals;
 using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.Rentals;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 
-namespace EquipmentService.Core.Validators.ValidatorContracts;
+namespace RentalService.Core.Validators.Contracts;
 
 public interface IEntityValidator
 {

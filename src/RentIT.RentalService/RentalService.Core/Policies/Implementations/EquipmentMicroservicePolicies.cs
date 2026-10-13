@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
-using RentalService.Core.DTO.Rentals;
 using RentalService.Core.Policies.Contracts;
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 using System.Net;
 using System.Text;
 using System.Text.Json;

@@ -1,7 +1,7 @@
 ﻿using Polly.CircuitBreaker;
 using RentalService.Core.Domain.HtppClientContracts;
 using RentalService.Core.Domain.ResultTypes;
-using RentalService.Core.DTO.Users;
+using RentIT.Contracts.DTO.Shared;
 using System.Net.Http.Json;
 
 namespace RentalService.Infrastructure.HttpClients
