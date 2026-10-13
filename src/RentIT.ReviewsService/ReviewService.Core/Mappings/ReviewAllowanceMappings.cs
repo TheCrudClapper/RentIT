@@ -1,5 +1,5 @@
-﻿using ReviewService.Core.Domain.Entities.ReviewAllowance;
-using ReviewService.Core.DTO.ReviewAllowances;
+﻿using RentIT.Contracts.DTO.ReviewMicroservice.ReviewAllowances;
+using ReviewService.Core.Domain.Entities.ReviewAllowance;
 
 namespace ReviewService.Core.Mappings;
 

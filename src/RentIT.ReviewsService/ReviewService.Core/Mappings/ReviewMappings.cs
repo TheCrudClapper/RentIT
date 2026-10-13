@@ -1,6 +1,6 @@
-﻿using ReviewService.Core.Domain.Entities.Review;
-using ReviewService.Core.DTO.Reviews;
-using ReviewService.Core.DTO.Users;
+﻿using RentIT.Contracts.DTO.ReviewMicroservice.Reviews;
+using RentIT.Contracts.DTO.Shared;
+using ReviewService.Core.Domain.Entities.Review;
 
 namespace ReviewService.Core.Mappings;
 

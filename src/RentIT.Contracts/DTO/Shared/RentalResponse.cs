@@ -1,4 +1,6 @@
-namespace RentIT.Contracts.DTO.RentalMicroservice.Rentals
+using RentIT.Contracts.DTO.RentalMicroservice.Rentals;
+
+namespace RentIT.Contracts.DTO.Shared
 {
     public record RentalResponse(Guid Id,
         DateTime? ReturnedDate,
@@ -6,6 +8,6 @@ namespace RentIT.Contracts.DTO.RentalMicroservice.Rentals
         Guid RentedByUserId,
         DateTime EndDate,
         decimal TotalRentalPrice,
-        EquipmentResponse equipmentDetails);
+        EquipmentResponse EquipmentDetails);
 }
 

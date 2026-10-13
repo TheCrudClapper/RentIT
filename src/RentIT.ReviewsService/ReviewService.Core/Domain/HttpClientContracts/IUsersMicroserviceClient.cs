@@ -1,5 +1,5 @@
-﻿using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Users;
+﻿using RentIT.Contracts.DTO.Shared;
+using ReviewService.Core.Domain.ResultTypes;
 
 namespace ReviewService.Core.Domain.HttpClientContracts;
 

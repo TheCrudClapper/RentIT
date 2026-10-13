@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserService.Core.DTO.User;
-using UserService.Core.DTO.UserDto;
+using RentIT.Contracts.DTO.UserMicroservice.User;
 using UserService.Core.ServiceContracts;
 namespace UserService.API.Controllers;
 

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RentIT.Contracts.DTO.ReviewMicroservice.Reviews;
 using ReviewService.Core.Domain.Entities.Review;
 using ReviewService.Core.Domain.Entities.Review.Errors;
 using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
 using ReviewService.Core.Domain.HttpClientContracts;
 using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Reviews;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.RabbitMQ.Messages;
 using ReviewServices.Core.RabbitMQ.Publishers;

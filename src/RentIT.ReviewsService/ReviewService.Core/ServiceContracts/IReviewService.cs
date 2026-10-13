@@ -1,5 +1,5 @@
-﻿using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.Reviews;
+﻿using RentIT.Contracts.DTO.ReviewMicroservice.Reviews;
+using ReviewService.Core.Domain.ResultTypes;
 
 namespace ReviewService.Core.ServiceContracts;
 

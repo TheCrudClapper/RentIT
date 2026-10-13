@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReviewService.Core.DTO.ReviewAllowances;
+using RentIT.Contracts.DTO.ReviewMicroservice.ReviewAllowances;
 using ReviewService.Core.ServiceContracts;
 
 namespace ReviewService.API.Controllers;

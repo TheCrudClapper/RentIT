@@ -1,7 +1,7 @@
-﻿using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
+﻿using RentIT.Contracts.DTO.ReviewMicroservice.ReviewAllowances;
+using ReviewService.Core.Domain.Entities.ReviewAllowance.Errors;
 using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Core.Domain.ResultTypes;
-using ReviewService.Core.DTO.ReviewAllowances;
 using ReviewService.Core.Mappings;
 using ReviewService.Core.ServiceContracts;
 
