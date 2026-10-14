@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Interfaces;
-using EquipmentService.Core.DTO.Shared;
+using RentIT.Contracts.DTO.Shared;
 
 namespace EquipmentService.Core.Mappings;
 

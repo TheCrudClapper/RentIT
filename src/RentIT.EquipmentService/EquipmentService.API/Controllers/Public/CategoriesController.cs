@@ -1,5 +1,5 @@
-﻿using EquipmentService.Core.DTO.CategoryDto;
-using EquipmentService.Core.DTO.Shared;
+﻿using RentIT.Contracts.DTO.EquipmentMicroservice.Categories;
+using RentIT.Contracts.DTO.Shared;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,5 @@
 using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.EquipmentMicroservice.RentalListings;
@@ -50,4 +50,5 @@ public class CurrencyRequest
     [Range(typeof(decimal), "0.01", "999999999")]
     public decimal Amount { get; set; }
 }
+
 

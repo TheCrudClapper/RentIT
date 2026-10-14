@@ -1,4 +1,4 @@
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.RentalMicroservice.Rentals
@@ -17,4 +17,5 @@ namespace RentIT.Contracts.DTO.RentalMicroservice.Rentals
         public DateTime EndDate;
     }
 }
+
 

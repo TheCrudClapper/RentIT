@@ -1,5 +1,5 @@
 using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.EquipmentMicroservice.RentalListings;
@@ -36,4 +36,5 @@ public class RentalListingUpdateRequestInternal
     [MaxCount(10, ErrorMessage = "You can upload up to 10 images per equipment.")]
     public IEnumerable<ImageRequest> Images { get; set; } = [];
 }
+
 

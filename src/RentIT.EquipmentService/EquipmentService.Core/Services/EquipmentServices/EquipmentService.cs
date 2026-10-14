@@ -2,8 +2,8 @@
 using EquipmentService.Core.Domain.Entities.Equipments.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.Equipments.Admin;
-using EquipmentService.Core.DTO.Shared;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Admin;
+using RentIT.Contracts.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
 using EquipmentService.Core.Validators;

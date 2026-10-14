@@ -2,8 +2,8 @@
 using EquipmentService.Core.Domain.Entities.Categories.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.CategoryDto;
-using EquipmentService.Core.DTO.Shared;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Categories;
+using RentIT.Contracts.DTO.Shared;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
 

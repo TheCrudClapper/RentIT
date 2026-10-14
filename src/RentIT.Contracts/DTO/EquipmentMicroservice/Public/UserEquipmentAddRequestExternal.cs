@@ -1,5 +1,5 @@
 using RentIT.Contracts.DTO.EquipmentMicroservice.Enums;
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.EquipmentMicroservice.Public;
@@ -23,5 +23,6 @@ public class UserEquipmentAddRequestExternal
     [OneCover]
     public IEnumerable<ImageRequestExternal> Images { get; set; } = [];
 }
+
 
 

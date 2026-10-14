@@ -4,7 +4,7 @@ using RentalService.API.Middleware;
 using RentalService.Core;
 using RentalService.Core.Policies.Contracts;
 using RentalService.Core.Policies.Implementations;
-using RentalService.Infrastructure;
+using RentalService.Infrastructure.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);

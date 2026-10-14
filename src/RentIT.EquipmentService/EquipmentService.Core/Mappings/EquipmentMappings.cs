@@ -1,7 +1,8 @@
 ﻿using EquipmentService.Core.Domain.Entities.Equipments;
-using EquipmentService.Core.DTO.Equipments.Admin;
-using EquipmentService.Core.DTO.Equipments.User;
-using EquipmentService.Core.DTO.Images;
+using ContractEquipmentCondition = RentIT.Contracts.DTO.EquipmentMicroservice.Enums.EquipmentCondition;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Admin;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.User;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
 
 namespace EquipmentService.Core.Mappings;
 
@@ -17,7 +18,7 @@ public static class EquipmentMappings
             InternalNotes = request.InternalNotes,
             Description = request.Description,
             Quantity = request.Quantity,
-            Condition = request.Condition,
+            Condition = (EquipmentCondition)request.Condition,
             UserId = request.UserId,
             DateCreated = DateTime.UtcNow,
             IsActive = true,
@@ -34,7 +35,7 @@ public static class EquipmentMappings
             InternalNotes = request.InternalNotes,
             Description = request.Description,
             Quantity = request.Quantity,
-            Condition = request.Condition,
+            Condition = (EquipmentCondition)request.Condition,
             DateCreated = DateTime.UtcNow,
             IsActive = true,
         };
@@ -50,7 +51,7 @@ public static class EquipmentMappings
             InternalNotes = request.InternalNotes,
             Description = request.Description,
             Quantity = request.Quantity,
-            Condition = request.Condition,
+            Condition = (EquipmentCondition)request.Condition,
             DateCreated = DateTime.UtcNow,
             IsActive = true,
         };
@@ -65,7 +66,7 @@ public static class EquipmentMappings
             InternalNotes = request.InternalNotes,
             Description = request.Description,
             Quantity = request.Quantity,
-            Condition = request.Condition,
+            Condition = (EquipmentCondition)request.Condition,
             UserId = request.UserId,
         };
     }
@@ -78,7 +79,7 @@ public static class EquipmentMappings
             Quantity = equipment.Quantity,
             InternalNotes = equipment.InternalNotes,
             UserId = equipment.UserId,
-            Condition = equipment.Condition,
+            Condition = (ContractEquipmentCondition)equipment.Condition,
             Description = equipment.Description,
             CategoryId = equipment.CategoryId,
             Images = equipment.Images.Select(x => new ImageResponse(x.Id, x.IsCover, x.ResourcePath))
@@ -94,7 +95,7 @@ public static class EquipmentMappings
             InternalNotes = equipment.InternalNotes,
             Description = equipment.Description,
             CategoryId = equipment.CategoryId,
-            Condition = equipment.Condition,
+            Condition = (ContractEquipmentCondition)equipment.Condition,
             Images = equipment.Images.Select(x => new ImageResponse(x.Id, x.IsCover, x.ResourcePath))
                 .ToList(),
         };

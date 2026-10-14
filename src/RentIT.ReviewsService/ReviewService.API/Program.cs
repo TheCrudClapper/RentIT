@@ -1,9 +1,9 @@
 using ReviewService.API.Extensions;
 using ReviewService.API.Handlers;
+using ReviewService.Infrastructure.Extensions;
 using ReviewServices.API.Extensions;
 using ReviewServices.API.Middleware;
 using ReviewServices.Core;
-using ReviewServices.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

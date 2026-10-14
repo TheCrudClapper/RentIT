@@ -2,7 +2,7 @@ using EquipmentService.Core.Domain.Entities.Listing;
 using EquipmentService.Core.Domain.Entities.Listing.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.RentalListings;
+using RentIT.Contracts.DTO.EquipmentMicroservice.RentalListings;
 using EquipmentService.Core.Mappings;
 using EquipmentService.Core.ServiceContracts;
 

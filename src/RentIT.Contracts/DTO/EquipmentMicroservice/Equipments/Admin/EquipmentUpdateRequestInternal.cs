@@ -1,6 +1,6 @@
+using RentIT.Contracts.Attributes;
 using RentIT.Contracts.DTO.EquipmentMicroservice.Enums;
 using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
-using RentIT.Contracts.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Admin;

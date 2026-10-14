@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.Domain.Entities.Categories;
-using EquipmentService.Core.DTO.CategoryDto;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Categories;
 
 namespace EquipmentService.Core.Mappings;
 

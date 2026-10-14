@@ -1,5 +1,5 @@
-﻿using EquipmentService.API.DTO.Public;
-using EquipmentService.Core.DTO.Images;
+﻿using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Public;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
 
 namespace EquipmentService.API.Mappings;
 

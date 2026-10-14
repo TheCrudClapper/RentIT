@@ -1,5 +1,5 @@
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.RentalListings;
+using RentIT.Contracts.DTO.EquipmentMicroservice.RentalListings;
 
 namespace EquipmentService.Core.ServiceContracts;
 

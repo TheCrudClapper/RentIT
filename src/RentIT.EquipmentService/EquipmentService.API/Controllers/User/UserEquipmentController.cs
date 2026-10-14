@@ -1,10 +1,10 @@
-﻿using EquipmentService.API.DTO.Public;
-using EquipmentService.API.Mappings;
-using EquipmentService.Core.DTO.Equipments.User;
-using EquipmentService.Core.DTO.Shared;
+﻿using EquipmentService.API.Mappings;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.User;
+using RentIT.Contracts.DTO.Shared;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.Public;
 
 namespace EquipmentService.API.Controllers.User;
 

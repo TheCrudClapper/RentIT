@@ -1,6 +1,6 @@
 using RentIT.Contracts.DTO.EquipmentMicroservice.Enums;
 using RentIT.Contracts.DTO.EquipmentMicroservice.Images;
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentIT.Contracts.DTO.EquipmentMicroservice.Equipments.User;
@@ -23,5 +23,6 @@ public class UserEquipmentAddRequestInternal
     [MaxCount(10, ErrorMessage = $"You can upload up to 10 images per equipment.")]
     public IEnumerable<ImageRequest> Images { get; set; } = [];
 }
+
 
 

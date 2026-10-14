@@ -1,7 +1,7 @@
 using UserService.API.Extensions;
 using UserService.API.Middleware;
-using UserService.Core;
-using UserService.Infrastructure;
+using UserService.Core.Extensions;
+using UserService.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

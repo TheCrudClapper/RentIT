@@ -1,4 +1,4 @@
-﻿using EquipmentService.Core.DTO.RentalListings;
+﻿using RentIT.Contracts.DTO.EquipmentMicroservice.RentalListings;
 using EquipmentService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

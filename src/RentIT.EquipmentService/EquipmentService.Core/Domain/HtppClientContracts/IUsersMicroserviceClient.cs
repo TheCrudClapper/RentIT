@@ -1,5 +1,5 @@
 ﻿using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.Users;
+using RentIT.Contracts.DTO.Shared;
 namespace EquipmentService.Core.Domain.HtppClientContracts;
 
 /// <summary>

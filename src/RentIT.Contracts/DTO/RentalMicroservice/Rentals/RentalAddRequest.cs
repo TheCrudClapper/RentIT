@@ -1,4 +1,4 @@
-using RentIT.Contracts.Validation;
+using RentIT.Contracts.Attributes;
 using System.ComponentModel.DataAnnotations;
 namespace RentIT.Contracts.DTO.RentalMicroservice.Rentals;
 
@@ -14,4 +14,5 @@ public class RentalAddRequest
     [Required, FutureDateAttribute]
     public DateTime EndDate { get; set; }
 }
+
 

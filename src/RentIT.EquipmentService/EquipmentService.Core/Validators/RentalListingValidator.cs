@@ -2,7 +2,7 @@
 using EquipmentService.Core.Domain.Entities.Listing.Errors;
 using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.Shared;
+using RentIT.Contracts.DTO.Shared;
 
 namespace EquipmentService.Core.Validators;
 

@@ -1,4 +1,4 @@
-namespace RentIT.Contracts.DTO.EquipmentMicroservice.CategoryDto;
+namespace RentIT.Contracts.DTO.EquipmentMicroservice.Categories;
 
 public class CategoryResponse
 {

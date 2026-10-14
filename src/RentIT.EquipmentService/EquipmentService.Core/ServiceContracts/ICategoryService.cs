@@ -1,6 +1,6 @@
 ﻿using EquipmentService.Core.Domain.ResultTypes;
-using EquipmentService.Core.DTO.CategoryDto;
-using EquipmentService.Core.DTO.Shared;
+using RentIT.Contracts.DTO.EquipmentMicroservice.Categories;
+using RentIT.Contracts.DTO.Shared;
 
 namespace EquipmentService.Core.ServiceContracts;
 
