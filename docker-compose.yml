@@ -21,8 +21,8 @@ services:
   userservice.api:
     image: users-microservice
     build:
-        context: ./src/RentIT.UserService
-        dockerfile: UserService.API/Dockerfile
+        context: .
+        dockerfile: src/RentIT.UserService/UserService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres 
@@ -60,8 +60,8 @@ services:
   equipmentservice.api:
     image: equipment-microservice
     build:
-        context: ./src/RentIT.EquipmentService
-        dockerfile: EquipmentService.API/Dockerfile
+        context: .
+        dockerfile: src/RentIT.EquipmentService/EquipmentService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres 
@@ -108,8 +108,8 @@ services:
   rentalmicroservice.api:
     image: rental-microservice
     build:
-        context: ./src/RentIT.RentalService
-        dockerfile: RentalService.API/Dockerfile
+        context: .
+        dockerfile: src/RentIT.RentalService/RentalService.API/Dockerfile
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - DB_USER=postgres
@@ -160,8 +160,8 @@ services:
   reviewmicroservice.api: 
     image: review-microservice
     build: 
-        context: ./src/RentIT.ReviewsService
-        dockerfile: ReviewService.API/Dockerfile
+        context: .
+        dockerfile: src/RentIT.ReviewsService/ReviewService.API/Dockerfile
     ports:
         - "5006:8080"
         - "5007:8081"
@@ -220,8 +220,8 @@ services:
   api-gateway:
      image: ocelot-gateway
      build:
-        context: ./src/RentITApiGateway
-        dockerfile: Dockerfile
+        context: .
+        dockerfile: src/RentITApiGateway/Dockerfile
      environment:
         - Jwt__Issuer=http://localhost:5050 
         - Jwt__Audience=http://localhost:5050
