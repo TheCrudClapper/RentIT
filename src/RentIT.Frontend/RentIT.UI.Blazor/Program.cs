@@ -13,6 +13,8 @@ namespace RentIT.BlazorFrontend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddBlazorBootstrap();
+
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
@@ -25,7 +27,6 @@ namespace RentIT.BlazorFrontend
                     options.AccessDeniedPath = "/access-denied";
                     options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
                 });
-
             builder.Services.AddLogging();
             builder.Services.AddAuthorization();
             builder.Services.AddCascadingAuthenticationState();

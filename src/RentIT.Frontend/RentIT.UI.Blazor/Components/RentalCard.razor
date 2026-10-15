@@ -1,4 +1,5 @@
 ﻿@using RentIT.BlazorFrontend.Models.Rentals
+
 <div class="tag-card">
     <div class="punch"></div>
     <div class="thumb reticle">
@@ -23,7 +24,7 @@
             <span class="pill pill-ok">@Model.Status</span>
         </div>
     </div>
-</div>
+ </div>
 
 @code {
     [Parameter, EditorRequired] public RentalBrowserItemViewModel Model { get; set; }

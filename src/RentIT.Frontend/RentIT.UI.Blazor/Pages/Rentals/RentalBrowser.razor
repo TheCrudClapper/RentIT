@@ -1,11 +1,11 @@
 ﻿@page "/rentals/browser"
 @rendermode InteractiveServer
+@using BlazorBootstrap
 @using RentIT.BlazorFrontend.Models.Rentals
-@using RentIT.BlazorFrontend.Pages.Rentals.Components
 
 <BasePageContent>
     <PageHead PageHeader="Dostępny sprzęt" PrompText=@($"Pozycje // {Items.Count}")>
-        <NavLink href="/rentals/create" class="btn btn-primary">+ Dodaj wynajem</NavLink>
+    <Button Type="ButtonType.Link" Color="ButtonColor.Primary" To="/rentals/create">+ Dodaj wynajem</Button>
     </PageHead>
     <SearchBar OnSearchClicked="HandleSearch"/>
     
@@ -14,13 +14,19 @@
             <h3>Filters</h3>
         </div>
         <div class="col-md-9">
-            <RentalCardContainer Items="@Items"/>
+            <div class="row g-3">
+                @foreach (var item in Items)
+                {
+                    <div class="col-md-4">
+                        <RentalCard Model="@item" />
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </BasePageContent>
 
 @code {
-    private string? SearchPhrase { get; set; }
     private bool _sideCartPanelOpen { get; set; }
     private List<RentalBrowserItemViewModel> SelectedRentals = new();
     private List<RentalBrowserItemViewModel> Items = new()
@@ -39,10 +45,11 @@
     }
 
     public void HandleRentalSelect(RentalBrowserItemViewModel vm)
-    {
+    {            
         if (SelectedRentals.Any(x => x.Id == vm.Id))
             return;
 
         SelectedRentals.Add(vm);
     }
+
 }

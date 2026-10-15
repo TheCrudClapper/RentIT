@@ -1,8 +1,19 @@
 ﻿<div class="search-bar">
-    <InputText type="text" class="input" placeholder="Szukaj sprzętu..." @bind-Value="@SearchPhrase" />
-    <button class="btn btn-ghost" @onclick="() => OnSearchClicked.InvokeAsync(SearchPhrase)">Szukaj</button>
+    <InputText type="text" 
+        class="input" 
+        placeholder="Szukaj sprzętu..." 
+        @bind-Value="@SearchPhrase" />
+
+    <Button @onclick="HandleClick" Class="btn-ghost">
+        Szukaj
+    </Button>
 </div>
 @code {
     [Parameter] public EventCallback<string> OnSearchClicked { get; set; }
-    public string SearchPhrase { get; set; }
+    public string? SearchPhrase { get; set; }
+
+    public async Task HandleClick()
+    {
+        await OnSearchClicked.InvokeAsync(SearchPhrase);
+    }
 }
