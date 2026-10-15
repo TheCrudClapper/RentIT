@@ -10,27 +10,26 @@ public class UserRepository : IUserRepository
 {
     private readonly UsersDbContext _context;
     public UserRepository(UsersDbContext dbContext)
-    {
-        _context = dbContext;
-    }
-    public async Task<IReadOnlyCollection<User>> GetAllUsersAsync(CancellationToken cancellationToken)
+        => _context = dbContext;
+    
+    public async Task<IReadOnlyCollection<User>> GetAllUsersAsync(CancellationToken ct)
     {
         return await _context.Users
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .ToListAsync(ct);
     }
 
-    public async Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
+    public async Task<User?> GetUserByCondition(Expression<Func<User, bool>> expression, CancellationToken ct)
     {
         return await _context.Users
-            .FirstOrDefaultAsync(expression, cancellationToken);
+            .FirstOrDefaultAsync(expression, ct);
     }
 
-    public async Task<IReadOnlyCollection<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<User>> GetUsersByCondition(Expression<Func<User, bool>> expression, CancellationToken ct)
     {
         return await _context.Users
             .AsNoTracking()
             .Where(expression)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(ct);
     }
 }

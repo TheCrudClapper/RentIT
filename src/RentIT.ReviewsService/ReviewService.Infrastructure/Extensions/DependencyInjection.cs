@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReviewService.Core.Domain.RepositoryContracts;
 using ReviewService.Infrastructure.Repositories;
+using ReviewService.Infrastructure.Repositories.UnitOfWork;
 using ReviewServices.Infrastructure.DbContexts;
 namespace ReviewService.Infrastructure.Extensions;
 
@@ -25,6 +26,7 @@ public static class DependencyInjection
         services.AddScoped<IUserReviewRepository, UserReviewRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IReviewAllowanceRepository, ReviewAllowanceRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

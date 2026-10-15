@@ -21,6 +21,8 @@
 
 @code {
     private string? SearchPhrase { get; set; }
+    private bool _sideCartPanelOpen { get; set; }
+    private List<RentalBrowserItemViewModel> SelectedRentals = new();
     private List<RentalBrowserItemViewModel> Items = new()
     {
         new() { Money = new() {Amount = 15, CurrencyCode = "PLN"}, CategoryName = "laptopy", Id = Guid.NewGuid(), CoverImageUrl = "https://placehold.co/600x400/png", Status = "dostepny", Name = "Dell Latitude 5540 i7/16GB", },
@@ -33,6 +35,14 @@
 
     public async Task HandleSearch(string phrase)
     {
-        
+
+    }
+
+    public void HandleRentalSelect(RentalBrowserItemViewModel vm)
+    {
+        if (SelectedRentals.Any(x => x.Id == vm.Id))
+            return;
+
+        SelectedRentals.Add(vm);
     }
 }

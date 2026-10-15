@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UserService.Core.Domain.RepositoryContracts;
 using UserService.Infrastructure.DbContexts;
 using UserService.Infrastructure.Repositories;
+using UserService.Infrastructure.Repositories.UnitOfWork;
 namespace UserService.Infrastructure.Extensions
 {
     /// <summary>
@@ -25,6 +26,7 @@ namespace UserService.Infrastructure.Extensions
                     x => x.MigrationsAssembly("UserService.Infrastructure"));
             });
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
     }
