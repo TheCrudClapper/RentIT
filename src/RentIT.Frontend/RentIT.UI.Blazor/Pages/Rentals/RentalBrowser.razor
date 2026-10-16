@@ -18,7 +18,7 @@
                 @foreach (var item in Items)
                 {
                     <div class="col-md-4">
-                        <RentalCard Model="@item" />
+                        <RentalCard Model="@item" OnRentalSelected="sex => ToggleRentalSelect(sex)"/>
                     </div>
                 }
             </div>
@@ -44,12 +44,12 @@
 
     }
 
-    public void HandleRentalSelect(RentalBrowserItemViewModel vm)
-    {            
-        if (SelectedRentals.Any(x => x.Id == vm.Id))
-            return;
-
-        SelectedRentals.Add(vm);
+    public void ToggleRentalSelect(RentalBrowserItemViewModel vm)
+    {
+        if (SelectedRentals.Contains(vm))
+            SelectedRentals.Remove(vm);
+        else
+            SelectedRentals.Add(vm);
     }
 
 }

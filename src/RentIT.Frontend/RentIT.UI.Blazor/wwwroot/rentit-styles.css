@@ -573,6 +573,7 @@ select {
     }
 
 /* asset tag "price tag" for eq */
+
 .tag-card {
     background: var(--surface);
     border: 1px dashed var(--border);
@@ -581,7 +582,6 @@ select {
     overflow: hidden;
     transition: border-color .15s;
 }
-
     .tag-card:hover {
         border-color: var(--yellow-dim);
     }
@@ -599,15 +599,8 @@ select {
     }
 
     .tag-card .punch-active {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
         background: var(--yellow);
         border: 1px solid var(--border);
-        z-index: 2;
     }
 
     .tag-card .thumb {

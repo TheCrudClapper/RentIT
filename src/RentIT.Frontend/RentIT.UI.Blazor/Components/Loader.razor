@@ -1,0 +1,52 @@
+﻿@rendermode InteractiveServer
+
+<style>
+    .spinner-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(2px);
+    }
+
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>
+
+@if (LoaderService.IsLoading)
+{
+    <div class="spinner-overlay">
+        <div class="spinner-container">
+            <div class="spinner-grow spinner-sm" role="status">
+                <span class="visually-hidden">Loading…</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Inject] ILoaderService LoaderService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        LoaderService.LoadingChanged += OnLoadingChanged;
+    }
+
+    private void OnLoadingChanged(bool isLoading)
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        LoaderService.LoadingChanged -= OnLoadingChanged;
+    }
+
+}

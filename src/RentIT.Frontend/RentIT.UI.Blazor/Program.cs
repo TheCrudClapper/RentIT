@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RentIT.BlazorFrontend.Components;
 using RentIT.BlazorFrontend.Extensions;
+using RentIT.BlazorFrontend.ServiceContracts;
+using RentIT.BlazorFrontend.Services;
 using RentIT.UI.Core.Extensions;
 using RentIT.UI.Infrastructure.Extensions;
 
@@ -27,6 +29,8 @@ namespace RentIT.BlazorFrontend
                     options.AccessDeniedPath = "/access-denied";
                     options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
                 });
+
+            builder.Services.AddScoped<ILoaderService, LoaderService>();
             builder.Services.AddLogging();
             builder.Services.AddAuthorization();
             builder.Services.AddCascadingAuthenticationState();

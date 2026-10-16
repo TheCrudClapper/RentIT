@@ -1,7 +1,7 @@
 ﻿@using RentIT.BlazorFrontend.Models.Rentals
 
 <div class="tag-card">
-    <div class="punch"></div>
+    <div class="punch @(_isSelected ? "punch-active" : "")" @onclick="ToggleSelect"></div>
     <div class="thumb reticle">
         <div class="rc-tl"></div>
         <div class="rc-br"></div>
@@ -28,4 +28,12 @@
 
 @code {
     [Parameter, EditorRequired] public RentalBrowserItemViewModel Model { get; set; }
+    [Parameter, EditorRequired] public EventCallback<RentalBrowserItemViewModel> OnRentalSelected { get; set; }
+    private bool _isSelected;
+
+    public async Task ToggleSelect()
+    {
+        _isSelected = !_isSelected;
+        await OnRentalSelected.InvokeAsync(Model);
+    }
 }
