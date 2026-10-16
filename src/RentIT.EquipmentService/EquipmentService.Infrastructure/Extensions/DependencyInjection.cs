@@ -5,6 +5,7 @@ using EquipmentService.Infrastructure.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 namespace EquipmentService.Infrastructure.Extensions
 {
     /// <summary>
@@ -31,7 +32,6 @@ namespace EquipmentService.Infrastructure.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IRentalListingRepository, RentalListingRepository>();
-
             //Uow
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;

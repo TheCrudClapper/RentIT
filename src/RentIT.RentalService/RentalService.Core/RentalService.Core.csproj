@@ -20,4 +20,8 @@
       <ProjectReference Include="..\..\RentIT.Contracts\RentIT.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain\Entities\Orders\Errors\" />
+    </ItemGroup>
+
 </Project>

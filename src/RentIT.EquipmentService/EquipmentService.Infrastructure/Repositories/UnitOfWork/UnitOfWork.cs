@@ -1,7 +1,6 @@
 ﻿using EquipmentService.Core.Domain.RepositoryContracts;
 using EquipmentService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Data;
 
 namespace EquipmentService.Infrastructure.Repositories.UnitOfWork;
 

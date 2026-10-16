@@ -48,15 +48,7 @@ public class UserRentalListingService : IUserRentalListingService
         RentalListing listing = request.ToRentalListing();
         var validation = await _validator.ValidateUpdateAsync(listing);
 
-        entity.Title = request.Title;
-        entity.Description = request.Description;
-        entity.Quantity = request.Quantity;
-        entity.PricePerDay = request.PricePerDay.ToCurrency();
-        entity.PenaltyFeePerDay = request.PenaltyFeePerDay.ToCurrency();
-        entity.MaximumRentalDays = request.MaximumRentalDays;
-        entity.MinimumRentalDays = request.MinimumRentalDays;
-        entity.DateEdited = DateTime.UtcNow;
-
+        entity.Update(listing);
         await _unitOfWork.SaveChangesAsync();
         return entity.ToUpdatedResponse();
     }

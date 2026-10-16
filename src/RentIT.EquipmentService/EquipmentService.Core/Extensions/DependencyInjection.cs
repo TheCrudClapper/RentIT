@@ -1,4 +1,5 @@
 ﻿using EquipmentService.Core.ServiceContracts;
+using EquipmentService.Core.Services.CartServices;
 using EquipmentService.Core.Services.CategoryServices;
 using EquipmentService.Core.Services.EquipmentServices;
 using EquipmentService.Core.Validators;
@@ -19,12 +20,14 @@ namespace EquipmentService.Core.Extensions
             services.AddScoped<IEquipmentService, Services.EquipmentServices.EquipmentService>();
             services.AddScoped<IRentalListingService, Services.ListingServices.RentalListingService>();
             services.AddScoped<IUserRentalListingService, Services.ListingServices.UserRentalListingService>();
+            services.AddScoped<ICartService, ICartService>();
 
             //Add Validators
             services.AddScoped<IEquipmentValidator, EquipmentValidator>();
             services.AddScoped<IRentalListingValidator, RentalListingValidator>();
             services.AddScoped<IEquipmentImageValidator, EquipmentImageValidator>();
             services.AddScoped<IListingImageValidator, ListingImageValidator>();
+            services.AddScoped<ICartValidator, CartValidator>();
 
             //Add RabbitMQ Components
             //services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();

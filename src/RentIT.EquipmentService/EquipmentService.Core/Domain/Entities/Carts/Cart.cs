@@ -1,6 +1,6 @@
-﻿using RentalService.Core.Domain.Interfaces;
+﻿using EquipmentService.Core.Domain.Interfaces;
 
-namespace RentalService.Core.Domain.Entities.Carts;
+namespace EquipmentService.Core.Domain.Entities.Carts;
 
 public class Cart : BaseEntity, ISoftDelete
 {

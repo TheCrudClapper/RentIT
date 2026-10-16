@@ -67,7 +67,7 @@ public class UserEquipmentService : IUserEquipmentService
 
     public async Task<Result<UpdatedResponse>> UpdateUserEquipment(Guid equipmentId, Guid userId, UserEquipmentUpdateRequestInternal request)
     {
-        Equipment? entity = await _equipmentRepository.GetByConditionAsync(equipmentId, x => x.UserId == userId);
+        Equipment? entity = await _equipmentRepository.GetByConditionAsync(x => x.UserId == userId && x.Id == equipmentId);
 
         if (entity is null)
             return Result.Failure<UpdatedResponse>(EquipmentErrors.EquipmentNotFound);
@@ -92,7 +92,7 @@ public class UserEquipmentService : IUserEquipmentService
 
     public async Task<Result<EquipmentResponse>> GetUserEquipmentById(Guid userId, Guid equipmentId, CancellationToken ct)
     {
-        Equipment? equipment = await _equipmentRepository.GetByConditionAsync(equipmentId, expression: x => x.UserId == userId, asNoTracking: true, ct: ct);
+        Equipment? equipment = await _equipmentRepository.GetByConditionAsync(x => x.UserId == userId && x.Id == equipmentId, asNoTracking: true, ct: ct);
 
         if (equipment is null)
             return Result.Failure<EquipmentResponse>(EquipmentErrors.EquipmentNotFound);
@@ -113,7 +113,7 @@ public class UserEquipmentService : IUserEquipmentService
 
     public async Task<Result> DeleteUserEquipment(Guid userId, Guid equipmentId)
     {
-        Equipment? equipment = await _equipmentRepository.GetByConditionAsync(equipmentId, x => x.UserId == userId);
+        Equipment? equipment = await _equipmentRepository.GetByConditionAsync(x => x.UserId == userId && x.Id == equipmentId);
 
         if (equipment is null)
             return Result.Failure(EquipmentErrors.EquipmentNotFound);

@@ -93,7 +93,6 @@ public static class RentalListingMappings
             MinimumRentalDays = request.MinimumRentalDays,
             ListingStatus = ListingStatus.Open,
             IsActive = true,
-            DateCreated = DateTime.UtcNow,
             DateEdited = DateTime.UtcNow
         };
     }

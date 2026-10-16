@@ -38,4 +38,16 @@ public class RentalListing : BaseEntity, ISoftDelete
         IsActive = false;
         DateDeleted = DateTime.UtcNow;
     }
+
+    public void Update(RentalListing listing)
+    {
+        Title = listing.Title;
+        Description = listing.Description;
+        Quantity = listing.Quantity;
+        PricePerDay = listing.PricePerDay;
+        PenaltyFeePerDay = listing.PenaltyFeePerDay;
+        MaximumRentalDays =  listing.MaximumRentalDays;
+        MinimumRentalDays =  listing.MinimumRentalDays;
+        DateEdited = DateTime.UtcNow;
+    }
 }
